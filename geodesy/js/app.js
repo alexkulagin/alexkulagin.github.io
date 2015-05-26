@@ -49,6 +49,35 @@
         sh = global.screenSize.screenheight,
         rf = function() {
             splash.css("height", sh);
+
+
+            //masthead-video
+            //-------------------------------
+            var ww = global.screenSize.screenwidth();
+            var hh = global.screenSize.screenheight();
+
+            var elem = $(".masthead-video");
+
+            // Get native video width and height
+            var nativeWidth = 1280;
+            var nativeHeight = 720;
+
+            // Get the scale factors
+            var heightScaleFactor = nativeHeight / hh;
+            var widthScaleFactor = nativeWidth / ww;
+
+            //alert(hh, ww)
+
+            // Based on highest scale factor set width and height
+            if (widthScaleFactor < heightScaleFactor) {
+                elem.height('auto');
+                elem.width(ww);
+            } else {
+                elem.height(hh);
+                elem.width('auto');
+            }
+
+            //-------------------------------
         }
 
     jQuery && jQuery(function($) {
@@ -56,7 +85,7 @@
         $(window).resize(function(){
             rf();
         });
-
+        // manualy resize
         isIE8 ? setTimeout(rf, 100) : rf();
     });
 
