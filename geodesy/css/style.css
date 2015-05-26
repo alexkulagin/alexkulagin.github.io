@@ -319,7 +319,8 @@ a:hover {
   max-width: 50%;
   max-height: 50%;
 }
-#splash-container .masthead-video {
+#splash-container .splash-video {
+  /*по умолчанию none чтобы не показывать на мобилах*/
   display: none;
   position: absolute;
   top: 50%;

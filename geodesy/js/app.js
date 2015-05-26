@@ -56,7 +56,7 @@
             var ww = global.screenSize.screenwidth();
             var hh = global.screenSize.screenheight();
 
-            var elem = $(".masthead-video");
+            var elem = $(".splash-video");
 
             // Get native video width and height
             var nativeWidth = 1280;
@@ -92,13 +92,16 @@
             any: function() { return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());} 
         };
 
-        if (isMobile) alert(isMobile.any());
+        if (!isMobile.any() && !isIE8) {
+            $(".splash-video").css("display", "block");
+        }
 
+        // resize event
         splash = $("#splash-container");
         $(window).resize(function(){
             rf();
         });
-        // manualy resize
+        // manually resize at once
         isIE8 ? setTimeout(rf, 100) : rf();
     });
 
