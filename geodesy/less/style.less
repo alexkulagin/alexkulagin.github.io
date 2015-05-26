@@ -1,0 +1,161 @@
+
+
+
+//┐
+//│  ╔══════════════════════════════════════════════════════════════════════════════════════════╗
+//│  ║                                                                                          ║
+//╠──╢  LESS CRAWLER ASSETS                                                                     ║
+//│  ║                                                                                          ║
+//│  ╚══════════════════════════════════════════════════════════════════════════════════════════╝
+//┘
+
+
+        @import "assets/config.less";
+        @import "assets/reset.less";
+        @import "assets/grid.less";
+        @import "assets/helpers.less";
+        @import "assets/fonts.less";
+
+
+//┐
+//│  ╔══════════════════════════════════════════════════════════════════════════════════════════╗
+//│  ║                                                                                          ║
+//╠──╢  DOCUMENT STYLESHEET                                                                     ║
+//│  ║                                                                                          ║
+//│  ╚══════════════════════════════════════════════════════════════════════════════════════════╝
+//┘
+
+
+    //┐
+    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+    //╠──┤  TYPE PRESETS                                                                        │
+    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
+    //┘
+
+        // Presets reset
+        html, body, h1, h2, h3, h4, h5, h6 {
+            font-size: 1rem;
+            line-height: 1rem;
+        }
+
+        html, body { font-size: @base-size / @unit }
+
+        body { 
+            font-family: "Font-Name", Helvetica, Arial, sans-serif;
+        }
+
+        h1, h2, h3, h4, h5, h6 { 
+            font-family: "Font-Name", Helvetica, Arial, sans-serif;
+        }
+
+
+    //┐
+    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+    //╠──┤  TYPOGRAPHY PRESETS                                                                  │
+    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
+    //┘
+
+        .micro {
+            font-size:   12 / @unit;
+            line-height: 18 / @unit;
+        }
+
+        .small {
+            font-size:   14 / @unit;
+            line-height: 20 / @unit;
+        }
+
+        .normal {
+            font-size:   16 / @unit;
+            line-height: 24 / @unit;
+        }
+
+        .medium {
+            font-size:   18 / @unit;
+            line-height: 28 / @unit;
+        }
+
+        .large {
+            font-size:   26 / @unit;
+            line-height: 36 / @unit;
+        }
+
+        .huge {
+            font-size:   42 / @unit;
+            line-height: 48 / @unit;
+        }
+
+        .massive {
+            font-size:   68 / @unit;
+            line-height: 72 / @unit;
+        }
+
+        .gigantic {
+            font-size:   110 / @unit;
+            line-height: 120 / @unit;
+        }
+
+
+    //┐
+    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+    //╠──┤  HYPERLINK                                                                           │
+    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
+    //┘
+
+        a {
+            color: #ccc;
+            text-decoration: none;
+            border-bottom: 1.2 / @unit solid #ccc;
+            &:hover {
+                color: #222;
+                border-bottom: 1.2 / @unit solid @selection-color;
+            }
+        }
+
+
+    //┐
+    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+    //╠──┤  SPLASH                                                                              │
+    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
+    //┘
+
+        #splash-container {
+            background: url(../img/splash-background.jpg) center no-repeat;
+            background-size: cover;
+            position: relative;
+            max-width: 100%;
+
+            .static-grid {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                background: url('../img/grid.png');
+            }
+
+            .splash-img {
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                max-width: 50%;
+                max-height: 50%;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            #splash-container .splash-img {
+                max-width: 90%;
+                max-height: 90%;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            #splash-container {
+                background: url(../img/splash-background-min.jpg) center no-repeat;
+                background-size: cover;
+            }
+        }
+
+
+
+
+
