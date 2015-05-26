@@ -92,7 +92,7 @@
             any: function() { return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());} 
         };
 
-        if (isMobile) alert("mobile");
+        if (isMobile) alert(isMobile.any());
 
         splash = $("#splash-container");
         $(window).resize(function(){
