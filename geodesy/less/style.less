@@ -115,7 +115,7 @@
 
     //┐
     //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
-    //╠──┤  SPLASH                                                                              │
+    //╠──┤  SPLASH CONTAINER                                                                    │
     //│  └──────────────────────────────────────────────────────────────────────────────────────┘
     //┘
 
@@ -135,6 +135,7 @@
             }
 
             .splash-img {
+                display: none;
                 position: absolute;
                 left: 0;
                 bottom: 0;
@@ -152,6 +153,33 @@
                 -ms-transform: translate(-50%, -50%);
                 transform: translate(-50%, -50%);
                 z-index: -1;
+            }
+
+            h1 {
+                position: absolute;
+                width: 100%;
+                font-family: 'HelveticaNeue-UltraLight', helvetica, sans-serif;
+                font-weight: bold;
+                letter-spacing: -0.06em;
+                font-size: 120px;
+                text-align: center;
+                height: 120px;
+                line-height: 1;
+                top: 0;
+                bottom: 0;
+                margin: auto;
+                color: #fff;
+                /*opacity: 0.4;*/
+
+                span {
+                    display: block;
+                    font-size: 24px;
+                    letter-spacing: 5px;
+                    font-family: 'HelveticaNeue-Thin', sans-serif;
+                    font-weight: 100;
+                    text-transform: uppercase;
+                    padding-left: 30px;
+                }
             }
         }
 
