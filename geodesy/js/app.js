@@ -171,7 +171,7 @@
         splash = $("#splash-container");
         $(window).resize(function(){
             rf();
-            alert(app.isMobile);
+            //alert(app.isMobile);
         });
         // manually resize at once
         isIE8 ? setTimeout(rf, 100) : rf();
