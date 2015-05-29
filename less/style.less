@@ -156,7 +156,7 @@
     //│  └──────────────────────────────────────────────────────────────────────────────────────┘
     //┘  
 
-        #masthead, #about, #wall {
+        #masthead, #about, #wall, #preloader {
             margin: 0 auto;
             width: 840 / @em;
         }
@@ -177,6 +177,14 @@
             top: 70 / @em;
             right: 0;
             width: 60 / @em;
+        }
+
+        #preloader { 
+            display: block;
+            margin: 0 auto;
+            width: 840/@em;  
+            height: 100/@em;
+            background:url(../img/preloader.gif) center center no-repeat @white-blue;
         }
 
         #about {

@@ -27,7 +27,7 @@
 // MINI APP
 ;(function(root) {
 
-    var docObj, docBody, timeout, images, scrollPosition, masthead, about, totop, totopStatus, wall, htbo,
+    var docObj, docBody, timeout, images, scrollPosition, masthead, about, totop, totopStatus, wall, htbo, preloader,
         app = {};
 
     // ON INIT
@@ -41,7 +41,8 @@
         about = $('#about');
         totop = $('#totop');
         wall = $('#wall');
-        htbo = $("html, body");
+        htbo = $('html, body');
+        preloader = $('#preloader');
 
         masthead.click(function(e) { e.preventDefault(); about.slideToggle(350) });
         totop.click(function(e) { e.preventDefault(); htbo.animate({ scrollTop: 0 }, 'slow') });
@@ -84,6 +85,10 @@
         var figure = $('<figure class="superImage"></figure>').append(this);
         wall.append(figure);
         figure.hide().slideDown(1000);
+
+        if (images && images.length == 0) {
+            preloader.hide();
+        }
     }
 
     function showTotop() 

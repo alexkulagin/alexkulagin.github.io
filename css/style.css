@@ -297,7 +297,8 @@ body {
 }
 #masthead,
 #about,
-#wall {
+#wall,
+#preloader {
   margin: 0 auto;
   width: 52.5em;
 }
@@ -319,6 +320,13 @@ body {
   top: 4.375em;
   right: 0;
   width: 3.75em;
+}
+#preloader {
+  display: block;
+  margin: 0 auto;
+  width: 52.5em;
+  height: 6.25em;
+  background: url(../img/preloader.gif) center center no-repeat #deeaed;
 }
 #about {
   display: none;
