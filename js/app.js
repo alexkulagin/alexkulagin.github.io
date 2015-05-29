@@ -34,7 +34,7 @@
     function initialize($, data) 
     {
         docObj = $(document);
-        docBody = document.body;
+        docBody = document.documentElement ? document.documentElement : document.body;
         images = data;
         totopStatus = false;
         masthead = $('#masthead');
@@ -76,7 +76,7 @@
     {
         var img = new Image();
             img.onload = onLoadCompleteHandler;
-            //img.onerror = onLoadErrorHandler;
+        //  img.onerror = onLoadErrorHandler;
             img.src = images.shift();
     }
 
