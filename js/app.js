@@ -120,14 +120,6 @@
 
 // INITIALIZE APP
 jQuery && jQuery(function($) { app.initialize($, [
-    "img/nv/nv-1.jpg",
-    "img/nv/nv-2.jpg",
-    "img/nv/nv-3.jpg",
-    "img/nv/nv-4.jpg",
-    "img/nv/nv-5.jpg",
-    "img/nv/nv-6.jpg",
-    "img/nv/nv-7.jpg",
-        
     "img/lll/lll-1.jpg",
     "img/lll/lll-2.jpg",
     "img/lll/lll-3.jpg",
@@ -147,6 +139,14 @@ jQuery && jQuery(function($) { app.initialize($, [
     "img/el/el-8.jpg",
     "img/el/el-9.jpg",
     "img/el/el-10.jpg",
+        
+    "img/nv/nv-1.jpg",
+    "img/nv/nv-2.jpg",
+    "img/nv/nv-3.jpg",
+    "img/nv/nv-4.jpg",
+    "img/nv/nv-5.jpg",
+    "img/nv/nv-6.jpg",
+    "img/nv/nv-7.jpg",
         
     "img/nb/nb-1.jpg",
     "img/nb/nb-2.jpg",
