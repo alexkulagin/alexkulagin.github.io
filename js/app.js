@@ -56,12 +56,7 @@
     {
         scrollPosition = docBody.scrollTop;
         
-        var dh = Math.max(
-                    elem.documentElement.clientHeight,
-                    elem.body.scrollHeight, elem.documentElement.scrollHeight,
-                    elem.body.offsetHeight, elem.documentElement.offsetHeight);
-
-        if (images && images.length > 0 && dh - scrollPosition < 2000) {
+        if (images && images.length > 0 && docObj.height() - scrollPosition < 3000) {
             timeout && clearTimeout(timeout);
             timeout = setTimeout(preloadIMG, 500);
         }
