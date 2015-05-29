@@ -56,7 +56,12 @@
     {
         scrollPosition = docBody.scrollTop;
         
-        if (images && images.length > 0 && docObj.height() - scrollPosition < 3000) {
+        var dh = Math.max(
+                    elem.documentElement.clientHeight,
+                    elem.body.scrollHeight, elem.documentElement.scrollHeight,
+                    elem.body.offsetHeight, elem.documentElement.offsetHeight);
+
+        if (images && images.length > 0 && dh - scrollPosition < 2000) {
             timeout && clearTimeout(timeout);
             timeout = setTimeout(preloadIMG, 500);
         }
@@ -77,9 +82,7 @@
         var img = new Image();
             img.onload = onLoadCompleteHandler;
             //img.onerror = onLoadErrorHandler;
-            //img.src = images.shift();
-
-            $(img).attr('src', images.shift());
+            img.src = images.shift();
     }
 
     function onLoadCompleteHandler()
