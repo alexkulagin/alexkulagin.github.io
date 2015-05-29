@@ -34,7 +34,7 @@
     function initialize($, data) 
     {
         docObj = $(document);
-        docBody = document.documentElement ? document.documentElement : document.body;
+        docBody = document.all && !window.atob ? document.documentElement : document.body;
         images = data;
         totopStatus = false;
         masthead = $('#masthead');
