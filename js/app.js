@@ -74,10 +74,12 @@
 
     function preloadIMG() 
     {
-        var img = document.createElement('img');
+        var img = new Image();
             img.onload = onLoadCompleteHandler;
             //img.onerror = onLoadErrorHandler;
-            img.src = images.shift();
+            //img.src = images.shift();
+
+            $(img).attr('src', images.shift());
     }
 
     function onLoadCompleteHandler()
