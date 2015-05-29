@@ -56,7 +56,7 @@
     {
         scrollPosition = docBody.scrollTop;
         
-        if (images && images.length > 0 && docObj.height() - scrollPosition < 2000) {
+        if (images && images.length > 0 && docObj.height() - scrollPosition < 3000) {
             timeout && clearTimeout(timeout);
             timeout = setTimeout(preloadIMG, 500);
         }
@@ -84,11 +84,16 @@
     {
         var figure = $('<figure class="superImage"></figure>').append(this);
         wall.append(figure);
-        figure.hide().slideDown(1000);
+        figure.hide().slideDown(1000, onSlidedownComplete);
 
         if (images && images.length == 0) {
             preloader.hide();
         }
+    }
+
+    function onSlidedownComplete()
+    {
+        images && images.length > 0 && onScrollHandler();
     }
 
     function showTotop() 
