@@ -61,15 +61,8 @@
             timeout = setTimeout(preloadIMG, 500);
         }
 
-        if (scrollPosition > 1200 && !totopStatus) {
-            totopStatus = true;
-            showTotop();
-        }
-
-        if (scrollPosition < 1200 && totopStatus) {
-            totopStatus = false;
-            hideTotop();
-        }
+        scrollPosition > 1200 && !totopStatus && showTotop();
+        scrollPosition < 1200 && totopStatus && hideTotop();
     }
 
     function preloadIMG() 
@@ -100,12 +93,14 @@
     {
         totop.css({top:'500px', bottom:'auto', opacity: '0'});
         totop.delay(100).animate({ top: '40px', opacity: '1' }, 200);
+        totopStatus = true;
     }
 
     function hideTotop() 
     {
         totop.css({top:'40px', bottom:'auto', opacity: '1'});
         totop.delay(100).animate({ top: '-500px', opacity: '0' }, 300);
+        totopStatus = false;
     }
 
     // PUBLIC METHODS
