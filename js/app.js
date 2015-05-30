@@ -27,14 +27,13 @@
 // MINI APP
 ;(function(root) {
 
-    var docObj, docBody, timeout, images, scrollPosition, masthead, about, totop, totopStatus, wall, htbo, preloader,
+    var dts, timeout, images, scrollPosition, masthead, about, totop, totopStatus, wall, htbo, preloader,
         app = {};
 
     // ON INIT
     function initialize($, data) 
     {
-        docObj = $(document);
-        docBody = document.all && !window.atob ? document.documentElement : document.body;
+        dts = document.all && !window.atob ? document.documentElement : document.body;
         images = data;
         totopStatus = false;
         masthead = $('#masthead');
@@ -52,11 +51,22 @@
         onScrollHandler();
     }
 
+    function getDocumentHeight()
+    {
+        var docB = document.body,
+            docE = document.documentElement;
+
+        return Math.max(
+            docB.scrollHeight, docB.offsetHeight, docB.clientHeight,
+            docE.scrollHeight, docE.offsetHeight, docE.clientHeight
+        );
+    }
+
     function onScrollHandler() 
     {
-        scrollPosition = docBody.scrollTop;
+        scrollPosition = dts.scrollTop;
         
-        if (images && images.length > 0 && docObj.height() - scrollPosition < 3000) {
+        if (images && images.length > 0 && getDocumentHeight() - scrollPosition < 3000) {
             timeout && clearTimeout(timeout);
             timeout = setTimeout(preloadIMG, 500);
         }
@@ -77,16 +87,11 @@
     {
         var figure = $('<figure class="superImage"></figure>').append(this);
         wall.append(figure);
-        figure.hide().slideDown(1000, onSlidedownComplete);
+        figure.hide().slideDown(1000, onScrollHandler);
 
         if (images && images.length == 0) {
-            preloader.hide();
+            preloader.hide(500);
         }
-    }
-
-    function onSlidedownComplete()
-    {
-        images && images.length > 0 && onScrollHandler();
     }
 
     function showTotop() 
