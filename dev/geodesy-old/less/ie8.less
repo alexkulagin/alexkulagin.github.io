@@ -4,7 +4,7 @@
 //┐
 //│  ╔══════════════════════════════════════════════════════════════════════════════════════════╗
 //│  ║                                                                                          ║
-//╠──╢  STYLESHEET FOR IE8                                                                      ║
+//╠──╢  DOCUMENT STYLESHEET FOR IE8                                                             ║
 //│  ║                                                                                          ║
 //│  ╚══════════════════════════════════════════════════════════════════════════════════════════╝
 //┘
@@ -16,23 +16,12 @@
     //│  └──────────────────────────────────────────────────────────────────────────────────────┘
     //┘
 
-        #splash {
+        #splash-container {
+            -ms-behavior: url(../js/polyfill/backgroundsize.htc);
+        }
 
-        	.splash-logo {
-        		img {
-				    top: 50%;
-				    left: 50%;
-				    width: 320px;
-				    margin-left: -160px;
-				    margin-top: -57px;
-        		}
-        	}
-
-        	.splash-tint {
-                filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
-        	}
-
-        	.splash-video {
-        		-ms-behavior: url(../js/polyfill/backgroundsize.htc);
-        	}
+        @media screen and (max-width: 480px) {
+            #splash-container {
+                -ms-behavior: url(../js/polyfill/backgroundsize.htc);
+            }
         }

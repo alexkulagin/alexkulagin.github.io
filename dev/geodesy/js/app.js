@@ -1,8 +1,126 @@
+// SVGeezy.js 1.0
+window.svgeezy=function(){return{init:function(t,i){this.avoid=t||false;this.filetype=i||"png";this.svgSupport=this.supportsSvg();if(!this.svgSupport){this.images=document.getElementsByTagName("img");this.imgL=this.images.length;this.fallbacks()}},fallbacks:function(){while(this.imgL--){if(!this.hasClass(this.images[this.imgL],this.avoid)||!this.avoid){var t=this.images[this.imgL].getAttribute("src");if(t===null){continue}if(this.getFileExt(t)=="svg"){var i=t.replace(".svg","."+this.filetype);this.images[this.imgL].setAttribute("src",i)}}}},getFileExt:function(t){var i=t.split(".").pop();if(i.indexOf("?")!==-1){i=i.split("?")[0]}return i},hasClass:function(t,i){return(" "+t.className+" ").indexOf(" "+i+" ")>-1},supportsSvg:function(){return document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Image","1.1")}}}();
+
+
+
+// PAGE APP
+var app = (function(root)
+{
+
+    var win, dts, docEl, $,
+        scrollPosition,
+        mm, mq, 
+        getViewportWidth, getViewportHeight, 
+        vpW, vpH, vpA, vpO,
+        fullHeightContainer,
+        splashMedia, splashMediaWidth, splashMediaHeight,
+        splashLogo, splashArrow,
+
+        app = {};
+
+    function initialize(jQ)
+    {
+
+        $ = jQ;
+        win = $(root);
+        dts = document.all && !window.atob ? document.documentElement : document.body;
+        docEl = document.documentElement;
+
+        mm = root['matchMedia'] || root['msMatchMedia'];
+        mq = mm ? function(q) { return !!mm.call(root, q)['matches'] } 
+                : function() { return false };
+        
+        vpW = vpH = vpA = vpO = splashMediaWidth = splashMediaHeight = scrollPosition = 0;
+
+        getViewportWidth = getViewportSize('width', 'innerWidth', 'clientWidth');
+        getViewportHeight = getViewportSize('height', 'innerHeight', 'clientHeight');
+
+        fullHeightContainer = $('#splash, #colophon');
+
+        splashMedia = $('.splash-video video');
+        splashMediaWidth = 1076;
+        splashMediaHeight = 606;
+
+        splashLogo = $('.splash-logo img');
+        splashArrow = $('.splash-arrow img');
+
+        svgeezy.init(false, 'png');
+
+        win.resize(onResizeHandler);
+        win.scroll(onScrollHandler);
+
+        onResizeHandler();
+        onScrollHandler();
+    }
+
+    function getViewportSize(d, i, c)
+    {
+        return docEl[c] < root[i] && mq('(min-' + d + ':' + root[i] + 'px)') 
+            ? function() { return root[i] } 
+            : function() { return docEl[c] };
+    }
+
+    function onResizeHandler()
+    {
+        vpW = getViewportWidth();
+        vpH = getViewportHeight();
+        vpA = vpW / vpH;
+        vpO = 1 < vpA ? 0 : 1; // "landscape" : "portrait"
+
+        /*console.log(
+            "\nwidth:", vpW, 
+            "\nheight:", vpH, 
+            "\naspect ratio:", vpA, 
+            "\norientation:", vpO == 0 ? "landscape" : "portrait"
+        );*/
+
+        fullHeightContainer && fullHeightContainer.css('height', vpH);
+
+
+        if (splashMediaWidth / vpW < splashMediaHeight / vpH) {
+            splashMedia.height('auto');
+            splashMedia.width(vpW);
+        } else {
+            splashMedia.height(vpH);
+            splashMedia.width('auto');
+        }
+    }
+
+    function onScrollHandler()
+    {
+        //console.log("dispatch on scroll");
+        scrollPosition = dts.scrollTop;
+
+        if (scrollPosition < vpH) {
+            splashLogo.css({
+                'opacity': 0.6 * (1 - (scrollPosition * 1) / vpH),
+                'top': 50 / (1 - (scrollPosition * 0.4) / vpH) + '%'
+            });
+
+            splashArrow.css('opacity', 0.6 * (1 - (scrollPosition * 4) / vpH));
+        }
+    }
+
+    // PUBLIC METHODS
+    app['initialize'] = initialize;
+
+    // EXTERNAL ACCESS
+    return app;
+
+}(this));
+
+
+
+
+// INITIALIZE APP
+jQuery && jQuery(function(jQuery) { app.initialize(jQuery) });
+
 
 
 
 // OLD IOS DEVICE RESIZE FIX BUG
-;(function(doc) {
+;(function(doc) 
+{
     var addEvent = 'addEventListener',
         type = 'gesturestart',
         qsa = 'querySelectorAll',
@@ -20,171 +138,6 @@
     }
 
 }(document));
-
-
-
-
-// APP
-;(function(root) {
-
-    var app = {};
-
-
-
-    // VIEWPORT UTILS
-    var docEl = document.documentElement,
-    mm = root['matchMedia'] || root['msMatchMedia'],
-    mq = mm ? function(q) { return !!mm.call(root, q)['matches'] } : function() { return false },
-    getScreenSize = function(d, i, c) 
-    {
-        return docEl[c] < root[i] && mq('(min-' + d + ':' + root[i] + 'px)') 
-            ? function() { return root[i] } 
-            : function() { return docEl[c] };
-    };
-
-    app['getViewportWidth'] = getScreenSize('width', 'innerWidth', 'clientWidth');
-    app['getViewportHeight'] = getScreenSize('height', 'innerHeight', 'clientHeight');
-    app['getViewportAspect'] = function() { return app.getViewportWidth() / app.getViewportHeight() };
-    app['getViewportOrientation'] = function () { return 1 < app.getViewportAspect() ? "landscape" : "portrait" };
-
-
-
-    // TEST
-    app['isIE8'] = document.all && !document.addEventListener;
-
-    app['isMobile'] = (function() {
-        // тест не работает для моб. браузеров с вкл. опцией full version
-        var is = { 
-            Android: function() { return navigator.userAgent.match(/Android/i); }, 
-            iOS: function() { return navigator.userAgent.match(/iPhone|iPad|iPod/i); },
-            Windows: function() { return navigator.userAgent.match(/IEMobile/i); },
-            /*Opera: function() { return navigator.userAgent.match(/Opera Mini/i); },
-            BlackBerry: function() { return navigator.userAgent.match(/BlackBerry/i); },*/
-            any: function() { return (is.Android() || is.iOS() || is.Windows() /*|| is.Opera() || is.BlackBerry()*/);} 
-        };
-        return is.any() ? true : false;
-    }());
-
-
-
-    // INITIALIZE & STARTUP APPLICATION
-    // todo
-
-
-    // EXTERNAL ACCESS
-    root['app'] = app;
-
-}(this));
-
-
-
-
-
-
-
-
-
-// screen size
-!(function(global) {
-    var docEl = document.documentElement,
-        mm = global['matchMedia'] || global['msMatchMedia'],
-        mq = mm ? function(q) { return !!mm.call(global, q)['matches'] } : function() { return false },
-        getScreenSize = function(dim, inner, client) {
-            return docEl[client] < global[inner] && mq('(min-' + dim + ':' + global[inner] + 'px)') 
-                ? function() { return global[inner] } 
-                : function() { return docEl[client] };
-        };
-
-    global['screenSize'] = {
-        'screenwidth'  : getScreenSize('width', 'innerWidth', 'clientWidth'),
-        'screenheight' : getScreenSize('height', 'innerHeight', 'clientHeight')
-    };
-
-}(this));
-
-
-
-
-
-// splash resizing
-!(function(global) {
-
-    var splash,
-        isIE8 = document.all && !document.addEventListener,
-        sh = global.screenSize.screenheight,
-        rf = function() {
-            splash.css("height", sh);
-
-
-            //masthead-video
-            //-------------------------------
-            var ww = global.screenSize.screenwidth();
-            var hh = global.screenSize.screenheight();
-
-            var elem = $(".splash-video");
-
-            // Get native video width and height
-            var nativeWidth = 1280;
-            var nativeHeight = 720;
-
-            // Get the scale factors
-            var heightScaleFactor = nativeHeight / hh;
-            var widthScaleFactor = nativeWidth / ww;
-
-            //alert(hh, ww)
-
-            // Based on highest scale factor set width and height
-            if (widthScaleFactor < heightScaleFactor) {
-                elem.height('auto');
-                elem.width(ww);
-            } else {
-                elem.height(hh);
-                elem.width('auto');
-            }
-
-            //-------------------------------
-        }
-
-
-    // startup
-    jQuery && jQuery(function($) {
-
-        // mobile test
-        var isMobile = { 
-            Android: function() { return navigator.userAgent.match(/Android/i); }, 
-            BlackBerry: function() { return navigator.userAgent.match(/BlackBerry/i); }, 
-            iOS: function() { return navigator.userAgent.match(/iPhone|iPad|iPod/i); }, 
-            Opera: function() { return navigator.userAgent.match(/Opera Mini/i); }, 
-            Windows: function() { return navigator.userAgent.match(/IEMobile/i); }, 
-            any: function() { return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());} 
-        };
-
-        // test mobile browser
-        if (!isMobile.any() && !isIE8) {
-            $(".splash-video").css("display", "block");
-        }
-
-        // test video support for iOS Android (todo)
-        // AUTOPLAY && alert("video is suported");
-
-        // resize event
-        splash = $("#splash-container");
-        $(window).resize(function(){
-            rf();
-            //alert(app.isMobile);
-        });
-        // manually resize at once
-        isIE8 ? setTimeout(rf, 100) : rf();
-    });
-
-}(this));
-
-
-
-
-
-
-
 
 
 

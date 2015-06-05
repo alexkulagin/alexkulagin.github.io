@@ -267,3 +267,27 @@
             border-collapse: collapse;
             border-spacing: 0;
         }
+
+
+    //┐
+    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+    //╠──┤  SELECTION COLOR                                                                     │
+    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
+    //┘
+
+        ::selection {
+            background: @selection-background; 
+            color: @selection-color;
+            text-shadow: none;
+        }
+
+        ::-moz-selection {
+            background: @selection-background; 
+            color: @selection-color;
+            text-shadow: none;
+        }
+
+        img::selection { background: transparent }
+        img::-moz-selection { background: transparent }
+
+        body { -webkit-tap-highlight-color: @selection-background }

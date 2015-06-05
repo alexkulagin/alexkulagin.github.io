@@ -24,52 +24,61 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <meta name="apple-mobile-web-app-capable" content="yes">
 
-        <title>Page Title</title>
+        <title>Инженерная геодезия</title>
         <meta name="description" content="page description">
         <meta name="keywords" content="page keywords"/>
         <meta name="author" content="Alex Kulagin">
 
-        <!-- PAGE STYLE -->
+        <link href='http://fonts.googleapis.com/css?family=Roboto:400,500,400italic&subset=cyrillic,latin' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="css/style.css"/>
 
         <!--[if lt IE 9]>
             <link rel="stylesheet" href="css/ie8.css"/>
             <script src="js/polyfill/html5shiv.js"></script>
-            <script src="js/polyfill/respond.js"></script>
         <![endif]-->
-
-        <!-- PRISM STYLE -->
-        <link href="prism/prism.css" rel="stylesheet" />
     </head>
     <body>
-        <!-- PAGE CONTENT -->
-        <div id="splash-container">
+        <section id="splash">
+            <div class="splash-logo"><img src="img/splash-logo.svg"></div>
+            <div class="splash-arrow"><img src="img/splash-arrow.svg"></div>
             <div class="splash-grid"></div>
-            <img class="splash-img" src="img/subject.png"/>
-            <h1>GEODESY.SU<span>Профессиональная геодезия</span></h1>
-            <video class="splash-video" autoplay loop muted>
-                <source src="//secure-c.vimeocdn.com/p/video/yosemite_hd_ii_hd.webm" type="video/webm">
-                <source src="//secure-c.vimeocdn.com/p/video/yosemite_hd_ii_hd.mp4" type="video/mp4">
-            </video>
-        </div>
-        <article id="services">Services</article>
-        <article id="portfolio">Portfolio</article>
-        <footer id="colophon">Contacts</footer>
-        <br><br>
-        <br><br>
-        <br><br>
-        <pre><code class="language-javascript">
-// app
-;(function(global) {
+            <div class="splash-tint"></div>
+            <div class="splash-video">
+                <video autoplay loop muted>
+                    <source src="//secure-c.vimeocdn.com/p/video/yosemite_hd_ii_hd.webm" type="video/webm">
+                    <source src="//secure-c.vimeocdn.com/p/video/yosemite_hd_ii_hd.mp4" type="video/mp4">
+                </video>
+            </div>
+        </section>
+        <nav id="sticky">
+            <ul>
+                <li>Услуги</li>
+                <li>Цены</li>
+                <li>Работы</li>
+                <li>Партнеры</li>
+                <li>Координаты</li>
+            </ul>
+            <div></div>
+        </nav>
+        <article id="about">
+            <header>
+                <h1>Инженерная <span class="green">Геодезия</span></h1>
+                <p>Сплоченная команда специалистов, которые профессионально занимаются геодезическими изысканиями на территории Москвы и Московской области. Сегодня мы располагаем самым современным оборудованием и программным обеспечением для сбора, анализа и обработки результатов геодезической съемки и других видов проводимых работ.</p>
+                <a href=""><span>Button</span></a>
+            </header>
+            <figure></figure>
+        </article>
+        <article id="services"></article>
+        <article id="prices"></article>
+        <article id="portfolio"></article>
+        <article id="partners"></article>
+        <footer id="colophon"></footer>
 
-    // app body
-    
-}(this));
-        </code></pre>
-        <!-- PAGE SCRIPT -->
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <!--[if lt IE 9]>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+            <script src="js/polyfill/respond.js"></script>
+        <![endif]-->
+        <!--[if gte IE 9]><!--><script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script><!--<![endif]-->
         <script src="js/app.js"></script>
-        <!-- PRISM SCRIPT -->
-        <script src="prism/prism.js"></script>
     </body>
 </html>
