@@ -1,8 +1,0 @@
-#splash-container {
-  -ms-behavior: url(../js/polyfill/backgroundsize.htc);
-}
-@media screen and (max-width: 480px) {
-  #splash-container {
-    -ms-behavior: url(../js/polyfill/backgroundsize.htc);
-  }
-}
