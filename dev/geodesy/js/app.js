@@ -1,143 +1,154 @@
-// SVGeezy.js 1.0
-window.svgeezy=function(){return{init:function(t,i){this.avoid=t||false;this.filetype=i||"png";this.svgSupport=this.supportsSvg();if(!this.svgSupport){this.images=document.getElementsByTagName("img");this.imgL=this.images.length;this.fallbacks()}},fallbacks:function(){while(this.imgL--){if(!this.hasClass(this.images[this.imgL],this.avoid)||!this.avoid){var t=this.images[this.imgL].getAttribute("src");if(t===null){continue}if(this.getFileExt(t)=="svg"){var i=t.replace(".svg","."+this.filetype);this.images[this.imgL].setAttribute("src",i)}}}},getFileExt:function(t){var i=t.split(".").pop();if(i.indexOf("?")!==-1){i=i.split("?")[0]}return i},hasClass:function(t,i){return(" "+t.className+" ").indexOf(" "+i+" ")>-1},supportsSvg:function(){return document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Image","1.1")}}}();
+
+
+
+// VIEWPORT UTILS
+/*var vpu = (function(win, doc)
+{
+	var db = doc.body,
+		de = doc.documentElement,
+		dt = doc.all && !win.atob ? de : db,
+
+		mm = win['matchMedia'] || win['msMatchMedia'],
+	    mq = mm ? function(q) { return !!mm.call(win, q)['matches'] } 
+	            : function() { return false },
+	    getSize = function(d, i, c) { return de[c] < win[i] && mq('(min-' + d + ':' + win[i] + 'px)') ? function() { return win[i] } : function() { return de[c] } },
+	
+	utils = {};
+	utils['getWidth'] = getSize('width', 'innerWidth', 'clientWidth');
+	utils['getHeight'] = getSize('height', 'innerHeight', 'clientHeight');
+	utils['getAspectRatio'] = function() { return utils.getWidth() / utils.getHeight() };
+	utils['getOrientation'] = function() { return 1 < utils.getAspectRatio() ? 0 : 1 }; // ? "landscape 0" : "portrait 1"
+	utils['getScrollTop'] = function() { return dt.scrollTop };
+	utils['getScrollLeft'] = function() { return dt.scrollLeft };
+	utils['getDocumentWidth'] = function() { return Math.max(db.scrollWidth, db.offsetWidth, db.clientWidth, de.scrollWidth, de.offsetWidth, de.clientWidth) };
+	utils['getDocumentHeight'] = function() { return Math.max(db.scrollHeight, db.offsetHeight, db.clientHeight, de.scrollHeight, de.offsetHeight, de.clientHeight) };
+
+	return utils;
+
+}(window, document));*/
 
 
 
 // PAGE APP
-var app = (function(root)
+;(function(win, doc, m, $)
 {
 
-    var win, dts, docEl, $,
-        scrollPosition,
-        mm, mq, 
-        getViewportWidth, getViewportHeight, 
-        vpW, vpH, vpA, vpO,
-        fullHeightContainer,
-        splashMedia, splashMediaWidth, splashMediaHeight,
-        splashLogo, splashArrow,
+	// VIEWPORT UTILS
+	// ==============================================================================================
 
-        app = {};
+	var vp = (function(w, d)
+	{	
+		var db = d.body,
+			de = d.documentElement,
+			dt = d.all && !w.atob ? de : db,
 
-    function initialize(jQ)
+			mm = w['matchMedia'] || w['msMatchMedia'],
+		    mq = mm ? function(q) { return !!mm.call(w, q)['matches'] } 
+		            : function() { return false },
+		    vs = function(d, i, c) { return de[c] < w[i] && mq('(min-' + d + ':' + w[i] + 'px)') ? function() { return w[i] } : function() { return de[c] } },
+		
+		utils = {};
+		utils['width'] = vs('width', 'innerWidth', 'clientWidth');
+		utils['height'] = vs('height', 'innerHeight', 'clientHeight');
+		utils['aspect'] = function() { return utils.width() / utils.height() };
+		utils['orientation'] = function() { return 1 < utils.aspect() ? 0 : 1 }; // ? "landscape 0" : "portrait 1"
+		utils['documentWidth'] = function() { return Math.max(db.scrollWidth, db.offsetWidth, db.clientWidth, de.scrollWidth, de.offsetWidth, de.clientWidth) };
+		utils['documentHeight'] = function() { return Math.max(db.scrollHeight, db.offsetHeight, db.clientHeight, de.scrollHeight, de.offsetHeight, de.clientHeight) };
+		utils['verticalScroll'] = function() { return dt.scrollTop };
+		utils['horizontalScroll'] = function() { return dt.scrollLeft };
+
+		return utils;
+
+	}(win, doc));
+
+
+
+	// SVG FALLBACKS
+	// ==============================================================================================
+
+	var svgfallback = (function(d)
+	{
+		var images, l, src, newSrc, ext;
+
+		function run()
+		{
+			images = d.getElementsByTagName('img');
+			l = images.length;
+
+			while (l--) 
+			{
+				src = images[l].getAttribute('src');
+				if (src === null) continue;
+				if (getExt(src) == 'svg') {
+					newSrc = src.replace('.svg', '.' + 'png');
+					images[l].setAttribute('src', newSrc);
+				}	
+			}
+		}
+
+		function getExt(s)
+		{
+			ext = s.split('.').pop();
+
+			if (ext.indexOf("?") !== -1) {
+          		ext = ext.split('?')[0];
+        	}
+
+        	return ext;
+		}
+
+		return { 'run': run };
+
+	}(doc));
+
+
+
+	// CHECK VIDEO AUTOPLAY AND STARTUP APP
+	// ==============================================================================================
+
+	$(function($) { m.ie && m.ien ? initialize(true) : m.on('videoautoplay', function(r) { initialize(r) }) });
+
+
+
+	// APP PROPS
+	// ==============================================================================================
+
+	var splashVideo, splashCover,
+		FHContainer;
+
+
+
+	// APP INITIALIZE
+	// ==============================================================================================
+
+	function initialize(bool)
+	{
+		m.videoautoplay = bool;
+		
+		!m.svg && svgfallback.run();
+
+		splashVideo = $('#splash .video');
+		splashCover = $('#splash .cover');
+		
+		bool ? splashVideo.show() : splashCover.show();
+
+		FHContainer = $('#splash'); // $('#splash, #colophon') multiple
+
+		$(win).resize(onResizeHandler);
+
+		onResizeHandler();
+	}
+
+
+
+	// RESIZE HANDLER
+	// ==============================================================================================
+
+	function onResizeHandler()
     {
-
-        $ = jQ;
-        win = $(root);
-        dts = document.all && !window.atob ? document.documentElement : document.body;
-        docEl = document.documentElement;
-
-        mm = root['matchMedia'] || root['msMatchMedia'];
-        mq = mm ? function(q) { return !!mm.call(root, q)['matches'] } 
-                : function() { return false };
-        
-        vpW = vpH = vpA = vpO = splashMediaWidth = splashMediaHeight = scrollPosition = 0;
-
-        getViewportWidth = getViewportSize('width', 'innerWidth', 'clientWidth');
-        getViewportHeight = getViewportSize('height', 'innerHeight', 'clientHeight');
-
-        fullHeightContainer = $('#splash, #colophon');
-
-        splashMedia = $('.splash-video video');
-        splashMediaWidth = 1076;
-        splashMediaHeight = 606;
-
-        splashLogo = $('.splash-logo img');
-        splashArrow = $('.splash-arrow img');
-
-        svgeezy.init(false, 'png');
-
-        win.resize(onResizeHandler);
-        win.scroll(onScrollHandler);
-
-        onResizeHandler();
-        onScrollHandler();
+    	FHContainer && FHContainer.css('height', vp.height());
     }
 
-    function getViewportSize(d, i, c)
-    {
-        return docEl[c] < root[i] && mq('(min-' + d + ':' + root[i] + 'px)') 
-            ? function() { return root[i] } 
-            : function() { return docEl[c] };
-    }
 
-    function onResizeHandler()
-    {
-        vpW = getViewportWidth();
-        vpH = getViewportHeight();
-        vpA = vpW / vpH;
-        vpO = 1 < vpA ? 0 : 1; // "landscape" : "portrait"
-
-        /*console.log(
-            "\nwidth:", vpW, 
-            "\nheight:", vpH, 
-            "\naspect ratio:", vpA, 
-            "\norientation:", vpO == 0 ? "landscape" : "portrait"
-        );*/
-
-        fullHeightContainer && fullHeightContainer.css('height', vpH);
-
-
-        if (splashMediaWidth / vpW < splashMediaHeight / vpH) {
-            splashMedia.height('auto');
-            splashMedia.width(vpW);
-        } else {
-            splashMedia.height(vpH);
-            splashMedia.width('auto');
-        }
-    }
-
-    function onScrollHandler()
-    {
-        //console.log("dispatch on scroll");
-        scrollPosition = dts.scrollTop;
-
-        if (scrollPosition < vpH) {
-            splashLogo.css({
-                'opacity': 0.6 * (1 - (scrollPosition * 1) / vpH),
-                'top': 50 / (1 - (scrollPosition * 0.4) / vpH) + '%'
-            });
-
-            splashArrow.css('opacity', 0.6 * (1 - (scrollPosition * 4) / vpH));
-        }
-    }
-
-    // PUBLIC METHODS
-    app['initialize'] = initialize;
-
-    // EXTERNAL ACCESS
-    return app;
-
-}(this));
-
-
-
-
-// INITIALIZE APP
-jQuery && jQuery(function(jQuery) { app.initialize(jQuery) });
-
-
-
-
-// OLD IOS DEVICE RESIZE FIX BUG
-;(function(doc) 
-{
-    var addEvent = 'addEventListener',
-        type = 'gesturestart',
-        qsa = 'querySelectorAll',
-        scales = [1, 1],
-        meta = qsa in doc ? doc[qsa]('meta[name=viewport]') : [],
-        fix = function() {
-            meta.content = 'width=device-width,minimum-scale=' + scales[0] + ',maximum-scale=' + scales[1];
-            doc.removeEventListener(type, fix, true);
-        };
-
-    if ((meta = meta[meta.length - 1]) && addEvent in doc) {
-        fix();
-        scales = [.25, 1.6];
-        doc[addEvent](type, fix, true);
-    }
-
-}(document));
-
-
+}(window, document, Modernizr, jQuery));
 

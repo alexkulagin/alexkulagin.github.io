@@ -15,9 +15,7 @@
 
 
 
-
-<!--[if lt IE 9]><html class="ie"><![endif]-->
-<!--[if gt IE 9]><!--><html><!--<![endif]-->
+<html>
     <head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -29,56 +27,32 @@
         <meta name="keywords" content="page keywords"/>
         <meta name="author" content="Alex Kulagin">
 
-        <link href='http://fonts.googleapis.com/css?family=Roboto:400,500,400italic&subset=cyrillic,latin' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="css/style.css"/>
+        <link href="http://fonts.googleapis.com/css?family=Roboto:400,500,400italic&subset=cyrillic,latin" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="/css/style.css"/>
+        <!--[if lt IE 9]><link rel="stylesheet" href="/css/ie.css"/><![endif]-->
 
-        <!--[if lt IE 9]>
-            <link rel="stylesheet" href="css/ie8.css"/>
-            <script src="js/polyfill/html5shiv.js"></script>
-        <![endif]-->
+        <script src="/js/modernizr.js"></script>
     </head>
     <body>
-        <section id="splash">
-            <div class="splash-logo"><img src="img/splash-logo.svg"></div>
-            <div class="splash-arrow"><img src="img/splash-arrow.svg"></div>
-            <div class="splash-grid"></div>
-            <div class="splash-tint"></div>
-            <div class="splash-video">
+        <div id="splash">
+            <!-- <div class="logo"></div> -->
+            <!-- <div class="arrow"></div> -->
+            <!-- <div class="grid"></div> -->
+            <!-- <div class="tint"></div> -->
+            <div class="video">
                 <video autoplay loop muted>
                     <source src="//secure-c.vimeocdn.com/p/video/yosemite_hd_ii_hd.webm" type="video/webm">
                     <source src="//secure-c.vimeocdn.com/p/video/yosemite_hd_ii_hd.mp4" type="video/mp4">
                 </video>
             </div>
-        </section>
-        <nav id="sticky">
-            <ul>
-                <li>Услуги</li>
-                <li>Цены</li>
-                <li>Работы</li>
-                <li>Партнеры</li>
-                <li>Координаты</li>
-            </ul>
-            <div></div>
-        </nav>
-        <article id="about">
-            <header>
-                <h1>Инженерная <span class="green">Геодезия</span></h1>
-                <p>Сплоченная команда специалистов, которые профессионально занимаются геодезическими изысканиями на территории Москвы и Московской области. Сегодня мы располагаем самым современным оборудованием и программным обеспечением для сбора, анализа и обработки результатов геодезической съемки и других видов проводимых работ.</p>
-                <a href=""><span>Button</span></a>
-            </header>
-            <figure></figure>
-        </article>
-        <article id="services"></article>
-        <article id="prices"></article>
-        <article id="portfolio"></article>
-        <article id="partners"></article>
-        <footer id="colophon"></footer>
-
+            <div class="cover"></div>
+        </div>
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
         <!--[if lt IE 9]>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-            <script src="js/polyfill/respond.js"></script>
+            <script src="/js/polyfill/respond.js"></script>
         <![endif]-->
         <!--[if gte IE 9]><!--><script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script><!--<![endif]-->
-        <script src="js/app.js"></script>
+        <script src="/js/app.js"></script>
     </body>
 </html>
