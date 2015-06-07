@@ -287,6 +287,9 @@ body {
 }
 #splash {
   max-width: 100%;
+  overflow: hidden;
+  height: auto;
+  position: relative;
   background-color: #333333;
 }
 #splash .video,
