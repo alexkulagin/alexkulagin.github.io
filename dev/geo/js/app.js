@@ -127,10 +127,10 @@
 
 		!m.svg && svgfallback.run();
 
-		//splashVideo = $('#splash .video');
-		//splashCover = $('#splash .cover');
+		splashVideo = $('#splash .video');
+		splashCover = $('#splash .cover');
 		
-		//bool ? splashVideo.show() : splashCover.show();
+		bool ? splashVideo.show() : splashCover.show();
 
 		FHContainer = $('#splash'); // $('#splash, #colophon') multiple
 

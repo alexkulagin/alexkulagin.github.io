@@ -246,7 +246,7 @@ p {
   line-height: 1.4em;
 }
 body {
-  background-color: #cccccc;
+  background-color: #fafafa;
   color: #333333;
 }
 .green {
@@ -288,7 +288,6 @@ body {
 #splash {
   max-width: 100%;
   overflow: hidden;
-  height: auto;
   position: relative;
   background-color: #333333;
 }
