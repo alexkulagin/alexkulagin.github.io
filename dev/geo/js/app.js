@@ -113,7 +113,7 @@
 	// APP PROPS
 	// ==============================================================================================
 
-	var splashVideo, splashCover,
+	var splashVideoContainer, splashCoverContainer, splashVideo, videoWidth, videoHeight, splashLogo, splashArrow, 
 		FHContainer;
 
 
@@ -127,16 +127,24 @@
 
 		!m.svg && svgfallback.run();
 
-		splashVideo = $('#splash .video');
-		splashCover = $('#splash .cover');
+		splashVideoContainer = $('#splash .video');
+		splashCoverContainer = $('#splash .cover');
+		splashVideo = $('#splash video');
+		videoWidth = 1076;
+		videoHeight = 606;
+
+		splashLogo = $('#splash .logo');
+		splashArrow = $('#splash .arrow');
 		
-		bool ? splashVideo.show() : splashCover.show();
+		bool ? splashVideoContainer.show() : splashCoverContainer.show();
 
 		FHContainer = $('#splash'); // $('#splash, #colophon') multiple
 
 		$(win).resize(onResizeHandler);
+        $(win).scroll(onScrollHandler);
 
 		onResizeHandler();
+        onScrollHandler();
 	}
 
 
@@ -146,7 +154,34 @@
 
 	function onResizeHandler()
     {
-    	FHContainer && FHContainer.css('height', vp.height());
+    	var w = vp.width();
+    	var h = vp.height();
+
+    	FHContainer && FHContainer.css('height', h);
+
+    	m.videoautoplay && (videoWidth / w < videoHeight / h)
+    		? splashVideo.css({'width': w, 'height': 'auto'})
+    		: splashVideo.css({'width': 'auto', 'height': h});
+    }
+
+
+
+	// SCROLLING HANDLER
+	// ==============================================================================================
+
+	function onScrollHandler()
+    {
+    	var s = vp.verticalScroll();
+    	var h = vp.height();
+
+        if (s < h) {
+            splashLogo.css({
+                'opacity': 0.6 * (1 - (s * 1) / h),
+                'top': 40 / (1 - (s * 0.9) / h) + '%'
+            });
+
+            splashArrow.css('opacity', 0.6 * (1 - (s * 4) / h));
+        }
     }
 
 

@@ -289,12 +289,17 @@ body {
   max-width: 100%;
   overflow: hidden;
   background-color: #333333;
+  position: relative;
 }
 #splash .logo,
 #splash .arrow {
   position: absolute;
   opacity: 0.6;
   left: 50%;
+}
+#splash .logo,
+#splash .arrow,
+#splash .video {
   -webkit-transform: translateY(-50%) translateX(-50%);
   -ms-transform: translateY(-50%) translateX(-50%);
   transform: translateY(-50%) translateX(-50%);
@@ -328,6 +333,11 @@ body {
 #splash .video,
 #splash .cover {
   display: none;
+}
+#splash .video {
+  top: 50%;
+  left: 50%;
+  position: absolute;
 }
 #splash .cover {
   height: 100%;
