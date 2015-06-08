@@ -114,6 +114,7 @@
 	// ==============================================================================================
 
 	var splashVideoContainer, splashCoverContainer, splashVideo, videoWidth, videoHeight, splashLogo, splashArrow, 
+		stickyContainer,
 		FHContainer;
 
 
@@ -127,6 +128,8 @@
 
 		!m.svg && svgfallback.run();
 
+		FHContainer = $('#splash'); // $('#splash, #colophon') multiple
+
 		splashVideoContainer = $('#splash .video');
 		splashCoverContainer = $('#splash .cover');
 		splashVideo = $('#splash video');
@@ -135,10 +138,10 @@
 
 		splashLogo = $('#splash .logo');
 		splashArrow = $('#splash .arrow');
+
+		stickyContainer = $('#sticky');
 		
 		bool ? splashVideoContainer.show() : splashCoverContainer.show();
-
-		FHContainer = $('#splash'); // $('#splash, #colophon') multiple
 
 		$(win).resize(onResizeHandler);
         $(win).scroll(onScrollHandler);
@@ -177,13 +180,42 @@
         if (s < h) {
             splashLogo.css({
                 'opacity': 0.6 * (1 - (s * 1) / h),
-                'top': 40 / (1 - (s * 0.9) / h) + '%'
+                'top': 40 / (1 - (s * 0.5) / h) + '%'
             });
 
             splashArrow.css('opacity', 0.6 * (1 - (s * 4) / h));
+        }
+
+        if (s > (h+64))
+        {
+        	stickyContainer.addClass("fix");
+        } else {
+        	stickyContainer.removeClass("fix");
         }
     }
 
 
 }(window, document, Modernizr, jQuery));
+
+
+// OLD IOS DEVICE RESIZE FIX BUG
+;(function(doc) 
+{
+    var addEvent = 'addEventListener',
+        type = 'gesturestart',
+        qsa = 'querySelectorAll',
+        scales = [1, 1],
+        meta = qsa in doc ? doc[qsa]('meta[name=viewport]') : [],
+        fix = function() {
+            meta.content = 'width=device-width,minimum-scale=' + scales[0] + ',maximum-scale=' + scales[1];
+            doc.removeEventListener(type, fix, true);
+        };
+
+    if ((meta = meta[meta.length - 1]) && addEvent in doc) {
+        fix();
+        scales = [.25, 1.6];
+        doc[addEvent](type, fix, true);
+    }
+
+}(document));
 

@@ -344,3 +344,42 @@ body {
   background: url(../img/splash-cover.png) center no-repeat;
   background-size: cover;
 }
+#sticky.fix {
+  width: 100%;
+  position: fixed;
+  top: -4em;
+}
+#sticky {
+  height: 8em;
+  background-color: #ffffff;
+  border-bottom: thin solid #dedede;
+}
+#sticky .menu {
+  width: 79.5em;
+  height: 100%;
+  position: relative;
+  margin: auto;
+}
+#sticky .menu nav {
+  width: 100%;
+  bottom: 1.5em;
+  position: absolute;
+}
+#sticky .menu nav ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+#sticky .menu nav ul li {
+  font-size: 0.875em;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin-right: 4.85714286em;
+  display: inline;
+}
+#sticky .menu img {
+  width: 6.25em;
+  right: 0;
+  bottom: 1.375em;
+  position: absolute;
+}
