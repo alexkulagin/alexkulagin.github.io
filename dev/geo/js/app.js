@@ -29,12 +29,24 @@
 
 
 
-// PAGE APP
+
+//┐
+//│  ╔══════════════════════════════════════════════════════════════════════════════════════════╗
+//│  ║                                                                                          ║
+//╠──╢  PAGE APP                                                                                ║
+//│  ║                                                                                          ║
+//│  ╚══════════════════════════════════════════════════════════════════════════════════════════╝
+//┘
+
+
 ;(function(win, doc, m, $)
 {
 
-	// VIEWPORT UTILS
-	// ==============================================================================================
+	//┐
+    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+    //╠──┤  VIEWPORT UTILS                                                                      │
+    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
+    //┘
 
 	var vp = (function(w, d)
 	{	
@@ -54,8 +66,8 @@
 		utils['orientation'] = function() { return 1 < utils.aspect() ? 0 : 1 }; // ? "landscape 0" : "portrait 1"
 		utils['documentWidth'] = function() { return Math.max(db.scrollWidth, db.offsetWidth, db.clientWidth, de.scrollWidth, de.offsetWidth, de.clientWidth) };
 		utils['documentHeight'] = function() { return Math.max(db.scrollHeight, db.offsetHeight, db.clientHeight, de.scrollHeight, de.offsetHeight, de.clientHeight) };
-		utils['verticalScroll'] = function() { return dt.scrollTop };
-		utils['horizontalScroll'] = function() { return dt.scrollLeft };
+		utils['scrollY'] = function() { return w.scrollY || dt.scrollTop };
+		utils['scrollX'] = function() { return w.scrollX || dt.scrollLeft };
 
 		return utils;
 
@@ -63,8 +75,11 @@
 
 
 
-	// SVG FALLBACKS
-	// ==============================================================================================
+	//┐
+    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+    //╠──┤  SVG FALLBACK                                                                        │
+    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
+    //┘
 
 	var svgfallback = (function(d)
 	{
@@ -103,33 +118,25 @@
 
 
 
-	// CHECK VIDEO AUTOPLAY AND STARTUP APP
-	// ==============================================================================================
+	//┐
+    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+    //╠──┤  SPLASH                                                                              │
+    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
+    //┘
 
-	$(function($) { m.ie && m.ien ? initialize(true) : m.on('videoautoplay', function(r) { initialize(r) }) });
+	var splash,
+		splashVideoContainer, 
+		splashCoverContainer, 
+		splashVideo, 
+		videoWidth, 
+		videoHeight, 
+		splashLogo, 
+		splashArrow;
 
 
-
-	// APP PROPS
-	// ==============================================================================================
-
-	var splashVideoContainer, splashCoverContainer, splashVideo, videoWidth, videoHeight, splashLogo, splashArrow, 
-		stickyContainer,
-		FHContainer;
-
-
-
-	// APP INITIALIZE
-	// ==============================================================================================
-
-	function initialize(bool)
+	function onSplashInit()
 	{
-		m.videoautoplay = bool;
-
-		!m.svg && svgfallback.run();
-
-		FHContainer = $('#splash'); // $('#splash, #colophon') multiple
-
+		splash = $('#splash');
 		splashVideoContainer = $('#splash .video');
 		splashCoverContainer = $('#splash .cover');
 		splashVideo = $('#splash video');
@@ -139,21 +146,122 @@
 		splashLogo = $('#splash .logo');
 		splashArrow = $('#splash .arrow');
 
-		stickyContainer = $('#sticky');
-		
-		bool ? splashVideoContainer.show() : splashCoverContainer.show();
+		m.videoautoplay ? splashVideoContainer.show() : splashCoverContainer.show();
+	}
 
+
+	function onSplashResize(w, h)
+    {
+    	(videoWidth / w < videoHeight / h)
+    		? splashVideo.css({ 'width': w, 'height': 'auto' })
+    		: splashVideo.css({ 'width': 'auto', 'height': h });
+    }
+
+
+    function onSplashScroll(s, h)
+    {
+    	var lt = 0.5, // logo top factor
+    		lo = 1.0, // logo opacity factor
+    		ao = 4.0; // arrow opacity factor
+
+    	if (s > h) return;
+
+    	splashLogo.css({
+            'opacity': 0.6 * (1 - (s * lo) / h),
+            'top': 40 / (1 - (s * lt) / h) + '%'
+         });
+
+        splashArrow.css('opacity', 0.6 * (1 - (s * ao) / h));
+    }
+
+
+
+	//┐
+    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+    //╠──┤  STICKY MENU                                                                         │
+    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
+    //┘
+
+	var sticky;
+
+
+	function onStickyInit()
+	{
+		sticky = $('#sticky');
+	}
+
+
+	function onStickyScroll(s, h)
+	{
+		if (s > (h + 64)) {
+        	sticky.addClass("fix");
+        	splash.addClass("fix");
+        } else {
+        	sticky.removeClass("fix");
+        	splash.removeClass("fix");
+        }
+	}
+
+
+
+	//┐
+    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+    //╠──┤  CHECK VIDEO AUTOPLAY & STARTUP APP                                                  │
+    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
+    //┘
+
+	$(function($) { m.ie && m.ien ? initialize(true) : m.on('videoautoplay', function(r) { initialize(r) }) });
+
+
+
+	//┐
+    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+    //╠──┤  APP PROPS                                                                           │
+    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
+    //┘
+
+	var FHContainer;
+
+
+
+	//┐
+    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+    //╠──┤  APP INITIALIZE                                                                      │
+    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
+    //┘
+
+	function initialize(bool)
+	{
+		m.videoautoplay = bool; // ie 9/10/11 autoplay fix
+
+		!m.svg && svgfallback.run();
+
+		FHContainer = $('#splash'); // $('#splash, #colophon') for multiple exucution
+
+		// container
+		onSplashInit();
+		onStickyInit();
+
+		// handlers
 		$(win).resize(onResizeHandler);
         $(win).scroll(onScrollHandler);
 
 		onResizeHandler();
         onScrollHandler();
+
+
+        /// TEST
+        btn = $('.mobile-btn');
+        btn.click(function(e) { e.preventDefault(); btn.toggleClass('open') });
 	}
 
 
 
-	// RESIZE HANDLER
-	// ==============================================================================================
+	//┐
+    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+    //╠──┤  RESIZE HANDLER                                                                      │
+    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
+    //┘
 
 	function onResizeHandler()
     {
@@ -162,43 +270,41 @@
 
     	FHContainer && FHContainer.css('height', h);
 
-    	m.videoautoplay && (videoWidth / w < videoHeight / h)
-    		? splashVideo.css({'width': w, 'height': 'auto'})
-    		: splashVideo.css({'width': 'auto', 'height': h});
+    	m.videoautoplay && onSplashResize(w, h);
     }
 
 
 
-	// SCROLLING HANDLER
-	// ==============================================================================================
+	//┐
+    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+    //╠──┤  SCROLLING HANDLER                                                                   │
+    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
+    //┘
 
 	function onScrollHandler()
     {
-    	var s = vp.verticalScroll();
+    	var s = vp.scrollY();
     	var h = vp.height();
 
-        if (s < h) {
-            splashLogo.css({
-                'opacity': 0.6 * (1 - (s * 1) / h),
-                'top': 40 / (1 - (s * 0.5) / h) + '%'
-            });
-
-            splashArrow.css('opacity', 0.6 * (1 - (s * 4) / h));
-        }
-
-        if (s > (h+64))
-        {
-        	stickyContainer.addClass("fix");
-        } else {
-        	stickyContainer.removeClass("fix");
-        }
+        onSplashScroll(s, h);
+        onStickyScroll(s, h);
     }
 
 
 }(window, document, Modernizr, jQuery));
 
 
-// OLD IOS DEVICE RESIZE FIX BUG
+
+
+//┐
+//│  ╔══════════════════════════════════════════════════════════════════════════════════════════╗
+//│  ║                                                                                          ║
+//╠──╢  OLD IOS DEVICE RESIZE FIX BUG                                                           ║
+//│  ║                                                                                          ║
+//│  ╚══════════════════════════════════════════════════════════════════════════════════════════╝
+//┘
+
+
 ;(function(doc) 
 {
     var addEvent = 'addEventListener',
@@ -218,4 +324,7 @@
     }
 
 }(document));
+
+
+
 
