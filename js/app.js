@@ -120,69 +120,13 @@
 
 // INITIALIZE APP
 jQuery && jQuery(function($) { app.initialize($, [
-    "img/qu/qu-1.jpg",
-    "img/qu/qu-2.jpg",
-    "img/qu/qu-3.jpg",
-    "img/qu/qu-4.jpg",
-    "img/qu/qu-5.jpg",
-    "img/qu/qu-6.jpg",
-    "img/qu/qu-7.jpg",
-    "img/qu/qu-8.jpg",
-
-    "img/lll/lll-1.jpg",
-    "img/lll/lll-2.jpg",
-    "img/lll/lll-3.jpg",
-    "img/lll/lll-4.jpg",
-    "img/lll/lll-5.jpg",
-    "img/lll/lll-6.jpg",
-    "img/lll/lll-7.jpg",
-    "img/lll/lll-8.jpg",
-        
-    "img/el/el-1.jpg",
-    "img/el/el-2.jpg",
-    "img/el/el-3.jpg",
-    "img/el/el-4.jpg",
-    "img/el/el-5.jpg",
-    "img/el/el-6.jpg",
-    "img/el/el-7.jpg",
-    "img/el/el-8.jpg",
-    "img/el/el-9.jpg",
-    "img/el/el-10.jpg",
-        
-    "img/nv/nv-1.jpg",
-    "img/nv/nv-2.jpg",
-    "img/nv/nv-3.jpg",
-    "img/nv/nv-4.jpg",
-    "img/nv/nv-5.jpg",
-    "img/nv/nv-6.jpg",
-    "img/nv/nv-7.jpg",
-        
-    "img/nb/nb-1.jpg",
-    "img/nb/nb-2.jpg",
-    "img/nb/nb-3.jpg",
-    "img/nb/nb-4.jpg",
-    "img/nb/nb-5.jpg",
-    "img/nb/nb-6.jpg",
-    "img/nb/nb-7.jpg",
-    "img/nb/nb-8.jpg",
-    "img/nb/nb-9.jpg",
-    "img/nb/nb-10.jpg",
-    "img/nb/nb-11.jpg",
-    "img/nb/nb-12.jpg",
-    "img/nb/nb-13.jpg",
-        
-    "img/hm/hm-1.jpg",
-    "img/hm/hm-2.jpg",
-    "img/hm/hm-3.jpg",
-    "img/hm/hm-4.jpg",
-    "img/hm/hm-5.jpg",
-    "img/hm/hm-6.jpg",
-        
-    "img/cc/cc-1.jpg",
-    "img/cc/cc-2.jpg",
-    "img/cc/cc-3.jpg",
-    "img/cc/cc-4.jpg",
-    "img/cc/cc-5.jpg"
+    "img/nv/nv-1.jpg", "img/nv/nv-2.jpg", "img/nv/nv-3.jpg", "img/nv/nv-4.jpg", "img/nv/nv-5.jpg", "img/nv/nv-6.jpg", "img/nv/nv-7.jpg",
+    "img/qu/qu-1.jpg", "img/qu/qu-2.jpg", "img/qu/qu-3.jpg", "img/qu/qu-4.jpg", "img/qu/qu-5.jpg", "img/qu/qu-6.jpg", "img/qu/qu-7.jpg", "img/qu/qu-8.jpg",
+    "img/ll/ll-1.jpg", "img/ll/ll-2.jpg", "img/ll/ll-3.jpg", "img/ll/ll-4.jpg", "img/ll/ll-5.jpg", "img/ll/ll-6.jpg", "img/ll/ll-7.jpg", "img/ll/ll-8.jpg",
+    "img/el/el-1.jpg", "img/el/el-2.jpg", "img/el/el-3.jpg", "img/el/el-4.jpg", "img/el/el-5.jpg", "img/el/el-6.jpg", "img/el/el-7.jpg", "img/el/el-8.jpg", "img/el/el-9.jpg", "img/el/el-10.jpg",
+    "img/nb/nb-1.jpg", "img/nb/nb-2.jpg", "img/nb/nb-3.jpg", "img/nb/nb-4.jpg", "img/nb/nb-5.jpg", "img/nb/nb-6.jpg", "img/nb/nb-7.jpg", "img/nb/nb-8.jpg", "img/nb/nb-9.jpg", "img/nb/nb-10.jpg", "img/nb/nb-11.jpg", "img/nb/nb-12.jpg", "img/nb/nb-13.jpg",
+    "img/hm/hm-1.jpg", "img/hm/hm-2.jpg", "img/hm/hm-3.jpg", "img/hm/hm-4.jpg", "img/hm/hm-5.jpg", "img/hm/hm-6.jpg",
+    "img/cc/cc-1.jpg", "img/cc/cc-2.jpg", "img/cc/cc-3.jpg", "img/cc/cc-4.jpg", "img/cc/cc-5.jpg"
 ])});
 
 
