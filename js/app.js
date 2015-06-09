@@ -120,6 +120,15 @@
 
 // INITIALIZE APP
 jQuery && jQuery(function($) { app.initialize($, [
+    "img/qu/qu-1.jpg",
+    "img/qu/qu-2.jpg",
+    "img/qu/qu-3.jpg",
+    "img/qu/qu-4.jpg",
+    "img/qu/qu-5.jpg",
+    "img/qu/qu-6.jpg",
+    "img/qu/qu-7.jpg",
+    "img/qu/qu-8.jpg",
+
     "img/lll/lll-1.jpg",
     "img/lll/lll-2.jpg",
     "img/lll/lll-3.jpg",
