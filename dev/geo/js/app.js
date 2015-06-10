@@ -39,7 +39,7 @@
 //┘
 
 
-;(function(win, doc, m, $)
+;(function(win, doc, modernizr, $)
 {
 
 	//┐
@@ -146,13 +146,13 @@
 		splashLogo = $('#splash .logo');
 		splashArrow = $('#splash .arrow');
 
-		m.videoautoplay ? splashVideoContainer.show() : splashCoverContainer.show();
+		modernizr.videoautoplay ? splashVideoContainer.show() : splashCoverContainer.show();
 	}
 
 
 	function onSplashResize(w, h)
     {
-    	(videoWidth / w < videoHeight / h)
+    	modernizr.videoautoplay && (videoWidth / w < videoHeight / h)
     		? splashVideo.css({ 'width': w, 'height': 'auto' })
     		: splashVideo.css({ 'width': 'auto', 'height': h });
     }
@@ -193,7 +193,7 @@
 
 	function onStickyScroll(s, h)
 	{
-		if (s > (h + 64)) {
+		if (s > h/*(h + 64)*/) {
         	sticky.addClass("fix");
         	splash.addClass("fix");
         } else {
@@ -210,7 +210,7 @@
     //│  └──────────────────────────────────────────────────────────────────────────────────────┘
     //┘
 
-	$(function($) { m.ie && m.ien ? initialize(true) : m.on('videoautoplay', function(r) { initialize(r) }) });
+	$(function($) { modernizr.ie && modernizr.ien ? initialize(true) : modernizr.on('videoautoplay', function(r) { initialize(r) }) });
 
 
 
@@ -220,7 +220,7 @@
     //│  └──────────────────────────────────────────────────────────────────────────────────────┘
     //┘
 
-	var FHContainer;
+	var FHContainer;	// full height container
 
 
 
@@ -232,9 +232,9 @@
 
 	function initialize(bool)
 	{
-		m.videoautoplay = bool; // ie 9/10/11 autoplay fix
+		modernizr.videoautoplay = bool; // ie 9/10/11 autoplay fix
 
-		!m.svg && svgfallback.run();
+		!modernizr.svg && svgfallback.run();
 
 		FHContainer = $('#splash'); // $('#splash, #colophon') for multiple exucution
 
@@ -246,6 +246,7 @@
 		$(win).resize(onResizeHandler);
         $(win).scroll(onScrollHandler);
 
+        // initialize prop
 		onResizeHandler();
         onScrollHandler();
 
@@ -270,7 +271,9 @@
 
     	FHContainer && FHContainer.css('height', h);
 
-    	m.videoautoplay && onSplashResize(w, h);
+    	onSplashResize(w, h);
+
+    	alert(w);
     }
 
 
