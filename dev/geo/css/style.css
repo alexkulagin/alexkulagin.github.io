@@ -1,8 +1,3 @@
-/*@white:                 #FFFFFF;
-		@white-silver:          #FAFAFA;
-		@black:                 #333333;
-		@green:                 #12C33B;
-		@black-blue:            #444666;*/
 html {
   font-size: 100%;
   -ms-text-size-adjust: 100%;
@@ -219,10 +214,9 @@ table {
 }
 html {
   font-size: 16px;
-  line-height: 1.375em;
+  line-height: 1.5em;
   font-family: "Roboto", Helvetica, Arial, sans-serif;
   font-weight: 400;
-  overflow-x: hidden;
 }
 strong {
   font-weight: 500;
@@ -259,12 +253,12 @@ a {
 a:hover {
   color: #ffffff;
 }
-/*img {
-            display: block;
-            max-width: 100%;
-            width: 100%;
-            height: auto;
-        }*/
+img {
+  display: block;
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+}
 ::selection {
   background: #444666;
   color: #deeaed;
@@ -284,27 +278,6 @@ img::-moz-selection {
 body {
   -webkit-tap-highlight-color: #444666;
 }
-/** {
-            -webkit-transition: 1s ease-in-out;
-            -moz-transition: 1s ease-in-out;
-            -o-transition: 1s ease-in-out;
-            transition: 1s ease-in-out;
-        }*/
-.container {
-  width: 84%;
-  margin: auto;
-  -webkit-transition: 1s ease-in-out;
-  -moz-transition: 1s ease-in-out;
-  -ms-transition: 1s ease-in-out;
-  -o-transition: 1s ease-in-out;
-  transition: 1s ease-in-out;
-}
-/*article {
-            padding-top: 120 / @u;
-        }*/
-/*#splash.fix {
-            margin-bottom: 128 / @unit;
-        }*/
 #splash {
   max-width: 100%;
   overflow: hidden;
@@ -332,7 +305,7 @@ body {
 }
 #splash .arrow {
   bottom: 5%;
-  width: 4.5rem;
+  width: 4.5em;
   cursor: pointer;
   z-index: 20;
 }
@@ -365,78 +338,102 @@ body {
   background: url(../img/splash-cover.png) center no-repeat;
   background-size: cover;
 }
-#sticky.mobile {
-  height: 4rem;
-  background-color: #1a1a1a;
-  border-bottom: thin solid #2a2a2a;
-  z-index: 100;
-  opacity: 0.98;
-}
-#sticky.mobile.fix {
+#sticky-menu {
   width: 100%;
+  height: 4em;
+  position: fixed;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+#sticky-menu .tint {
+  width: 100%;
+  height: 100%;
+  background-color: #1a1a1a;
+  opacity: 0.00;
+  position: absolute;
+}
+#sticky-menu nav {
+  display: none;
+}
+body.modal {
+  height: 100%;
+  overflow: hidden;
+}
+#modal-menu {
+  display: none;
+}
+#modal-menu .container {
+  display: none;
+}
+.mobile #modal-menu {
+  display: block;
   position: fixed;
   top: 0;
+  left: 0;
+  z-index: 150;
 }
-#sticky.mobile .menu {
-  height: 100%;
-  position: relative;
-}
-#sticky.mobile .menu nav {
-  width: 100%;
+.mobile #modal-menu .btn {
+  width: 4em;
+  height: 4em;
+  padding: 1.75em 1.375em;
+  cursor: pointer;
   position: absolute;
-  bottom: 0;
-}
-#sticky.mobile .menu nav .mobile-btn {
+  z-index: 20;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   -o-box-sizing: border-box;
   -ms-box-sizing: border-box;
   box-sizing: border-box;
-  width: 4rem;
-  height: 4rem;
-  padding: 1.625rem 1.375rem;
-  cursor: pointer;
-  margin-left: -1.375rem;
 }
-#sticky.mobile .menu nav .mobile-btn .menu-bar {
+.mobile #modal-menu .btn .bar {
   -webkit-transition: all 0.2s;
   -moz-transition: all 0.2s;
   -ms-transition: all 0.2s;
   -o-transition: all 0.2s;
   transition: all 0.2s;
   display: block;
-  width: 1.25rem;
-  height: 0.25rem;
-  margin: 0 0 0.25rem;
+  width: 1.25em;
+  height: 0.125em;
+  margin: 0 0 0.25em;
   background: #ffffff;
 }
-#sticky.mobile .menu nav .mobile-btn.open .menu-bar {
-  -webkit-transform-origin: 0.28125rem center;
-  -moz-transform-origin: 0.28125rem center;
-  -ms-transform-origin: 0.28125rem center;
-  -o-transform-origin: 0.28125rem center;
-  transform-origin: 0.28125rem center;
+.mobile #modal-menu .btn.open .bar {
+  -webkit-transform-origin: 0.3625em center;
+  -moz-transform-origin: 0.3625em center;
+  -ms-transform-origin: 0.3625em center;
+  -o-transform-origin: 0.3625em center;
+  transform-origin: 0.3625em center;
   background: #12c33b;
-  margin-left: 0.125rem;
+  margin-left: 0.0625em;
 }
-#sticky.mobile .menu nav .mobile-btn.open .menu-bar:first-child {
+.mobile #modal-menu .btn.open .bar:first-child {
   -webkit-transform: scale(1) rotate(45deg);
   -moz-transform: scale(1) rotate(45deg);
   -ms-transform: scale(1) rotate(45deg);
   -o-transform: scale(1) rotate(45deg);
 }
-#sticky.mobile .menu nav .mobile-btn.open .menu-bar:nth-child(2) {
+.mobile #modal-menu .btn.open .bar:nth-child(2) {
   -webkit-transform: scale(1) rotate(-45deg);
   -moz-transform: scale(1) rotate(-45deg);
   -ms-transform: scale(1) rotate(-45deg);
   -o-transform: scale(1) rotate(-45deg);
 }
-#sticky.mobile .menu nav ul {
-  display: none;
+.modal #modal-menu {
+  width: 100%;
+  height: 100%;
 }
-#sticky.mobile .menu img {
-  width: 6.25rem;
-  right: 0;
-  bottom: 1.375rem;
-  position: absolute;
+.modal #modal-menu .container {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  z-index: 10;
+}
+.modal #modal-menu .container .tint {
+  background-color: #1a1a1a;
+  opacity: 0.9;
+  width: 100%;
+  height: 100%;
 }

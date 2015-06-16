@@ -1,31 +1,34 @@
 
 
 
-// VIEWPORT UTILS
-/*var vpu = (function(win, doc)
+//┐
+//│  ╔══════════════════════════════════════════════════════════════════════════════════════════╗
+//│  ║                                                                                          ║
+//╠──╢  OLD IOS DEVICE RESIZE FIX BUG                                                           ║
+//│  ║                                                                                          ║
+//│  ╚══════════════════════════════════════════════════════════════════════════════════════════╝
+//┘
+
+
+;(function(doc) 
 {
-	var db = doc.body,
-		de = doc.documentElement,
-		dt = doc.all && !win.atob ? de : db,
+	var addEvent = 'addEventListener',
+		type = 'gesturestart',
+		qsa = 'querySelectorAll',
+		scales = [1, 1],
+		meta = qsa in doc ? doc[qsa]('meta[name=viewport]') : [],
+		fix = function() {
+			meta.content = 'width=device-width,minimum-scale=' + scales[0] + ',maximum-scale=' + scales[1];
+			doc.removeEventListener(type, fix, true);
+		};
 
-		mm = win['matchMedia'] || win['msMatchMedia'],
-	    mq = mm ? function(q) { return !!mm.call(win, q)['matches'] } 
-	            : function() { return false },
-	    getSize = function(d, i, c) { return de[c] < win[i] && mq('(min-' + d + ':' + win[i] + 'px)') ? function() { return win[i] } : function() { return de[c] } },
-	
-	utils = {};
-	utils['getWidth'] = getSize('width', 'innerWidth', 'clientWidth');
-	utils['getHeight'] = getSize('height', 'innerHeight', 'clientHeight');
-	utils['getAspectRatio'] = function() { return utils.getWidth() / utils.getHeight() };
-	utils['getOrientation'] = function() { return 1 < utils.getAspectRatio() ? 0 : 1 }; // ? "landscape 0" : "portrait 1"
-	utils['getScrollTop'] = function() { return dt.scrollTop };
-	utils['getScrollLeft'] = function() { return dt.scrollLeft };
-	utils['getDocumentWidth'] = function() { return Math.max(db.scrollWidth, db.offsetWidth, db.clientWidth, de.scrollWidth, de.offsetWidth, de.clientWidth) };
-	utils['getDocumentHeight'] = function() { return Math.max(db.scrollHeight, db.offsetHeight, db.clientHeight, de.scrollHeight, de.offsetHeight, de.clientHeight) };
+	if ((meta = meta[meta.length - 1]) && addEvent in doc) {
+		fix();
+		scales = [.25, 1.6];
+		doc[addEvent](type, fix, true);
+	}
 
-	return utils;
-
-}(window, document));*/
+}(document));
 
 
 
@@ -39,14 +42,14 @@
 //┘
 
 
-;(function(win, doc, modernizr, $)
+;(function(win, doc, Modernizr, Signal, $)
 {
 
 	//┐
-    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
-    //╠──┤  VIEWPORT UTILS                                                                      │
-    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
-    //┘
+	//│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+	//╠──┤  VIEWPORT UTILS                                                                      │
+	//│  └──────────────────────────────────────────────────────────────────────────────────────┘
+	//┘
 
 	var vp = (function(w, d)
 	{	
@@ -55,9 +58,9 @@
 			dt = d.all && !w.atob ? de : db,
 
 			mm = w['matchMedia'] || w['msMatchMedia'],
-		    mq = mm ? function(q) { return !!mm.call(w, q)['matches'] } 
-		            : function() { return false },
-		    vs = function(d, i, c) { return de[c] < w[i] && mq('(min-' + d + ':' + w[i] + 'px)') ? function() { return w[i] } : function() { return de[c] } },
+			mq = mm ? function(q) { return !!mm.call(w, q)['matches'] } 
+					: function() { return false },
+			vs = function(d, i, c) { return de[c] < w[i] && mq('(min-' + d + ':' + w[i] + 'px)') ? function() { return w[i] } : function() { return de[c] } },
 		
 		utils = {};
 		utils['width'] = vs('width', 'innerWidth', 'clientWidth');
@@ -76,27 +79,27 @@
 
 
 	//┐
-    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
-    //╠──┤  SVG FALLBACK                                                                        │
-    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
-    //┘
+	//│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+	//╠──┤  SVG FALLBACK                                                                        │
+	//│  └──────────────────────────────────────────────────────────────────────────────────────┘
+	//┘
 
 	var svgfallback = (function(d)
 	{
-		var images, l, src, newSrc, ext;
+		var collection, l, src, to, ext;
 
 		function run()
 		{
-			images = d.getElementsByTagName('img');
-			l = images.length;
+			collection = d.getElementsByTagName('img');
+			l = collection.length;
 
 			while (l--) 
 			{
-				src = images[l].getAttribute('src');
+				src = collection[l].getAttribute('src');
 				if (src === null) continue;
 				if (getExt(src) == 'svg') {
-					newSrc = src.replace('.svg', '.' + 'png');
-					images[l].setAttribute('src', newSrc);
+					to = src.replace('.svg', '.' + 'png');
+					collection[l].setAttribute('src', to);
 				}	
 			}
 		}
@@ -106,10 +109,10 @@
 			ext = s.split('.').pop();
 
 			if (ext.indexOf("?") !== -1) {
-          		ext = ext.split('?')[0];
-        	}
+				ext = ext.split('?')[0];
+			}
 
-        	return ext;
+			return ext;
 		}
 
 		return { 'run': run };
@@ -119,214 +122,278 @@
 
 
 	//┐
-    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
-    //╠──┤  SPLASH                                                                              │
-    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
-    //┘
+	//│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+	//╠──┤  APP PROPS                                                                           │
+	//│  └──────────────────────────────────────────────────────────────────────────────────────┘
+	//┘
 
+	var vW = 0, vH = 0,		// width, height
+		vA = 0, vO = 0,		// aspect ratio, orientation
+		dW = 0, dH = 0,		// doc width, doc height
+		sX = 0, sY = 0,		// scrollX, scrollY
+
+		isMobile,			// mobile or desktop version
+
+		body,
+
+		// app signals
+		initializeSignal = new Signal(),
+		resizeSignal = new Signal(),
+		scrollSignal = new Signal(),
+		mobileSignal = new Signal();
+
+
+
+	//┐
+	//│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+	//╠──┤  APP INITIALIZE                                                                      │
+	//│  └──────────────────────────────────────────────────────────────────────────────────────┘
+	//┘
+
+	function initialize(b)
+	{
+		Modernizr.videoautoplay = b; // ie 9/10/11 autoplay fix
+		Modernizr.svg || svgfallback.run();
+
+		body = $('body');
+
+		// initialize sections
+		initializeSignal.dispatch();
+		initializeSignal = undefined;
+
+		// handlers registration
+		$(win).resize(onResizeHandler);
+		$(win).scroll(onScrollHandler);
+
+		mobileSignal.add(onChangeVersion);
+
+		// update props
+		onResizeHandler();
+		onScrollHandler();
+	}
+
+
+
+	//┐
+	//│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+	//╠──┤  APP RESIZE HANDLER                                                                  │
+	//│  └──────────────────────────────────────────────────────────────────────────────────────┘
+	//┘
+
+	function onResizeHandler()
+	{
+		vW = vp.width();
+		vH = vp.height();
+		vA = vp.aspect(); 
+		vO = vp.orientation();
+
+		var m = isMobile;
+		isMobile = vW >= (16 * 60) ? false : true;
+		isMobile !== m && mobileSignal.dispatch();
+
+		resizeSignal.dispatch();
+	}
+
+
+
+	//┐
+	//│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+	//╠──┤  APP SCROLLING HANDLER                                                               │
+	//│  └──────────────────────────────────────────────────────────────────────────────────────┘
+	//┘
+
+	function onScrollHandler()
+	{
+		sX = vp.scrollX(); 
+		sY = vp.scrollY();
+		
+		scrollSignal.dispatch()
+	}
+
+
+
+	//┐
+	//│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+	//╠──┤  APP CHANGE MOBILE VERSION                                                           │
+	//│  └──────────────────────────────────────────────────────────────────────────────────────┘
+	//┘
+
+	function onChangeVersion()
+	{
+		isMobile ? body.addClass('mobile') : body.removeClass('mobile');
+	}
+
+
+
+	//┐
+	//│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+	//╠──┤  SPLASH MODULE                                                                       │
+	//│  └──────────────────────────────────────────────────────────────────────────────────────┘
+	//┘
+	
 	var splash,
-		splashVideoContainer, 
-		splashCoverContainer, 
-		splashVideo, 
-		videoWidth, 
-		videoHeight, 
-		splashLogo, 
-		splashArrow;
+		videoContainer,
+		coverContainer,
+		splashVideo,
+		splashLogo,
+		splashArrow,
+		splashAutoplay,
 
+		videoWidth = 1076, 
+		videoHeight = 606; 
 
-	function onSplashInit()
+	initializeSignal.addOnce(splashInit);
+
+	function splashInit()
 	{
 		splash = $('#splash');
-		splashVideoContainer = $('#splash .video');
-		splashCoverContainer = $('#splash .cover');
+		videoContainer = $('#splash .video');
+		coverContainer = $('#splash .cover');
 		splashVideo = $('#splash video');
-		videoWidth = 1076;
-		videoHeight = 606;
-
 		splashLogo = $('#splash .logo');
 		splashArrow = $('#splash .arrow');
 
-		modernizr.videoautoplay ? splashVideoContainer.show() : splashCoverContainer.show();
+		splashAutoplay = Modernizr.videoautoplay;
+		splashAutoplay ? videoContainer.show() : coverContainer.show();
+
+		resizeSignal.add(splashResize);
+		scrollSignal.add(splashScroll);
 	}
 
 
-	function onSplashResize(w, h)
-    {
-    	modernizr.videoautoplay && (videoWidth / w < videoHeight / h)
-    		? splashVideo.css({ 'width': w, 'height': 'auto' })
-    		: splashVideo.css({ 'width': 'auto', 'height': h });
-    }
-
-
-    function onSplashScroll(s, h)
-    {
-    	var lt = 0.5, // logo top factor
-    		lo = 1.0, // logo opacity factor
-    		ao = 4.0; // arrow opacity factor
-
-    	if (s > h) return;
-
-    	splashLogo.css({
-            'opacity': 0.6 * (1 - (s * lo) / h),
-            'top': 40 / (1 - (s * lt) / h) + '%'
-         });
-
-        splashArrow.css('opacity', 0.6 * (1 - (s * ao) / h));
-    }
-
-
-
-	//┐
-    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
-    //╠──┤  STICKY MENU                                                                         │
-    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
-    //┘
-
-	var sticky;
-
-
-	function onStickyInit()
+	function splashResize()
 	{
-		sticky = $('#sticky');
+		var w = vW,
+			h = vH,
+			o = 64;
+
+		splash.css('height', h);
+
+		splashAutoplay && (videoWidth / w < videoHeight / h)
+			? splashVideo.css({ 'width': w + o, 'height': 'auto' })
+			: splashVideo.css({ 'width': 'auto', 'height': h + o });
 	}
 
 
-	function onStickyScroll(s, h)
+	function splashScroll()
 	{
-		if (s > h/*(h + 64)*/) {
-        	sticky.addClass("fix");
-        	splash.addClass("fix");
-        } else {
-        	sticky.removeClass("fix");
-        	splash.removeClass("fix");
-        }
+		var lt = 0.5,	// logo top factor
+			lo = 1.0,	// logo opacity factor
+			ao = 4.0,	// arrow opacity factor
+			op = 0.6,	// default opacity
+			to = 40;	// default logo top
+		
+		if (sY > vH) return;
+
+		splashLogo.css({
+			'opacity': op * (1 - (sY * lo) / vH),
+			'top': to / (1 - (sY * lt) / vH) + '%'
+		 });
+
+		splashArrow.css('opacity', op * (1 - (sY * ao) / vH));
 	}
 
 
 
 	//┐
-    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
-    //╠──┤  CHECK VIDEO AUTOPLAY & STARTUP APP                                                  │
-    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
-    //┘
+	//│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+	//╠──┤  STICKY MODULE                                                                       │
+	//│  └──────────────────────────────────────────────────────────────────────────────────────┘
+	//┘
+	
+	var sticky,
+		stickyTint;
 
-	$(function($) { modernizr.ie && modernizr.ien ? initialize(true) : modernizr.on('videoautoplay', function(r) { initialize(r) }) });
+	initializeSignal.addOnce(stickyInit);
 
-
-
-	//┐
-    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
-    //╠──┤  APP PROPS                                                                           │
-    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
-    //┘
-
-	var FHContainer;	// full height container
-
-
-
-	//┐
-    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
-    //╠──┤  APP INITIALIZE                                                                      │
-    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
-    //┘
-
-	function initialize(bool)
+	function stickyInit()
 	{
-		modernizr.videoautoplay = bool; // ie 9/10/11 autoplay fix
+		sticky = $('#sticky-menu');
+		stickyTint = $('#sticky-menu .tint');
 
-		!modernizr.svg && svgfallback.run();
+		scrollSignal.add(stickyScroll);
+	}
 
-		FHContainer = $('#splash'); // $('#splash, #colophon') for multiple exucution
+	function stickyScroll()
+	{
+		var min = 0.0,	// default opacity
+			max = 0.6;	// final opacity
 
-		// container
-		onSplashInit();
-		onStickyInit();
+		if (sY > vH) return;
 
-		// handlers
-		$(win).resize(onResizeHandler);
-        $(win).scroll(onScrollHandler);
-
-        // initialize prop
-		onResizeHandler();
-        onScrollHandler();
-
-
-        /// TEST
-        btn = $('.mobile-btn');
-        btn.click(function(e) { e.preventDefault(); btn.toggleClass('open') });
+		stickyTint.css('opacity', min + (max - min) * (sY/vH));
 	}
 
 
 
 	//┐
-    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
-    //╠──┤  RESIZE HANDLER                                                                      │
-    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
-    //┘
+	//│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+	//╠──┤  MODAL MENU MODULE                                                                   │
+	//│  └──────────────────────────────────────────────────────────────────────────────────────┘
+	//┘
+	
+	var menu,
+		menuBtn,
+		isMenuOpen;
 
-	function onResizeHandler()
-    {
-    	var w = vp.width();
-    	var h = vp.height();
+	initializeSignal.addOnce(menuInit);
 
-    	FHContainer && FHContainer.css('height', h);
+	function menuInit()
+	{
+		menu = $('#modal-menu');
+		menuBtn = $('#modal-menu .btn');
+		menuBtn.click(onClickMenuBtn);
 
-    	onSplashResize(w, h);
+		mobileSignal.add(onChangeMobileMenu);
+	}
 
-    	alert(w);
-    }
+	function onChangeMobileMenu()
+	{
+		!isMobile && isMenuOpen && onHideMenu();
+	}
+
+	function onClickMenuBtn()
+	{
+		!isMenuOpen ? onShowMenu() : onHideMenu();
+	}
+
+	function onShowMenu()
+	{
+		menuBtn.addClass('open');
+		body.addClass('modal');
+		//body.bind('touchmove', function(e){ e.preventDefault() });
+
+		isMenuOpen = true;
+	}
+
+	function onHideMenu()
+	{
+		menuBtn.removeClass('open');
+		body.removeClass('modal');
+		//body.unbind('touchmove');
+
+		isMenuOpen = false;
+	}
 
 
 
 	//┐
-    //│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
-    //╠──┤  SCROLLING HANDLER                                                                   │
-    //│  └──────────────────────────────────────────────────────────────────────────────────────┘
-    //┘
+	//│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+	//╠──┤  CHECK VIDEO AUTOPLAY & STARTUP APP                                                  │
+	//│  └──────────────────────────────────────────────────────────────────────────────────────┘
+	//┘
 
-	function onScrollHandler()
-    {
-    	var s = vp.scrollY();
-    	var h = vp.height();
-
-        onSplashScroll(s, h);
-        onStickyScroll(s, h);
-    }
-
-
-}(window, document, Modernizr, jQuery));
+	$(function($) { 
+		!(Modernizr.ie && Modernizr.ien)
+			? Modernizr.on('videoautoplay', function(r) { initialize(r) }) 
+			: initialize(true) 
+	});
 
 
 
-
-//┐
-//│  ╔══════════════════════════════════════════════════════════════════════════════════════════╗
-//│  ║                                                                                          ║
-//╠──╢  OLD IOS DEVICE RESIZE FIX BUG                                                           ║
-//│  ║                                                                                          ║
-//│  ╚══════════════════════════════════════════════════════════════════════════════════════════╝
-//┘
+}(window, document, Modernizr, signals.Signal, jQuery));
 
 
-;(function(doc) 
-{
-    var addEvent = 'addEventListener',
-        type = 'gesturestart',
-        qsa = 'querySelectorAll',
-        scales = [1, 1],
-        meta = qsa in doc ? doc[qsa]('meta[name=viewport]') : [],
-        fix = function() {
-            meta.content = 'width=device-width,minimum-scale=' + scales[0] + ',maximum-scale=' + scales[1];
-            doc.removeEventListener(type, fix, true);
-        };
-
-    if ((meta = meta[meta.length - 1]) && addEvent in doc) {
-        fix();
-        scales = [.25, 1.6];
-        doc[addEvent](type, fix, true);
-    }
-
-}(document));
 
 
 
