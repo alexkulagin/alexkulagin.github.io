@@ -81,24 +81,30 @@
 	};
 
 	ElastiStack.prototype._setStackStyle = function() {
-		var item1 = this._firstItem(), item2 = this._secondItem(), item3 = this._thirdItem();
+		var item1 = this._firstItem(), item2 = this._secondItem(), item3 = this._thirdItem(), item4 = this._fourthItem();
 
 		if( item1 ) {
 			item1.style.opacity = 1;
-			item1.style.zIndex = 4;
+			item1.style.zIndex = 5;
 			setTransformStyle( item1, is3d ? 'translate3d(0,0,0)' : 'translate(0,0)' );
 		}
 
 		if( item2 ) {
 			item2.style.opacity = 1;
-			item2.style.zIndex = 3;
+			item2.style.zIndex = 4;
 			setTransformStyle( item2, is3d ? 'translate3d(0,0,-60px)' : 'translate(0,0)' );
 		}
 
 		if( item3 ) {
 			item3.style.opacity = 1;
-			item3.style.zIndex = 2;
+			item3.style.zIndex = 3;
 			setTransformStyle( item3, is3d ? 'translate3d(0,0,-120px)' : 'translate(0,0)' );
+		}
+
+		if( item4 ) {
+			item4.style.opacity = 1;
+			item4.style.zIndex = 2;
+			setTransformStyle( item4, is3d ? 'translate3d(0,0,-180px)' : 'translate(0,0)' );
 		}
 	};
 
@@ -119,7 +125,7 @@
 		instance.element.style.opacity = 0;
 
 		// other items move back to stack
-		var item2 = this._secondItem(), item3 = this._thirdItem();
+		var item2 = this._secondItem(), item3 = this._thirdItem(), item4 = this._fourthItem();
 
 		if( item2 ) {
 			classie.add( item2, 'move-back' );
@@ -131,6 +137,11 @@
 			classie.add( item3, 'animate' );
 			setTransformStyle( item3, is3d ? 'translate3d(0,0,-120px)' : 'translate(0,0)' );
 		}
+		if( item4 ) {
+			classie.add( item4, 'move-back' );
+			classie.add( item4, 'animate' );
+			setTransformStyle( item4, is3d ? 'translate3d(0,0,-180px)' : 'translate(0,0)' );
+		}
 
 		// after transition ends..
 		var self = this,
@@ -138,7 +149,7 @@
 				instance.element.removeEventListener( transEndEventName, onEndTransFn );
 				
 				// reset first item
-				setTransformStyle( instance.element, is3d ? 'translate3d(0,0,-180px)' : 'translate(0,0,0)' );
+				setTransformStyle( instance.element, is3d ? 'translate3d(0,0,-240px)' : 'translate(0,0,0)' );
 				instance.element.style.left = instance.element.style.top = '0px';
 				instance.element.style.zIndex = -1;
 				classie.remove( instance.element, 'animate' );
@@ -148,12 +159,14 @@
 				// new front items
 				var item1 = self._firstItem(),
 					item2 = self._secondItem(),
-					item3 = self._thirdItem();
+					item3 = self._thirdItem(),
+					item4 = self._fourthItem();
 
 				// reset transition timing function
 				classie.remove( item1, 'move-back' );
 				if( item2 ) classie.remove( item2, 'move-back' );
 				if( item3 ) classie.remove( item3, 'move-back' );
+				if( item4 ) classie.remove( item3, 'move-back' );
 
 				setTimeout( function() {
 					// the upcoming one will animate..
@@ -181,7 +194,7 @@
 	};
 
 	ElastiStack.prototype._moveBack = function( instance ) {
-		var item2 = this._secondItem(), item3 = this._thirdItem();
+		var item2 = this._secondItem(), item3 = this._thirdItem(), item4 = this._fourthItem();
 
 		classie.add( instance.element, 'move-back' );
 		classie.add( instance.element, 'animate' );
@@ -199,11 +212,16 @@
 			classie.add( item3, 'animate' );
 			setTransformStyle( item3, is3d ? 'translate3d(0,0,-120px)' : 'translate(0,0)' );
 		}
+		if( item4 ) {
+			classie.add( item4, 'move-back' );
+			classie.add( item4, 'animate' );
+			setTransformStyle( item4, is3d ? 'translate3d(0,0,-180px)' : 'translate(0,0)' );
+		}
 	};
 
 	ElastiStack.prototype._onDragStart = function( instance, event, pointer ) {
 		// remove transition classes if any
-		var item2 = this._secondItem(), item3 = this._thirdItem();
+		var item2 = this._secondItem(), item3 = this._thirdItem(), item4 = this._fourthItem();
 
 		classie.remove( instance.element, 'move-back' );
 		classie.remove( instance.element, 'animate' );
@@ -216,6 +234,10 @@
 			classie.remove( item3, 'move-back' );
 			classie.remove( item3, 'animate' );
 		}
+		if( item4 ) {
+			classie.remove( item4, 'move-back' );
+			classie.remove( item4, 'animate' );
+		}
 	};
 
 	ElastiStack.prototype._onDragMove = function( instance, event, pointer ) {
@@ -224,12 +246,15 @@
 		}
 		else {
 			// the second and third items also move
-			var item2 = this._secondItem(), item3 = this._thirdItem();
+			var item2 = this._secondItem(), item3 = this._thirdItem(), item4 = this._fourthItem();
 			if( item2 ) {
-				setTransformStyle( item2, is3d ? 'translate3d(' + ( instance.position.x * .6 ) + 'px,' + ( instance.position.y * .6 ) + 'px, -60px)' : 'translate(' + ( instance.position.x * .6 ) + 'px,' + ( instance.position.y * .6 ) + 'px)' );
+				setTransformStyle( item2, is3d ? 'translate3d(' + ( instance.position.x * .9 ) + 'px,' + ( instance.position.y * .9 ) + 'px, -60px)' : 'translate(' + ( instance.position.x * .9 ) + 'px,' + ( instance.position.y * .9 ) + 'px)' );
 			}
 			if( item3 ) {
-				setTransformStyle( item3, is3d ? 'translate3d(' + ( instance.position.x * .3 ) + 'px,' + ( instance.position.y * .3 ) + 'px, -120px)' : 'translate(' + ( instance.position.x * .3 ) + 'px,' + ( instance.position.y * .3 ) + 'px)' );
+				setTransformStyle( item3, is3d ? 'translate3d(' + ( instance.position.x * .6 ) + 'px,' + ( instance.position.y * .6 ) + 'px, -120px)' : 'translate(' + ( instance.position.x * .6 ) + 'px,' + ( instance.position.y * .6 ) + 'px)' );
+			}
+			if( item4 ) {
+				setTransformStyle( item4, is3d ? 'translate3d(' + ( instance.position.x * .3 ) + 'px,' + ( instance.position.y * .3 ) + 'px, -180px)' : 'translate(' + ( instance.position.x * .3 ) + 'px,' + ( instance.position.y * .3 ) + 'px)' );
 			}
 		}
 	};
@@ -295,11 +320,18 @@
 			return this.current + 2 < this.itemsCount ? this.items[ this.current + 2 ] : this.items[ Math.abs( this.itemsCount - ( this.current + 2 ) ) ];
 		}
 	};
+	
+	// returns the fourth item in the stack
+	ElastiStack.prototype._fourthItem = function() { 
+		if( this.itemsCount >= 4 ) {
+			return this.current + 3 < this.itemsCount ? this.items[ this.current + 3 ] : this.items[ Math.abs( this.itemsCount - ( this.current + 3 ) ) ];
+		}
+	};
 
 	// returns the last item (of the first three) in the stack
 	ElastiStack.prototype._lastItem = function() { 
-		if( this.itemsCount >= 3 ) {
-			return this._thirdItem();
+		if( this.itemsCount >= 4 ) {
+			return this._fourthItem();
 		}
 		else {
 			return this._secondItem();
