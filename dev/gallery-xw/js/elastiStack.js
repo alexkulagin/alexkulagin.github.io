@@ -49,9 +49,9 @@
 
 	ElastiStack.prototype.options = {
 		// distDragBack: if the user stops dragging the image in a area that does not exceed [distDragBack]px for either x or y then the image goes back to the stack 
-		distDragBack : 50,
+		distDragBack : 70,
 		// distDragMax: if the user drags the image in a area that exceeds [distDragMax]px for either x or y then the image moves away from the stack 
-		distDragMax : 100,
+		distDragMax : 140,
 		// callback
 		onUpdateStack : function( current ) { return false; }
 	};
