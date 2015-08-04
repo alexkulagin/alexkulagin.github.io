@@ -76,8 +76,8 @@ body {
 }
 
 .elasticstack li.animate {
-	-webkit-transition: all 0.3s ease-out;
-	transition: all 0.3s ease-out;
+	-webkit-transition: all 0.15s ease-out;
+	transition: all 0.15s ease-out;
 }
 
 .elasticstack li.move-back {
