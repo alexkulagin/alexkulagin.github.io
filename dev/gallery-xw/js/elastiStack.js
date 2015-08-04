@@ -248,13 +248,13 @@
 			// the second and third items also move
 			var item2 = this._secondItem(), item3 = this._thirdItem(), item4 = this._fourthItem();
 			if( item2 ) {
-				setTransformStyle( item2, is3d ? 'translate3d(' + ( instance.position.x * .9 ) + 'px,' + ( instance.position.y * .9 ) + 'px, -60px)' : 'translate(' + ( instance.position.x * .9 ) + 'px,' + ( instance.position.y * .9 ) + 'px)' );
+				setTransformStyle( item2, is3d ? 'translate3d(' + ( instance.position.x * .6 ) + 'px,' + ( instance.position.y * .6 ) + 'px, -60px)' : 'translate(' + ( instance.position.x * .6 ) + 'px,' + ( instance.position.y * .6 ) + 'px)' );
 			}
 			if( item3 ) {
-				setTransformStyle( item3, is3d ? 'translate3d(' + ( instance.position.x * .6 ) + 'px,' + ( instance.position.y * .6 ) + 'px, -120px)' : 'translate(' + ( instance.position.x * .6 ) + 'px,' + ( instance.position.y * .6 ) + 'px)' );
+				setTransformStyle( item3, is3d ? 'translate3d(' + ( instance.position.x * .3 ) + 'px,' + ( instance.position.y * .3 ) + 'px, -120px)' : 'translate(' + ( instance.position.x * .3 ) + 'px,' + ( instance.position.y * .3 ) + 'px)' );
 			}
 			if( item4 ) {
-				setTransformStyle( item4, is3d ? 'translate3d(' + ( instance.position.x * .3 ) + 'px,' + ( instance.position.y * .3 ) + 'px, -180px)' : 'translate(' + ( instance.position.x * .3 ) + 'px,' + ( instance.position.y * .3 ) + 'px)' );
+				setTransformStyle( item4, is3d ? 'translate3d(' + ( instance.position.x * .15 ) + 'px,' + ( instance.position.y * .15 ) + 'px, -180px)' : 'translate(' + ( instance.position.x * .15 ) + 'px,' + ( instance.position.y * .15 ) + 'px)' );
 			}
 		}
 	};
