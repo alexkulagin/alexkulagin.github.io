@@ -27,15 +27,22 @@ jQuery(function($)
 
 	$('.cart-tab-back').click(function(e){
 		e.stopPropagation();
-		wrapper.toggleClass("hide");
+		wrapper.toggleClass("hidden");
 		console.log('cart-tab-back');
 	});
 
 	$('.cart-tint').click(function(e){
 		e.stopPropagation();
-		wrapper.toggleClass("hide");
+		wrapper.toggleClass("hidden");
 		console.log('.cart-tint');
 	});
+
+
+	// trash
+
+	$('.cart-item-trash').click(function(){
+		$(this).parent().parent().parent().hide(200);
+	})
 
 
 
@@ -78,7 +85,7 @@ jQuery(function($)
            if (currentState == "current-section__favorites") {
             	changeState("cart-tab-main");
             } else {
-            	wrapper.toggleClass("hide");
+            	wrapper.toggleClass("hidden");
             }
         }
         else {
