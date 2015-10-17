@@ -324,6 +324,7 @@ body .frame {
 			OPTIMIZATION & BASE64 (SVG)
 			1. https://jakearchibald.github.io/svgomg/
 			2. http://www.mobilefish.com/services/base64/base64.php
+			3. https://www.base64encode.org/
 		*/
 .tab-back-ic {
   background-image: url('data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIxMSAtMTEgNDggNDgiPjxzdHlsZT4uc3Qwe2ZpbGw6bm9uZTt9IC5zdDF7ZmlsbDojNDI0MzQ2O3N0cm9rZTojNDI0MzQ2O3N0cm9rZS13aWR0aDozO3N0cm9rZS1taXRlcmxpbWl0OjEwO308L3N0eWxlPjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik0xMS0xMWg0OHY0OEgxMXoiLz48cGF0aCBjbGFzcz0ic3QxIiBkPSJNMTYuNSAxMy45aDM3LjFjLjUgMCAuOS0uNC45LS45cy0uNC0uOS0uOS0uOUgxNi41Yy0uNSAwLS45LjQtLjkuOXMuNC45LjkuOXoiLz48cGF0aCBjbGFzcz0ic3QxIiBkPSJNMzQuNiAzMmMuMiAwIC41LS4xLjctLjMuNC0uNC40LTEgMC0xLjNMMTcuOSAxMyAzNS4zLTQuNGMuNC0uNC40LTEgMC0xLjMtLjQtLjQtMS0uNC0xLjMgMGwtMTguMSAxOGMtLjIuMi0uMy40LS4zLjcgMCAuMy4xLjUuMy43bDE4LjEgMThjLjEuMi40LjMuNi4zeiIvPjwvc3ZnPg==');
@@ -517,6 +518,7 @@ body .frame {
   bottom: 0;
   text-align: center;
   z-index: 30;
+  pointer-events: none;
 }
 .cart-checkout-btn {
   position: relative;
