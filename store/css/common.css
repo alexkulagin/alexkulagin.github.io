@@ -511,19 +511,20 @@ body .frame {
 .current-section__favorites .cart-tab-cursor {
   left: 100%;
 }
-.cart-footer {
-  position: absolute;
-  width: 100%;
-  height: 6.25em;
-  bottom: 0;
-  text-align: center;
-  z-index: 30;
-}
+/*.cart-footer {
+			position: absolute;
+			width: 100%;
+			height: 100/@em;
+			bottom: 0;
+			text-align: center;
+			z-index: 30;
+		}*/
 .cart-checkout-btn {
   position: absolute;
   bottom: 1.5em;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 30;
   width: 5em;
   height: 5em;
   color: #ffffff;
