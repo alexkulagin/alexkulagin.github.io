@@ -77,7 +77,7 @@ jQuery(function($)
 
 
 	//
-
+	$.Finger.preventDefault = true;
 	$('.cart-panel').on('flick', function(e) {
 	    if ('horizontal' == e.orientation) {
 	        if (1 == e.direction) {
