@@ -537,9 +537,13 @@ body .frame {
 		}*/
 .cart-checkout-btn {
   position: absolute;
-  bottom: 1.5em;
+  bottom: 3em;
   left: 50%;
-  transform: translateX(-50%);
+  -webkit-transform: translate(-50%, 0);
+  -moz-transform: translate(-50%, 0);
+  -ms-transform: translate(-50%, 0);
+  -o-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
   z-index: 30;
   width: 5em;
   height: 5em;
@@ -567,12 +571,14 @@ body .frame {
 .cart-checkout-btn .checkout-cart-ic {
   margin: auto;
   position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  display: inline-block;
   background-size: 30px 30px;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   width: 30px;
   height: 30px;
 }
@@ -581,12 +587,28 @@ body .frame {
   text-transform: uppercase;
   font-size: 0.9375em;
   letter-spacing: 0.06em;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 .cart-checkout-btn:hover {
   background-color: #1b71d3;
 }
 .cart-checkout-btn:active {
   background-color: #1e5ea8;
+}
+/**
+		 * PORTRAIT MOBILE MODE (~416px)
+		 */
+@media (max-height: 26em) {
+  .cart-checkout-btn {
+    bottom: 1.5em;
+  }
 }
 .cart-content {
   position: absolute;
@@ -798,13 +820,6 @@ body .frame {
   }
   .cart-checkout-btn .checkout-label {
     display: block;
-    margin: auto;
-    position: absolute;
-    height: 1.25em;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
   }
 }
 @media screen and (min-width: 38.375em) {
