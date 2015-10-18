@@ -521,6 +521,7 @@ body .frame {
   pointer-events: none;
 }
 .cart-checkout-btn {
+  pointer-events: auto !important;
   position: relative;
   margin: auto;
   margin-bottom: 0.75em;
