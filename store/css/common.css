@@ -518,13 +518,12 @@ body .frame {
   bottom: 0;
   text-align: center;
   z-index: 30;
-  pointer-events: none;
 }
 .cart-checkout-btn {
-  pointer-events: auto !important;
-  position: relative;
-  margin: auto;
-  margin-bottom: 0.75em;
+  position: absolute;
+  bottom: 1.5em;
+  left: 50%;
+  transform: translateX(-50%);
   width: 5em;
   height: 5em;
   color: #ffffff;
