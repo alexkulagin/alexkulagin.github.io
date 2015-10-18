@@ -613,11 +613,11 @@ body .frame {
 }
 /** CART STATE */
 .current-section__cart .cart-sections {
-  left: 0;
+  transform: perspective(400) translate3d(0, 0, 0);
 }
 /** FAVORITES STATE */
 .current-section__favorites .cart-sections {
-  left: -100%;
+  transform: translate3d(-50%, 0, 0);
 }
 .cart-list {
   list-style-type: none;
