@@ -360,6 +360,10 @@ body .frame {
   background: #3392FF;
   background: rgba(0, 120, 255, 0.8);
 }
+.disable-hover,
+.disable-hover * {
+  pointer-events: none !important;
+}
 .cart-wrapper {
   position: absolute;
   font-family: 'Montserrat', sans-serif;
