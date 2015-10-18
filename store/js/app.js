@@ -45,6 +45,9 @@ jQuery(function($)
 	})
 
 
+	// $('body').bind('touchmove', function(e){e.preventDefault()})
+	$('.cart-tint').bind('touchmove', function(e){e.preventDefault()});
+
 
 	// mini app
 
