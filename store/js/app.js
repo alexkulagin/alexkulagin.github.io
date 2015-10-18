@@ -64,7 +64,6 @@ jQuery(function($)
 			newState = newState == "cart-tab-back" ? "current-section__back" : newState;
 			newState = newState == "cart-tab-main" ? "current-section__cart" : newState;
 			newState = newState == "cart-tab-favorites" ? "current-section__favorites" : newState;
-			transitionOut();
 		if (newState == currentState || newState == "current-section__back") return;
 
 		$('.cart-wrapper').removeClass(currentState);
@@ -78,19 +77,6 @@ jQuery(function($)
 
 
 	//
-	var body = document.body, timer;
-	function transitionOut()
-	{
-		console.log("trout");
-		clearTimeout(timer);
-		  if(!body.classList.contains('disable-hover')) {
-		    body.classList.add('disable-hover')
-		  }
-		  
-		  timer = setTimeout(function(){
-		    body.classList.remove('disable-hover')
-		  },500);
-	}
 
 	$('.cart-panel').on('flick', function(e) {
 	    if ('horizontal' == e.orientation) {
@@ -110,7 +96,6 @@ jQuery(function($)
 	            	changeState("cart-tab-favorites");
 	            }
 	        }
-	        transitionOut();
 
 	    }
 	});
