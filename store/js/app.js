@@ -20,7 +20,7 @@
 
 jQuery(function($)
 {
-	$('.nano').nanoScroller({iOSNativeScrolling: true});
+	$('.nano').nanoScroller({iOSNativeScrolling: true, preventPageScrolling: true});
 
 	// show hide
 	var wrapper = $('.cart-wrapper');
