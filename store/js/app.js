@@ -1028,7 +1028,7 @@
 
 jQuery(function($)
 {
-	$('.nano').nanoScroller({preventPageScrolling: true});
+	$('.nano').nanoScroller({iOSNativeScrolling: true, preventPageScrolling: true});
 
 	// show hide
 	var wrapper = $('.cart-wrapper');
