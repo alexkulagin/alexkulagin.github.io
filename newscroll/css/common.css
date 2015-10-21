@@ -249,6 +249,21 @@ body {
   width: 100%;
   height: 100%;
 }
+/**
+		 * IFRAME STYLE
+		 */
+body {
+  overflow: hidden;
+}
+body .frame {
+  position: absolute;
+  border: none;
+  width: 100%;
+  height: 100%;
+}
+/**
+		 * ISCROLL STYLE
+		 */
 .iScrollVerticalScrollbar {
   margin: 0.5em 0.125em;
   margin-top: 4.25em;
@@ -306,6 +321,16 @@ body {
   -ms-transition: all 0.5s;
   -o-transition: all 0.5s;
   transition: all 0.5s;
+}
+.cart-wrapper.hidden .cart-container {
+  -webkit-transform: translate3d(100%, 0, 0);
+  -moz-transform: translate3d(100%, 0, 0);
+  -ms-transform: translate3d(100%, 0, 0);
+  -o-transform: translate3d(100%, 0, 0);
+  transform: translate3d(100%, 0, 0);
+}
+.cart-wrapper.hidden .cart-tint {
+  opacity: 0;
 }
 .cart-header {
   position: absolute;
@@ -608,5 +633,9 @@ body {
 @media screen and (min-width: 34.375em) {
   .cart-checkout-btn {
     right: 17.1875em;
+  }
+  .iScrollVerticalScrollbar {
+    margin: 0.5em 0.25em;
+    margin-top: 4.25em;
   }
 }
