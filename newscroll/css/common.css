@@ -476,14 +476,14 @@ body {
   height: 100%;
 }
 .cart-checkout-btn {
-  position: absolute;
+  position: fixed;
   bottom: 1.25em;
-  left: 50%;
-  -webkit-transform: translate(-50%, 0);
-  -moz-transform: translate(-50%, 0);
-  -ms-transform: translate(-50%, 0);
-  -o-transform: translate(-50%, 0);
-  transform: translate(-50%, 0);
+  right: 50%;
+  -webkit-transform: translate(50%, 0);
+  -moz-transform: translate(50%, 0);
+  -ms-transform: translate(50%, 0);
+  -o-transform: translate(50%, 0);
+  transform: translate(50%, 0);
   z-index: 30;
   width: 5em;
   height: 5em;
@@ -603,5 +603,10 @@ body {
   }
   .cart-list-colophon {
     height: 6.875em !important;
+  }
+}
+@media screen and (min-width: 34.375em) {
+  .cart-checkout-btn {
+    right: 17.1875em;
   }
 }
