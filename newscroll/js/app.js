@@ -56,7 +56,7 @@ jQuery(function($)
 	});
 
 
-	$('.cart-tint').bind('touchmove', function(e){e.preventDefault()});
+	$('.cart-tint, .cart-header, .cart-checkout-btn').bind('touchmove', function(e){e.preventDefault()});
 
 
 	var wrapper = $('.cart-wrapper');

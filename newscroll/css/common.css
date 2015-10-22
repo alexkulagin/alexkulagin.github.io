@@ -252,16 +252,15 @@ body {
 /**
 		 * IFRAME STYLE
 		 */
-/*body {
-			overflow: hidden;
-		}
-
-		body .frame {
-			position: absolute;
-			border: none;
-			width: 100%;
-			height: 100%;
-		}*/
+body {
+  overflow: hidden;
+}
+body .frame {
+  position: absolute;
+  border: none;
+  width: 100%;
+  height: 100%;
+}
 /**
 		 * ISCROLL STYLE
 		 */
@@ -339,7 +338,7 @@ body {
   width: 100%;
   height: 3.75em;
   background-color: #fafafa;
-  background-color: rgba(250, 250, 250, 0.99);
+  background-color: rgba(250, 250, 250, 0.97);
   z-index: 20;
   display: table;
 }
