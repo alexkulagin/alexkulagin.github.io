@@ -254,6 +254,7 @@ body {
 		 */
 body {
   overflow: hidden;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 body .frame {
   position: absolute;
@@ -613,6 +614,7 @@ body .frame {
     display: table-cell;
   }
   .cart-checkout-btn {
+    position: absolute;
     width: 14.375em;
     height: 3.125em;
     bottom: 3em;
@@ -645,5 +647,8 @@ body .frame {
   .iScrollVerticalScrollbar {
     margin: 0.5em 0.25em;
     margin-top: 4.25em;
+  }
+  .cart-item-trash {
+    width: 4em;
   }
 }
