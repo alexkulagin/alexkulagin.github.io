@@ -27,7 +27,12 @@ jQuery(function($)
     	resizeScrollbars: true,
     	shrinkScrollbars: true,
     	bounce: true,
-    	click: true
+    	directionLockThreshold: 5,
+    	bounceTime: 600,
+    	snapThreshold: 0.334,
+    	click: true,
+    	deceleration: 0.0006
+    	//,momentum: false
 	});
 
 
