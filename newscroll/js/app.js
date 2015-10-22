@@ -26,7 +26,8 @@ jQuery(function($)
     	interactiveScrollbars: true,
     	resizeScrollbars: true,
     	shrinkScrollbars: true,
-    	bounce: false
+    	bounce: true,
+    	click: true
 	});
 
 
