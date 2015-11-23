@@ -914,7 +914,7 @@
 
 				insertItem: function (item)
 				{
-					var view = new ItemView({ model: item });
+					var view = new ItemView({ tagName: 'li', className: 'cart-item', model: item });
 					this.$el.append(view.render().el);
 				},
 
@@ -1006,13 +1006,13 @@
 	obj || (obj = {});
 	var __t, __p = '';
 	with (obj) {
-	__p += '<li class="cart-item">\n	<div class="cart-item-img" style="background-image: url(\'' +
+	__p += '<!-- <li class="cart-item"> -->\n	<div class="cart-item-img" style="background-image: url(\'' +
 	((__t = (img)) == null ? '' : __t) +
 	'\');"></div>\n	<div class="cart-item-block">\n		<div class="cart-item-block-wrapper">\n			<div class="cart-item-description">\n				<span>\n					<span class="cart-item-label">' +
 	((__t = (title)) == null ? '' : __t) +
 	'</span>\n					<span class="cart-item-price">' +
 	((__t = (price)) == null ? '' : __t) +
-	'</span>\n				</span>\n			</div>\n			<div class="cart-item-trash">\n				<span class="cart-item-trash-ic">\n					<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">\n						<g>\n							<g>\n								<line x1="7" y1="7" x2="25" y2="25"/>\n								<g>\n									<line x1="25" y1="7" x2="7" y2="25"/>\n								</g>\n							</g>\n						</g>\n					</svg>\n				</span>\n			</div>\n		</div>\n	</div>\n</li>';
+	'</span>\n				</span>\n			</div>\n			<div class="cart-item-trash">\n				<span class="cart-item-trash-ic">\n					<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">\n						<g>\n							<g>\n								<line x1="7" y1="7" x2="25" y2="25"/>\n								<g>\n									<line x1="25" y1="7" x2="7" y2="25"/>\n								</g>\n							</g>\n						</g>\n					</svg>\n				</span>\n			</div>\n		</div>\n	</div>\n<!-- </li> -->';
 
 	}
 	return __p
