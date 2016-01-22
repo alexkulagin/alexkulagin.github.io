@@ -202,27 +202,14 @@
 				iswish: true, 
 				ismultiple: false 
 			});
-			alert($);
 
 			//console.log(cart);
 
-			/*$('.add-to-cart').click(function() {
+			$('.add-to-cart').click(function() {
 				cart.addToCart($(this).prev().data());
 			});
 			
 			$('.add-to-wish').click(function() {
-				cart.addToWish($(this).prev().prev().data());
-			});*/
-
-
-			$('.add-to-cart').on('click tap',function(){
-				alert('to cart');
-				cart.addToCart($(this).prev().data());
-			});
-
-
-			$('.add-to-wish').on('click tap',function(){
-				alert('to wish');
 				cart.addToWish($(this).prev().prev().data());
 			});
 
