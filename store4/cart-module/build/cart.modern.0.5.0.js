@@ -984,13 +984,16 @@
 					this.animator.show();
 	
 	
-					document.body.addEventListener('touchmove',function(e){
-						if(!$(e.target).hasClass("scrollable")) {
-							e.preventDefault();
-						}
-					});
+					document.body.addEventListener('touchmove', this._ontouchmove);
 	
 					$('body').addClass('block');
+				},
+	
+				_ontouchmove: function (e)
+				{
+					if(!$(e.target).hasClass("scrollable")) {
+						e.preventDefault();
+					}
 				},
 	
 	
@@ -1030,7 +1033,7 @@
 						Lifecycle.next(LifecycleEvent.DEACTIVATE, LifecycleEvent.EMPTY);
 					}
 	
-					//document.body.removeEventListener('touchmove');
+					document.body.removeEventListener('touchmove', this._ontouchmove);
 					$('body').removeClass('block');
 				},
 	
