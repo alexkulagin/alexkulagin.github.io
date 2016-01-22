@@ -348,12 +348,12 @@
 				 *	Меняет состояние
 				 */
 	
-				next: function (...args)
+				next: function (state)
 				{
 					var a = Array.prototype.slice.call(arguments);
 	
-					if (_.isString(a[0])) {
-						this._state = a[0];
+					if (_.isString(state)) {
+						this._state = state;
 						this.trigger.apply(this, a);
 					}
 				},
