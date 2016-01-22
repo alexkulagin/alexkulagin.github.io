@@ -184,6 +184,7 @@
 		<script>
 			var cart = new FlappyCart();
 			$('.product').click(function(){
+				alert('to cart');
 				cart.addItem($(this).data());
 				var a = cart.getID();
 				$.each( $( ".product" ), function() {
