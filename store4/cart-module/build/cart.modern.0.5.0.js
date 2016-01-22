@@ -984,13 +984,12 @@
 					this.animator.show();
 	
 	
-					$('.cart-wrapper').bind('touchmove', function(e){
-						e.stopPropagation();
+					document.body.addEventListener('touchmove',function(e){
+						if(!$(e.target).hasClass("scrollable")) {
+							e.preventDefault();
+						}
 					});
 	
-					$(document).bind('touchmove', function(e){
-						e.preventDefault();
-					});
 					$('body').addClass('block');
 				},
 	
@@ -1031,8 +1030,7 @@
 						Lifecycle.next(LifecycleEvent.DEACTIVATE, LifecycleEvent.EMPTY);
 					}
 	
-					$('.cart-wrapper').unbind('touchmove');
-					$(document).unbind('touchmove');
+					//document.body.removeEventListener('touchmove');
 					$('body').removeClass('block');
 				},
 	
