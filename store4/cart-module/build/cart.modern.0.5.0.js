@@ -983,6 +983,14 @@
 					// показывает панель
 					this.animator.show();
 	
+	
+					$('.cart-wrapper').bind('touchmove', function(e){
+						e.stopPropagation();
+					});
+	
+					$(document).bind('touchmove', function(e){
+						e.preventDefault();
+					});
 					$('body').addClass('block');
 				},
 	
@@ -1023,6 +1031,8 @@
 						Lifecycle.next(LifecycleEvent.DEACTIVATE, LifecycleEvent.EMPTY);
 					}
 	
+					$('.cart-wrapper').unbind('touchmove');
+					$(document).unbind('touchmove');
 					$('body').removeClass('block');
 				},
 	
