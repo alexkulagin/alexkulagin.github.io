@@ -1740,7 +1740,7 @@
 				
 	
 				this.scroller.on('flick', _.bind(function(e){
-					if (Math.abs(this.scroller.distX) > 120) {
+					if (Math.abs(this.scroller.distX) > 60) {
 						if (this.scroller.distX > 0) {
 							// right direction 
 							this.el.className == 'cp-section-cart' && this.panel.hidePanel();
