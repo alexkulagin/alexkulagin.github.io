@@ -712,6 +712,7 @@
 	 */
 	
 	var $ = __webpack_require__(1),
+		_ = __webpack_require__(2),
 		Backbone = __webpack_require__(3),
 		webfont = __webpack_require__(9);
 	
@@ -730,6 +731,7 @@
 	 */
 	 
 	var Options = __webpack_require__(10),
+		Hooks = __webpack_require__(30),
 		Animator = __webpack_require__(11),
 		PanelView = __webpack_require__(13),
 		TintView = __webpack_require__(21),
@@ -809,6 +811,7 @@
 			this.tint = new TintView({ el: '.cart-tint' });
 	
 			this.animator = new Animator(this);
+			this.hooks = new Hooks();
 	
 	
 	
@@ -1080,8 +1083,11 @@
 					// перестает слушать события
 					this.stopListening();
 	
+					// разрушает hooks
+					this.hooks.destroy();
 	
 					// обнуляет ссылки на компоненты
+					this.hooks = null;
 					this.animator = null;
 					this.panel = null;
 					this.tint = null;
@@ -1349,7 +1355,8 @@
 	 *	Require third-party library
 	 */
 	
-	var Backbone = __webpack_require__(3);
+	var _ = __webpack_require__(2),
+		Backbone = __webpack_require__(3);
 	
 	
 	/** 
@@ -1413,7 +1420,7 @@
 	
 	
 				this.$el.append(HeaderHTML({ iswish: this.iswish }));
-				//this.$el.append(ContentHTML({ iswish: this.iswish }));
+				this.$el.append(ContentHTML({ iswish: this.iswish }));
 				this.$el.append(FooterHTML());
 	
 	
@@ -1421,8 +1428,8 @@
 				this.$headerTotalWish = this.iswish ? $('.wish-tab .cp-tab-label') : null;
 	
 	
-				//this.cartSection = new SectionView({ el: '.cp-section-cart', list: this.cartList });
-				//this.wishSection = this.iswish ? new SectionView({ el: '.cp-section-wish', list: this.wishList }) : null;
+				this.cartSection = new SectionView({ el: '.cp-section-cart', list: this.cartList });
+				this.wishSection = this.iswish ? new SectionView({ el: '.cp-section-wish', list: this.wishList }) : null;
 	
 			},
 	
@@ -1435,28 +1442,18 @@
 	
 			change: function (section)
 			{
-				if (this.section == section) return;
-				else this.section = section;
-	
+				
+				this.section = section;
 	
 				this.$el.toggleClass('cp-section_cart', this.section == 'cart');
 				this.iswish && this.$el.toggleClass('cp-section_wish', this.section == 'wish');
 	
+				$('.cart-tab').toggleClass('gs-tab-selected', this.section == 'cart');
+				this.iswish && $('.wish-tab').toggleClass('gs-tab-selected', this.section == 'wish');
 	
-				//this.section == 'cart' ? this.cartSection.activate() : this.cartSection.deactivate();
-				//this.iswish ? this.section == 'wish' ? this.wishSection.activate() : this.cartSection.deactivate() : null;
 	
-	
-				/*TweenMax.to($('.cp-tab-selector'), 0.3, { 
-					xPercent: (this.section == 'wish') ? 100 : 0, 
-					ease: Power1.easeOut, 
-					onComplete: _.bind(this._changed, this) 
-				});*/
-	
-				/*TweenMax.to($('.cp-container > ul'), 0.3, {
-					xPercent: (this.section == 'wish') ? -50 : 0, 
-					ease: Power1.easeOut
-				});*/
+				this.section == 'cart' ? this.cartSection.activate() : this.cartSection.deactivate();
+				this.iswish ? this.section == 'wish' ? this.wishSection.activate() : this.wishSection.deactivate() : null;
 	
 			},
 	
@@ -1548,7 +1545,13 @@
 	
 				activateRendering: function (section)
 				{
-					this.change(section);
+					this.cartSection.clear();
+					this.iswish && this.wishSection.clear();
+	
+					setTimeout(_.bind(function () 
+					{
+						this.change(section);
+					}, this), 350);
 	
 					this.listenTo(this.cartList, 'destroy change', this.render);
 					this.iswish && this.listenTo(this.wishList, 'destroy change', this.render);
@@ -1564,6 +1567,8 @@
 				{
 					this.stopListening(this.cartList);
 					this.iswish && this.stopListening(this.wishList);
+					this.section == 'cart' && this.cartSection.deactivate();
+					this.iswish && this.section == 'wish' && this.wishSection.deactivate();
 				},
 	
 	
@@ -1578,6 +1583,9 @@
 	
 					this.$headerTotalCost.html(Utils.format(cartListStats.totalCost, this.currency));
 					this.$headerTotalWish && this.$headerTotalWish.html(wishListStats ? wishListStats.totalItems : 0);
+	
+					this.section == 'cart' && this.cartSection.refresh();
+					this.iswish && this.section == 'wish' && this.wishSection.refresh();
 				}
 			});
 	
@@ -1680,7 +1688,8 @@
 	 *	Require component
 	 */
 	 
-	var SectionItemView = __webpack_require__(17);
+	var CartSectionItem = __webpack_require__(31),
+		WishSectionItem = __webpack_require__(32);
 	
 	
 	
@@ -1717,43 +1726,67 @@
 					snapThreshold: 0.334,
 					click: true,
 					deceleration: 0.0006,
-					probeType: 3
+					probeType: 3,
+					scrollbars: 'custom'
 				});
 	
-				this.listenTo(Lifecycle, LifecycleEvent.ENTER, _.bind(function(){
-					this.scroller.refresh();
-				}, this));
+				
 				
 				this.deactivate();
 			},
 	
 			activate: function ()
 			{
-				console.log('activate');
 				this.insertItems();
-				this.delegateEvents(this.events);
-				setTimeout(_.bind(function () {
-					this.scroller.refresh();
-				}, this), 300);
+	
+				setTimeout(_.bind(function () 
+				{
+					var someClassName = '.' + this.el.className + ' .cp-item-wrapper';
+					var animationClass = 'active';
+					TweenMax.staggerTo(someClassName, 0.0, {className: '+=' + animationClass, ease: Power4.easeOut}, 0.05);
+	
+					this.delegateEvents(this.events);
+					this.scroller.scrollTo(0, 0);
+					this.scroller.enable();
+					this.refresh();
+	
+				}, this), 50);
+	
+				this.listenTo(Lifecycle, LifecycleEvent.ENTER, _.bind(function(){
+					this.refresh();
+				}, this));
 			},
 	
 			deactivate: function ()
 			{
 				this.undelegateEvents();
-				//this.scroller.disable();
+				this.scroller.disable();
+				this.stopListening();
 			},
 	
 			insertItem: function (item)
 			{
-				var view = new SectionItemView({ model: item });
+				var o = { model: item },
+					view = this.el.className == 'cp-section-cart' ? new CartSectionItem(o) : new WishSectionItem(o);
+	
 				this.$list.append(view.render().el);
 			},
 	
 			insertItems: function ()
 			{
-				this.$list.html('');
+				this.clear();
 				this.list.each(this.insertItem, this);
 				
+			},
+	
+			clear: function ()
+			{
+				this.$list.html('');
+			},
+	
+			refresh: function ()
+			{
+				this.scroller.refresh();
 			}
 		});
 	
@@ -1791,99 +1824,7 @@
 	module.exports = IScroll;
 
 /***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-	
-	
-	
-	/** 
-	 *	Require third-party library
-	 */
-	
-	var Backbone = __webpack_require__(3);
-	
-	
-	/** 
-	 *	Require base
-	 */
-	 
-	var	Cart = __webpack_require__(7),
-		Lifecycle = __webpack_require__(5),
-		LifecycleEvent = __webpack_require__(6);
-	
-	
-	/** 
-	 *	Require HTML template
-	 */
-	 
-	var	ItemHTML = __webpack_require__(29);
-	
-	
-	
-	
-	//┐
-	//│  ╔══════════════════════════════════════════════════════════════════════════════════════════╗
-	//│  ║                                                                                          ║
-	//╠──╢  ПРЕДСТАВЛЕНИЕ ПРОДУКТА                                                                  ║
-	//│  ║                                                                                          ║
-	//│  ╚══════════════════════════════════════════════════════════════════════════════════════════╝
-	//┘
-	
-		var SectionItemView = Backbone.View.extend(
-		{
-			tagName: "li",
-			model: Cart.Item,
-	
-			events: {
-				'click .cp-item-trash': 'trash'
-			},
-	
-			initialize: function () {
-				this.listenTo(this.model, 'destroy', this.remove);
-				this.listenTo(this.model, 'change:quantity', this.render);
-			},
-	
-			trash: function ()
-			{
-				this.model.destroy();
-			}
-		});
-	
-	
-	
-		//┐
-		//│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
-		//╠──┤  RENDERING                                                                           │
-		//│  └──────────────────────────────────────────────────────────────────────────────────────┘
-		//┘
-	
-			_.extend(SectionItemView.prototype,
-			{
-				/**
-				 *	Рендер представления
-				 */
-	
-				render: function ()
-				{
-					if (this.model.changed.id !== undefined) {
-						return;
-					}
-	
-					this.$el.html(ItemHTML(this.model.toJSON()));
-	
-					return this;
-				}
-			});
-	
-	
-	module.exports = SectionItemView;
-	
-	
-	
-
-
-/***/ },
+/* 17 */,
 /* 18 */
 /***/ function(module, exports) {
 
@@ -1892,13 +1833,13 @@
 	var __t, __p = '', __j = Array.prototype.join;
 	function print() { __p += __j.call(arguments, '') }
 	with (obj) {
-	__p += '<header class="cp-header">\n	<ul>\n		<li class="cp-back">\n			<span class="cp-tab-ic">\n				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve"><g><polyline points="14.7,25.7 5,16 14.7,6.3"/><line x1="5.3" y1="16" x2="27" y2="16"/></g></svg>\n			</span>\n		</li>\n		<li class="cp-tabs">\n			<ul>\n				<li class="cart-tab">\n					<div class="cp-tab-wrapper">\n						<span class="cp-tab-ic">\n							<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve"><g><path d="M25.4,29H6.6c-1.7,0-3-1.4-2.8-2.9l1.9-13.8C5.9,11,6.6,10,8,10h16c1.4,0,2.1,1,2.3,2.3l1.9,13.8 C28.4,27.6,27.1,29,25.4,29z"/><path d="M10.6,12.7V8.4C10.6,5.4,13,3,16,3h0c3,0,5.4,2.4,5.4,5.4v4.3"/></g></svg>\n						</span>\n						<span class="cp-tab-label">$0.00</span>\n					</div>\n				</li>\n				';
+	__p += '<header class="cp-header gs-tabs">\n	<ul>\n		<li class="cp-back">\n			<span class="cp-tab-ic">\n				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve"><g><polyline points="14.7,25.7 5,16 14.7,6.3"/><line x1="5.3" y1="16" x2="27" y2="16"/></g></svg>\n			</span>\n		</li>\n		<li class="cp-tabs">\n			<ul>\n				<li class="cart-tab">\n					<div class="cp-tab-wrapper">\n						<span class="cp-tab-ic">\n							<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve"><g><path d="M25.4,29H6.6c-1.7,0-3-1.4-2.8-2.9l1.9-13.8C5.9,11,6.6,10,8,10h16c1.4,0,2.1,1,2.3,2.3l1.9,13.8 C28.4,27.6,27.1,29,25.4,29z"/><path d="M10.6,12.7V8.4C10.6,5.4,13,3,16,3h0c3,0,5.4,2.4,5.4,5.4v4.3"/></g></svg>\n						</span>\n						<span class="cp-tab-label">$0.00</span>\n					</div>\n				</li>\n				';
 	 if (iswish) { ;
 	__p += '\n				<li class="wish-tab">\n					<div class="cp-tab-wrapper">\n						<span class="cp-tab-ic">\n							<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve"> <path d="M22.6,6.5c-2.9,0-5.4,1.7-6.6,4.1c-1.2-2.4-3.7-4.1-6.6-4.1C5.3,6.5,2,9.8,2,13.9C2,23.7,15.8,29,15.8,29 S30,23.6,30,13.9C30,9.8,26.7,6.5,22.6,6.5L22.6,6.5z"/></svg>\n						</span>\n						<span class="cp-tab-label">0</span>\n					</div>\n				</li>\n				';
 	 } ;
 	__p += '\n			</ul>\n			';
 	 if (iswish) { ;
-	__p += '\n			<span class="cp-tab-selector"></span>\n			';
+	__p += '\n			<span class="cp-tab-cursor p-color"></span>\n			';
 	 } ;
 	__p += '\n		</li>\n	</ul>\n</header>';
 	
@@ -1933,7 +1874,7 @@
 	obj || (obj = {});
 	var __t, __p = '';
 	with (obj) {
-	__p += '<!-- <footer class="cp-footer"> -->\n	<div class="cp-checkout-btn">\n		<span class="cp-checkout-ic">\n			<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve"><g><path d="M25.4,29H6.6c-1.7,0-3-1.4-2.8-2.9l1.9-13.8C5.9,11,6.6,10,8,10h16c1.4,0,2.1,1,2.3,2.3l1.9,13.8 C28.4,27.6,27.1,29,25.4,29z"/><path d="M10.6,12.7V8.4C10.6,5.4,13,3,16,3h0c3,0,5.4,2.4,5.4,5.4v4.3"/></g></svg>\n		</span>\n		<span class="cp-checkout-label">Checkout</span>\n	</div>\n<!-- </footer> -->';
+	__p += '<!-- <footer class="cp-footer"> -->\n	<div class="cp-checkout-btn gs-btn">\n		<span class="cp-checkout-ic">\n			<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve"><g><path d="M25.4,29H6.6c-1.7,0-3-1.4-2.8-2.9l1.9-13.8C5.9,11,6.6,10,8,10h16c1.4,0,2.1,1,2.3,2.3l1.9,13.8 C28.4,27.6,27.1,29,25.4,29z"/><path d="M10.6,12.7V8.4C10.6,5.4,13,3,16,3h0c3,0,5.4,2.4,5.4,5.4v4.3"/></g></svg>\n		</span>\n		<span class="cp-checkout-label">Checkout</span>\n	</div>\n<!-- </footer> -->';
 	
 	}
 	return __p
@@ -2218,7 +2159,7 @@
 	with (obj) {
 	
 	 if (totalCart > 0 || totalWish > 0) { ;
-	__p += '\n<div class="cb-wrapper';
+	__p += '\n<div class="cb-wrapper gs-btn';
 	 print( totalWish > 0 && totalCart > 0 ? ' cb-state_both' : (totalCart > 0 ? ' cb-state_cart' : ' cb-state_wish') ) ;
 	__p += '">\n	<ul>\n		<li class="cb-cart-cell">\n			<span class="cb-ic">\n				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve"><g><path d="M25.4,29H6.6c-1.7,0-3-1.4-2.8-2.9l1.9-13.8C5.9,11,6.6,10,8,10h16c1.4,0,2.1,1,2.3,2.3l1.9,13.8 C28.4,27.6,27.1,29,25.4,29z"/><path d="M10.6,12.7V8.4C10.6,5.4,13,3,16,3h0c3,0,5.4,2.4,5.4,5.4v4.3"/></g></svg>\n			</span>\n			<span class="cb-label">';
 	 print(cost) ;
@@ -2248,7 +2189,7 @@
 	obj || (obj = {});
 	var __t, __p = '';
 	with (obj) {
-	__p += '<!-- Cart Wrapper -->\n<div class="cart-wrapper">\n	<div class="cart-panel"></div>\n	<div class="cart-tint"></div>\n	<div class="cart-button"></div>\n</div>';
+	__p += '<!-- Cart Wrapper -->\n<div class="cart-wrapper">\n	<div class="cart-panel gs-panel"></div>\n	<div class="cart-tint gs-tint"></div>\n	<div class="cart-button"></div>\n</div>';
 	
 	}
 	return __p
@@ -2289,7 +2230,7 @@
 	
 	
 	// module
-	exports.push([module.id, "html {\n  font-size: 100%;\n  -ms-text-size-adjust: 100%;\n  -webkit-text-size-adjust: 100%;\n}\nbody,\ndiv,\nh1,\nh2,\nh3,\nh4,\nh5,\nh6,\np,\nblockquote,\npre,\ndl,\ndt,\ndd,\nol,\nul,\nli,\nfieldset,\nform,\nlabel,\nlegend,\nth,\ntd,\narticle,\naside,\nfigure,\nfooter,\nheader,\nhgroup,\nmenu,\nnav,\nsection {\n  margin: 0;\n  padding: 0;\n  border: 0;\n}\narticle,\naside,\ndetails,\nfigcaption,\nfigure,\nfooter,\nheader,\nhgroup,\nmain,\nmenu,\nnav,\nsection,\nsummary {\n  display: block;\n}\naudio,\ncanvas,\nprogress,\nvideo {\n  display: inline-block;\n  /* 1 */\n  vertical-align: baseline;\n  /* 2 */\n}\naudio:not([controls]) {\n  display: none;\n  height: 0;\n}\n[hidden],\ntemplate {\n  display: none;\n}\na {\n  background-color: transparent;\n}\na:active,\na:hover {\n  outline: 0;\n}\nabbr[title] {\n  border-bottom: 1px dotted;\n}\nb,\nstrong {\n  font-weight: bold;\n}\ndfn {\n  font-style: italic;\n}\nh1 {\n  font-size: 2em;\n  margin: 0.67em 0;\n}\nmark {\n  background: #ff0;\n  color: #000;\n}\nsmall {\n  font-size: 80%;\n}\nsub,\nsup {\n  font-size: 75%;\n  line-height: 0;\n  position: relative;\n  vertical-align: baseline;\n}\nsup {\n  top: -0.5em;\n}\nsub {\n  bottom: -0.25em;\n}\nimg {\n  border: 0;\n}\nsvg:not(:root) {\n  overflow: hidden;\n}\nfigure {\n  margin: 1em 40px;\n}\nhr {\n  box-sizing: content-box;\n  height: 0;\n}\npre {\n  overflow: auto;\n}\ncode,\nkbd,\npre,\nsamp {\n  font-family: monospace, monospace;\n  font-size: 1em;\n}\nbutton,\ninput,\noptgroup,\nselect,\ntextarea {\n  color: inherit;\n  /* 1 */\n  font: inherit;\n  /* 2 */\n  margin: 0;\n  /* 3 */\n}\nbutton {\n  overflow: visible;\n}\nbutton,\nselect {\n  text-transform: none;\n}\nbutton,\nhtml input[type=\"button\"],\ninput[type=\"reset\"],\ninput[type=\"submit\"] {\n  -webkit-appearance: button;\n  /* 2 */\n  cursor: pointer;\n  /* 3 */\n}\nbutton[disabled],\nhtml input[disabled] {\n  cursor: default;\n}\nbutton::-moz-focus-inner,\ninput::-moz-focus-inner {\n  border: 0;\n  padding: 0;\n}\ninput {\n  line-height: normal;\n}\ninput[type=\"checkbox\"],\ninput[type=\"radio\"] {\n  box-sizing: border-box;\n  /* 1 */\n  padding: 0;\n  /* 2 */\n}\ninput[type=\"number\"]::-webkit-inner-spin-button,\ninput[type=\"number\"]::-webkit-outer-spin-button {\n  height: auto;\n}\ninput[type=\"search\"] {\n  -webkit-appearance: textfield;\n  /* 1 */\n  box-sizing: content-box;\n  /* 2 */\n}\ninput[type=\"search\"]::-webkit-search-cancel-button,\ninput[type=\"search\"]::-webkit-search-decoration {\n  -webkit-appearance: none;\n}\nfieldset {\n  border: 1px solid #c0c0c0;\n  margin: 0 2px;\n  padding: 0.35em 0.625em 0.75em;\n}\nlegend {\n  border: 0;\n  /* 1 */\n  padding: 0;\n  /* 2 */\n}\ntextarea {\n  overflow: auto;\n}\noptgroup {\n  font-weight: bold;\n}\ntable {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\ntd,\nth {\n  padding: 0;\n}\n/* 1 */\n/*img[src*=\".svg\"] { \n\t\twidth: 100%;\n\t}*/\n/* 2 */\n/*@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {\n\t\timg[src*=\".svg\"] {\n\t\t\twidth: 100%; \n\t\t}\n\t}*/\n/**\n\t\t * BODY COMMON STYLE\n\t\t */\nhtml,\nbody {\n  width: 100%;\n  height: 100%;\n  background-color: #eee;\n}\nbody.block {\n  overflow: hidden;\n}\n.cart-wrapper {\n  position: absolute;\n  top: 0;\n  left: 0;\n  font-size: 16px;\n  font-family: 'Montserrat', sans-serif;\n  font-weight: 400;\n  letter-spacing: -0.02em;\n  color: #262626;\n  z-index: 100000;\n  -webkit-overflow-scrolling: touch;\n}\n.cart-panel {\n  width: 100%;\n  height: 100%;\n  top: 0;\n  right: 0;\n  min-width: 17.5em;\n  display: none;\n  position: fixed;\n  z-index: 30;\n  background-color: #f5f5f5;\n  -webkit-transition: width 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  -moz-transition: width 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  -o-transition: width 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  transition: width 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n}\n/** 550 */\n@media screen and (min-width: 34.375em) {\n  .cart-panel {\n    width: 34.375em;\n  }\n}\n/** 1024 */\n@media screen and (min-width: 64em) {\n  .cart-panel {\n    width: 40em;\n  }\n}\n.cp-header {\n  width: 100%;\n  height: 3em;\n  background-color: #ffffff;\n  opacity: 0.98;\n  position: absolute;\n  z-index: 20;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n.cp-header ul {\n  width: 100%;\n  height: 100%;\n  display: table;\n}\n.cp-header li {\n  height: 100%;\n  position: relative;\n  display: table-cell;\n  white-space: nowrap;\n}\n.cp-tab-ic {\n  margin-right: 0.125em;\n  vertical-align: middle;\n  display: inline-block;\n  width: 1em;\n  height: 1em;\n}\n.cp-tab-ic svg {\n  fill: none;\n  stroke: #262626;\n  stroke-width: 2.6;\n  stroke-linecap: round;\n  stroke-miterlimit: 4;\n}\n.cp-tab-label {\n  vertical-align: middle;\n  display: inline-block;\n  color: #262626;\n  font-size: 0.875em;\n  line-height: 1em;\n}\n.cp-section_cart .cart-tab,\n.cp-section_wish .wish-tab {\n  cursor: default;\n}\n.cp-section_cart .cart-tab .cp-tab-label,\n.cp-section_wish .wish-tab .cp-tab-label {\n  color: #424346;\n}\n.cp-section_cart .cart-tab .cp-tab-ic svg,\n.cp-section_wish .wish-tab .cp-tab-ic svg {\n  stroke: #424346;\n}\n.cp-back {\n  width: 3em;\n  cursor: pointer;\n}\n.cp-back .cp-tab-ic {\n  position: absolute;\n  top: 50%;\n  -webkit-transform: translate(0.625em, -50%);\n  -moz-transform: translate(0.625em, -50%);\n  -ms-transform: translate(0.625em, -50%);\n  -o-transform: translate(0.625em, -50%);\n  transform: translate(0.625em, -50%);\n}\n.cp-back:hover .cp-tab-ic {\n  -webkit-transform: translate(0.5em, -50%);\n  -moz-transform: translate(0.5em, -50%);\n  -ms-transform: translate(0.5em, -50%);\n  -o-transform: translate(0.5em, -50%);\n  transform: translate(0.5em, -50%);\n}\n.cp-tab-wrapper {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  -webkit-transform: translate(-50%, -50%);\n  -moz-transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  -o-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%);\n}\n.cp-tabs li {\n  cursor: pointer;\n}\n.cp-tabs li.selected {\n  cursor: default;\n}\n.cp-tab-selector {\n  background-color: #262626;\n  width: 50%;\n  height: 0.125em;\n  top: 0;\n  left: 0;\n  position: absolute;\n  -webkit-transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);\n  -moz-transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);\n  -o-transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);\n  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);\n}\n.cp-section_cart .cp-tab-selector {\n  -webkit-transform: translateX(0);\n  -moz-transform: translateX(0);\n  -ms-transform: translateX(0);\n  -o-transform: translateX(0);\n  transform: translateX(0);\n}\n.cp-section_wish .cp-tab-selector {\n  -webkit-transform: translateX(100%);\n  -moz-transform: translateX(100%);\n  -ms-transform: translateX(100%);\n  -o-transform: translateX(100%);\n  transform: translateX(100%);\n}\n@media screen and (min-width: 20em) {\n  .cp-header {\n    height: 3.75em;\n  }\n  .cp-back {\n    width: 3.75em;\n  }\n  .cp-back .cp-tab-ic {\n    -webkit-transform: translate(1.125em, -50%);\n    -moz-transform: translate(1.125em, -50%);\n    -ms-transform: translate(1.125em, -50%);\n    -o-transform: translate(1.125em, -50%);\n    transform: translate(1.125em, -50%);\n  }\n  .cp-back:hover .cp-tab-ic {\n    -webkit-transform: translate(1em, -50%);\n    -moz-transform: translate(1em, -50%);\n    -ms-transform: translate(1em, -50%);\n    -o-transform: translate(1em, -50%);\n    transform: translate(1em, -50%);\n  }\n  .cp-tab-ic {\n    margin-right: 0.25em;\n    width: 1.1875em;\n    height: 1.1875em;\n  }\n  .cp-tab-label {\n    font-size: 1em;\n    line-height: 1.25em;\n  }\n}\n/**\n\t\t * PORTRAIT MOBILE MODE (~416px)\n\t\t */\n@media (min-width: 26.25em) and (max-height: 26em) {\n  .cp-header {\n    height: 2.5em;\n  }\n  .cp-back {\n    width: 2.5em;\n  }\n  .cp-back .cp-tab-ic {\n    -webkit-transform: translate(0.625em, -50%);\n    -moz-transform: translate(0.625em, -50%);\n    -ms-transform: translate(0.625em, -50%);\n    -o-transform: translate(0.625em, -50%);\n    transform: translate(0.625em, -50%);\n  }\n  .cp-back:hover .cp-tab-ic {\n    -webkit-transform: translate(0.5em, -50%);\n    -moz-transform: translate(0.5em, -50%);\n    -ms-transform: translate(0.5em, -50%);\n    -o-transform: translate(0.5em, -50%);\n    transform: translate(0.5em, -50%);\n  }\n  .cp-tab-ic {\n    margin-right: 0.125em;\n    width: 1em;\n    height: 1em;\n  }\n  .cp-tab-label {\n    font-size: 0.875em;\n    line-height: 1em;\n  }\n}\n.cp-container {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  z-index: 10;\n  top: 0;\n  left: 0;\n  overflow: hidden;\n}\n.cp-container ul {\n  list-style-type: none;\n}\n.cp-container > ul {\n  width: 200%;\n  height: 100%;\n  display: table;\n  position: relative;\n}\n.cp-container > ul > li {\n  height: 100%;\n  width: 50%;\n  position: relative;\n  display: table-cell;\n}\n.iScrollVerticalScrollbar {\n  margin: 0.5em 0.125em;\n  margin-top: 4.25em;\n}\n.cp-section-wrapper {\n  position: relative;\n  width: 100%;\n  height: 100%;\n  overflow: hidden;\n  /* Prevent native touch events on Windows */\n  -ms-touch-action: none;\n  /* Prevent the callout on tap-hold and text selection */\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  /* Prevent text resize on orientation change, useful for web-apps */\n  -webkit-text-size-adjust: none;\n  -moz-text-size-adjust: none;\n  -ms-text-size-adjust: none;\n  -o-text-size-adjust: none;\n  text-size-adjust: none;\n}\n.cp-section-content {\n  position: absolute;\n  width: 100%;\n  /* Prevent elements to be highlighted on tap */\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  /* Put the scroller into the HW Compositing layer right from the start */\n  -webkit-transform: translateZ(0);\n  -moz-transform: translateZ(0);\n  -ms-transform: translateZ(0);\n  -o-transform: translateZ(0);\n  transform: translateZ(0);\n}\n.cp-section-top,\n.cp-section-bottom {\n  display: block;\n}\n.cp-section-top {\n  height: 3.625em;\n}\n.cp-section-cart .cp-section-bottom {\n  height: 3.5em;\n}\n.cp-section-wish .cp-section-bottom {\n  height: 0em;\n}\n.cp-section-list {\n  -webkit-box-sizing: border-box;\n  -moz-box-sizing: border-box;\n  box-sizing: border-box;\n  padding: 0 0.625em;\n}\n.cp-section-list > li {\n  margin-bottom: 0.625em;\n}\n.cp-item-wrapper {\n  width: 100%;\n  position: relative;\n  background-color: #FFF;\n  overflow: hidden;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  border-radius: 20px;\n  -webkit-transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  -moz-transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  -o-transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n}\n.cp-item-img {\n  width: 100%;\n  padding-bottom: 100%;\n  background-repeat: no-repeat;\n  -webkit-background-size: cover;\n  -moz-background-size: cover;\n  -o-background-size: cover;\n  background-size: cover;\n  -webkit-transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  -moz-transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  -o-transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n}\n/** CART ITEM BLOCK */\n.cp-item-block-wrapper {\n  width: 100%;\n  height: 5em;\n  display: table;\n  -webkit-transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  -moz-transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  -o-transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n}\n.cp-item-block-wrapper > div {\n  position: relative;\n  display: table-cell;\n}\n.cp-item-description > span {\n  position: absolute;\n  padding: 0 1.125em;\n  top: 50%;\n  -webkit-transform: translate(0, -50%);\n  -moz-transform: translate(0, -50%);\n  -ms-transform: translate(0, -50%);\n  -o-transform: translate(0, -50%);\n  transform: translate(0, -50%);\n}\n.cp-item-label {\n  line-height: 1.3em;\n  max-height: 2.6em;\n  font-size: 0.875em;\n  overflow: hidden;\n  color: #202022;\n  display: block;\n}\n.cp-item-price {\n  font-size: 0.875em;\n  color: #A8A8B2;\n  display: block;\n  margin-top: 0.125em;\n}\n.cp-item-trash {\n  width: 4em;\n  cursor: pointer;\n}\n.cp-item-ic {\n  position: absolute;\n  display: inline-block;\n  width: 0.9375em;\n  height: 0.9375em;\n  top: 50%;\n  left: 50%;\n  -webkit-transform: translate(-50%, -50%);\n  -moz-transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  -o-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%);\n}\n.cp-item-ic svg {\n  fill: none;\n  stroke: #BDC3C7;\n  stroke-width: 2.6;\n  stroke-linecap: round;\n  stroke-miterlimit: 4;\n}\n@media screen and (min-width: 20em) {\n  .cp-section-top {\n    height: 4.375em;\n  }\n  .cp-section-cart .cp-section-bottom {\n    height: 5em;\n  }\n  .cp-item-ic {\n    width: 1.5em;\n    height: 1.5em;\n  }\n}\n@media screen and (min-width: 22.5em) {\n  .cp-section-top {\n    height: 5em;\n  }\n  .cp-section-cart .cp-section-bottom {\n    height: 5em;\n  }\n  .cp-section-wish .cp-section-bottom {\n    height: 0em;\n  }\n  .cp-section-list {\n    padding: 0 1.25em;\n  }\n  .cp-section-list > li {\n    margin-bottom: 1.25em;\n  }\n  .cp-item-label {\n    line-height: 1.3em;\n    max-height: 2.6em;\n    font-size: 1em;\n  }\n  .cp-item-price {\n    font-size: 1em;\n  }\n}\n@media screen and (min-width: 26.25em) {\n  .cp-section-list {\n    padding: 0 0.625em;\n  }\n  .cp-section-list > li {\n    margin-bottom: 0.125em;\n  }\n  .cp-section-top {\n    height: 4.375em;\n  }\n  .cp-section-cart .cp-section-bottom {\n    height: 6.125em;\n  }\n  .cp-section-wish .cp-section-bottom {\n    height: 0.5em;\n  }\n  .cp-item-wrapper {\n    height: 5em;\n    display: table;\n    -webkit-border-radius: 5px;\n    -moz-border-radius: 5px;\n    border-radius: 5px;\n    /** CART ITEM IMG */\n  }\n  .cp-item-wrapper > div {\n    display: table-cell;\n  }\n  .cp-item-wrapper .cp-item-img {\n    width: 5em;\n    padding: 0;\n    display: table-cell;\n  }\n  .cp-item-ic {\n    width: 0.9375em;\n    height: 0.9375em;\n  }\n  .cp-item-label {\n    line-height: 1.3em;\n    max-height: 2.6em;\n    font-size: 0.875em;\n  }\n  .cp-item-price {\n    font-size: 0.875em;\n  }\n}\n/**\n\t\t * PORTRAIT MOBILE MODE (~416px)\n\t\t */\n@media (min-width: 26.25em) and (max-height: 26em) {\n  .cp-section-top {\n    height: 3.125em;\n  }\n  .cp-section-cart .cp-section-bottom {\n    height: 4em;\n  }\n}\n@media screen and (min-width: 30em) {\n  .cp-section-list {\n    padding: 0 1.25em;\n  }\n  .cp-section-list > li {\n    margin-bottom: 0.25em;\n  }\n  .cp-section-top {\n    height: 5em;\n  }\n  .cp-section-cart .cp-section-bottom {\n    height: 6.625em;\n  }\n  .cp-section-wish .cp-section-bottom {\n    height: 1em;\n  }\n}\n/**\n\t\t * PORTRAIT MOBILE MODE (~480px)\n\t\t */\n@media (min-width: 30em) and (max-height: 26em) {\n  .cp-section-top {\n    height: 3.75em;\n  }\n  .cp-section-cart .cp-section-bottom {\n    height: 4.5em;\n  }\n}\n@media screen and (min-width: 64em) {\n  .cp-item-ic {\n    width: 1.5em;\n    height: 1.5em;\n  }\n  .cp-section-list {\n    padding: 0 1.875em;\n  }\n  .cp-section-list > li {\n    margin-bottom: 0.25em;\n  }\n  .cp-section-top {\n    height: 5.625em;\n  }\n  .cp-section-cart .cp-section-bottom {\n    height: 7.25em;\n  }\n  .cp-section-wish .cp-section-bottom {\n    height: 1.625em;\n  }\n  .cp-item-block-wrapper {\n    height: 7.5em;\n  }\n  .cp-item-wrapper {\n    height: 7.5em;\n    /** CART ITEM IMG */\n  }\n  .cp-item-wrapper .cp-item-img {\n    width: 7.5em;\n  }\n  .cp-item-label {\n    line-height: 1.3em;\n    max-height: 2.6em;\n    font-size: 1em;\n  }\n  .cp-item-price {\n    font-size: 1em;\n  }\n}\n/*.cp-footer {\n\n\t}*/\n.cp-checkout-btn {\n  position: absolute;\n  z-index: 30;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  width: 2.5em;\n  height: 2.5em;\n  background-color: #111111;\n  cursor: pointer;\n  -webkit-border-radius: 1.25em;\n  -moz-border-radius: 1.25em;\n  border-radius: 1.25em;\n  -webkit-box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.2);\n  -moz-box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.2);\n  box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.2);\n  bottom: 1em;\n  left: 50%;\n  -webkit-transform: translate(-50%, 0);\n  -moz-transform: translate(-50%, 0);\n  -ms-transform: translate(-50%, 0);\n  -o-transform: translate(-50%, 0);\n  transform: translate(-50%, 0);\n  -webkit-transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);\n  -moz-transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);\n  -o-transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);\n  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);\n  -webkit-transition-property: width, height, bottom, -webkit-border-radius, -webkit-transform, opacity;\n  -moz-transition-property: width, height, bottom, border-radius, -moz-transform, opacity;\n  -o-transition-property: width, height, bottom, border-radius, -o-transform, opacity;\n  transition-property: width, height, bottom, border-radius,-webkit-transform,-moz-transform,-o-transform,transform, opacity;\n  -webkit-transition-delay: 0s;\n  -moz-transition-delay: 0s;\n  -o-transition-delay: 0s;\n  transition-delay: 0s;\n}\n.cp-checkout-btn:hover {\n  background-color: #292929;\n}\n.cp-section_wish .cp-checkout-btn {\n  -webkit-transition-delay: 0s;\n  -moz-transition-delay: 0s;\n  -o-transition-delay: 0s;\n  transition-delay: 0s;\n  -webkit-transform: translate(-50%, 300%);\n  -moz-transform: translate(-50%, 300%);\n  -ms-transform: translate(-50%, 300%);\n  -o-transform: translate(-50%, 300%);\n  transform: translate(-50%, 300%);\n  opacity: 0;\n}\n.cp-checkout-label {\n  display: none;\n}\n.cp-checkout-ic {\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  -webkit-transform: translate(-50%, -50%);\n  -moz-transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  -o-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%);\n  display: block;\n  width: 1em;\n  height: 1em;\n}\n.cp-checkout-ic svg {\n  fill: none;\n  stroke: #ffffff;\n  stroke-width: 2.6;\n  stroke-linecap: round;\n  stroke-miterlimit: 4;\n}\n@media screen and (min-width: 20em) {\n  .cp-checkout-ic {\n    width: 1.5em;\n    height: 1.5em;\n  }\n  .cp-checkout-btn {\n    width: 3.75em;\n    height: 3.75em;\n    -webkit-border-radius: 1.875em;\n    -moz-border-radius: 1.875em;\n    border-radius: 1.875em;\n    bottom: 1.25em;\n  }\n}\n@media screen and (min-width: 26.25em) {\n  .cp-checkout-ic {\n    display: none;\n  }\n  .cp-checkout-btn {\n    width: 15.625em;\n    height: 3.125em;\n    bottom: 2.5em;\n  }\n  .cp-checkout-label {\n    position: absolute;\n    left: 50%;\n    top: 50%;\n    -webkit-transform: translate(-50%, -50%);\n    -moz-transform: translate(-50%, -50%);\n    -ms-transform: translate(-50%, -50%);\n    -o-transform: translate(-50%, -50%);\n    transform: translate(-50%, -50%);\n    display: block;\n    color: #ffffff;\n    font-size: 0.875em;\n    text-transform: uppercase;\n  }\n}\n/**\n\t\t * PORTRAIT MOBILE MODE (~416px)\n\t\t */\n@media (min-width: 26.25em) and (max-height: 26em) {\n  .cp-checkout-btn {\n    bottom: 1em;\n    width: 11.25em;\n    height: 2.5em;\n  }\n  .cp-checkout-label {\n    font-size: 0.75em;\n  }\n}\n.cart-tint {\n  width: 100%;\n  height: 100%;\n  display: none;\n  position: fixed;\n  background-color: rgba(0, 0, 0, 0.9);\n  z-index: 20;\n}\n.cart-button {\n  position: fixed;\n  left: auto;\n  top: 1.5em;\n  right: 1.5em;\n  bottom: auto;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  display: none;\n  z-index: 10;\n}\n.cb-wrapper {\n  width: 2.5em;\n  height: 2.5em;\n  position: relative;\n  background-color: #111111;\n  cursor: pointer;\n  -webkit-border-radius: 1.25em;\n  -moz-border-radius: 1.25em;\n  border-radius: 1.25em;\n  -webkit-box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.2);\n  -moz-box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.2);\n  box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.2);\n}\n.cb-wrapper:hover {\n  background-color: #292929;\n}\n.cb-wrapper ul {\n  display: table;\n  list-style-type: none;\n  height: 100%;\n  width: 100%;\n}\n.cb-wrapper li {\n  display: table-cell;\n  height: 100%;\n}\n.cb-ic {\n  width: 1.125em;\n  height: 1.125em;\n  position: absolute;\n  display: inline-block;\n  top: 50%;\n  left: 50%;\n  -webkit-transform: translate(-50%, -50%);\n  -moz-transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  -o-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%);\n}\n.cb-ic svg {\n  fill: none;\n  stroke: #ffffff;\n  stroke-width: 2.6;\n  stroke-linecap: round;\n  stroke-miterlimit: 4;\n}\n.cb-label {\n  display: none;\n}\n.cb-wrapper.cb-state_both .cb-wish-cell,\n.cb-wrapper.cb-state_cart .cb-wish-cell {\n  display: none;\n}\n.cb-wrapper.cb-state_wish .cb-cart-cell {\n  display: none;\n}\n.cb-counter {\n  width: 1.25em;\n  height: 1.25em;\n  position: absolute;\n  display: inline-block;\n  right: -12%;\n  top: -12%;\n  background-color: #ffffff;\n  color: #424346;\n  -webkit-border-radius: 0.625em;\n  -moz-border-radius: 0.625em;\n  border-radius: 0.625em;\n  -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);\n  -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);\n  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);\n  overflow: hidden;\n  z-index: 10;\n}\n.cb-counter-label {\n  position: absolute;\n  display: inline-block;\n  left: 50%;\n  top: 50%;\n  -webkit-transform: translate(-50%, -50%);\n  -moz-transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  -o-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%);\n  font-size: 0.6875em;\n}\n@media screen and (min-width: 20em) {\n  .cb-ic {\n    width: 1.5em;\n    height: 1.5em;\n  }\n  .cb-wrapper {\n    width: 3.75em;\n    height: 3.75em;\n    -webkit-border-radius: 1.875em;\n    -moz-border-radius: 1.875em;\n    border-radius: 1.875em;\n  }\n  .cb-counter {\n    width: 1.625em;\n    height: 1.625em;\n    right: -0.25em;\n    top: -0.25em;\n    -webkit-border-radius: 0.8125em;\n    -moz-border-radius: 0.8125em;\n    border-radius: 0.8125em;\n  }\n  .cb-counter-label {\n    font-size: 0.75em;\n  }\n}\n@media screen and (min-width: 26.25em) {\n  .cb-wrapper.cb-state_both,\n  .cb-wrapper.cb-state_cart {\n    width: auto;\n    height: 3.125em;\n    -webkit-border-radius: 1.5625em;\n    -moz-border-radius: 1.5625em;\n    border-radius: 1.5625em;\n  }\n  .cb-wrapper.cb-state_both ul > li,\n  .cb-wrapper.cb-state_cart ul > li {\n    padding: 0 1em;\n    padding-top: 0.875em;\n  }\n  .cb-wrapper.cb-state_both .cb-ic,\n  .cb-wrapper.cb-state_cart .cb-ic {\n    width: 1.25em;\n    height: 1.25em;\n    position: relative;\n    display: inline-block;\n    top: auto;\n    left: auto;\n    -webkit-transform: translate(0, 0);\n    -moz-transform: translate(0, 0);\n    -ms-transform: translate(0, 0);\n    -o-transform: translate(0, 0);\n    transform: translate(0, 0);\n  }\n  .cb-wrapper.cb-state_both .cb-label,\n  .cb-wrapper.cb-state_cart .cb-label {\n    display: inline-block;\n    color: #ffffff;\n    font-size: 0.875em;\n    -webkit-transform: translate(0, 0.125em);\n    -moz-transform: translate(0, 0.125em);\n    -ms-transform: translate(0, 0.125em);\n    -o-transform: translate(0, 0.125em);\n    transform: translate(0, 0.125em);\n    vertical-align: top;\n    padding-left: 0.25em;\n  }\n  .cb-counter {\n    right: -0.375em;\n    top: -0.375em;\n  }\n}\n@media screen and (min-width: 48em) {\n  .cb-wrapper.cb-state_both .cb-wish-cell {\n    display: table-cell;\n  }\n  .cb-wrapper.cb-state_both .cb-cart-cell {\n    padding-right: 0;\n  }\n}\n", ""]);
+	exports.push([module.id, "html {\n  font-size: 100%;\n  -ms-text-size-adjust: 100%;\n  -webkit-text-size-adjust: 100%;\n}\nbody,\ndiv,\nh1,\nh2,\nh3,\nh4,\nh5,\nh6,\np,\nblockquote,\npre,\ndl,\ndt,\ndd,\nol,\nul,\nli,\nfieldset,\nform,\nlabel,\nlegend,\nth,\ntd,\narticle,\naside,\nfigure,\nfooter,\nheader,\nhgroup,\nmenu,\nnav,\nsection {\n  margin: 0;\n  padding: 0;\n  border: 0;\n}\narticle,\naside,\ndetails,\nfigcaption,\nfigure,\nfooter,\nheader,\nhgroup,\nmain,\nmenu,\nnav,\nsection,\nsummary {\n  display: block;\n}\naudio,\ncanvas,\nprogress,\nvideo {\n  display: inline-block;\n  /* 1 */\n  vertical-align: baseline;\n  /* 2 */\n}\naudio:not([controls]) {\n  display: none;\n  height: 0;\n}\n[hidden],\ntemplate {\n  display: none;\n}\na {\n  background-color: transparent;\n}\na:active,\na:hover {\n  outline: 0;\n}\nabbr[title] {\n  border-bottom: 1px dotted;\n}\nb,\nstrong {\n  font-weight: bold;\n}\ndfn {\n  font-style: italic;\n}\nh1 {\n  font-size: 2em;\n  margin: 0.67em 0;\n}\nmark {\n  background: #ff0;\n  color: #000;\n}\nsmall {\n  font-size: 80%;\n}\nsub,\nsup {\n  font-size: 75%;\n  line-height: 0;\n  position: relative;\n  vertical-align: baseline;\n}\nsup {\n  top: -0.5em;\n}\nsub {\n  bottom: -0.25em;\n}\nimg {\n  border: 0;\n}\nsvg:not(:root) {\n  overflow: hidden;\n}\nfigure {\n  margin: 1em 40px;\n}\nhr {\n  box-sizing: content-box;\n  height: 0;\n}\npre {\n  overflow: auto;\n}\ncode,\nkbd,\npre,\nsamp {\n  font-family: monospace, monospace;\n  font-size: 1em;\n}\nbutton,\ninput,\noptgroup,\nselect,\ntextarea {\n  color: inherit;\n  /* 1 */\n  font: inherit;\n  /* 2 */\n  margin: 0;\n  /* 3 */\n}\nbutton {\n  overflow: visible;\n}\nbutton,\nselect {\n  text-transform: none;\n}\nbutton,\nhtml input[type=\"button\"],\ninput[type=\"reset\"],\ninput[type=\"submit\"] {\n  -webkit-appearance: button;\n  /* 2 */\n  cursor: pointer;\n  /* 3 */\n}\nbutton[disabled],\nhtml input[disabled] {\n  cursor: default;\n}\nbutton::-moz-focus-inner,\ninput::-moz-focus-inner {\n  border: 0;\n  padding: 0;\n}\ninput {\n  line-height: normal;\n}\ninput[type=\"checkbox\"],\ninput[type=\"radio\"] {\n  box-sizing: border-box;\n  /* 1 */\n  padding: 0;\n  /* 2 */\n}\ninput[type=\"number\"]::-webkit-inner-spin-button,\ninput[type=\"number\"]::-webkit-outer-spin-button {\n  height: auto;\n}\ninput[type=\"search\"] {\n  -webkit-appearance: textfield;\n  /* 1 */\n  box-sizing: content-box;\n  /* 2 */\n}\ninput[type=\"search\"]::-webkit-search-cancel-button,\ninput[type=\"search\"]::-webkit-search-decoration {\n  -webkit-appearance: none;\n}\nfieldset {\n  border: 1px solid #c0c0c0;\n  margin: 0 2px;\n  padding: 0.35em 0.625em 0.75em;\n}\nlegend {\n  border: 0;\n  /* 1 */\n  padding: 0;\n  /* 2 */\n}\ntextarea {\n  overflow: auto;\n}\noptgroup {\n  font-weight: bold;\n}\ntable {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\ntd,\nth {\n  padding: 0;\n}\n/* 1 */\n/*img[src*=\".svg\"] { \n\t\twidth: 100%;\n\t}*/\n/* 2 */\n/*@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {\n\t\timg[src*=\".svg\"] {\n\t\t\twidth: 100%; \n\t\t}\n\t}*/\n/**\n\t\t * BODY COMMON STYLE\n\t\t */\nhtml,\nbody {\n  width: 100%;\n  height: 100%;\n  background-color: #eee;\n}\nbody.blocked {\n  overflow: hidden;\n}\n.cart-wrapper {\n  position: absolute;\n  top: 0;\n  left: 0;\n  font-size: 16px;\n  font-family: 'Montserrat', sans-serif;\n  font-weight: 400;\n  letter-spacing: -0.02em;\n  color: #262626;\n  z-index: 100000;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n}\n/**\n\t\t *\tPrimary color\n\t\t */\n.p-color {\n  background-color: #111111;\n}\n/**\n\t\t *\tButton\n\t\t */\n.gs-btn {\n  background-color: #111111;\n  color: #ffffff;\n  cursor: pointer;\n  -webkit-box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.2);\n  -moz-box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.2);\n  box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.2);\n}\n.gs-btn svg {\n  stroke: #ffffff;\n}\n.gs-btn:hover {\n  background-color: #292929;\n  color: #ffffff;\n}\n.gs-btn:hover svg {\n  stroke: #ffffff;\n}\n/**\n\t\t *\tTint\n\t\t */\n.gs-tint {\n  background-color: rgba(0, 0, 0, 0.9);\n}\n/**\n\t\t *\tPanel\n\t\t */\n.gs-panel {\n  background-color: #f5f5f5;\n}\n.gs-tabs {\n  background-color: rgba(255, 255, 255, 0.9);\n  color: #262626;\n}\n.gs-tabs svg {\n  stroke: #262626;\n}\n.gs-tabs .gs-tab-selected {\n  color: #424346;\n  cursor: default;\n}\n.gs-tabs .gs-tab-selected svg {\n  stroke: #424346;\n}\n.iScrollVerticalScrollbar {\n  position: absolute;\n  z-index: 9999;\n  width: 0.25em;\n  bottom: 0.5em;\n  top: 0.5em;\n  right: 0.125em;\n  overflow: hidden;\n  margin: 0.25em 0em;\n  margin-top: 4.25em;\n}\n.iScrollVerticalScrollbar.iScrollBothScrollbars {\n  bottom: 0.5em;\n}\n.iScrollIndicator {\n  position: absolute;\n  background: rgba(38, 38, 38, 0.2);\n  border-radius: 2px;\n}\n.iScrollVerticalScrollbar .iScrollIndicator {\n  width: 100%;\n  background: rgba(38, 38, 38, 0.5);\n}\n.cart-panel {\n  width: 100%;\n  height: 100%;\n  top: 0;\n  right: 0;\n  min-width: 17.5em;\n  display: none;\n  position: fixed;\n  z-index: 30;\n  -webkit-transition: width 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  -moz-transition: width 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  -o-transition: width 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  transition: width 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n}\n/** 550 */\n@media screen and (min-width: 34.375em) {\n  .cart-panel {\n    width: 34.375em;\n  }\n}\n/** 1024 */\n@media screen and (min-width: 64em) {\n  .cart-panel {\n    width: 40em;\n  }\n}\n.cp-header {\n  width: 100%;\n  height: 3em;\n  position: absolute;\n  z-index: 20;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n.cp-header ul {\n  width: 100%;\n  height: 100%;\n  display: table;\n}\n.cp-header li {\n  height: 100%;\n  position: relative;\n  display: table-cell;\n  white-space: nowrap;\n}\n.cp-tab-ic {\n  margin-right: 0.125em;\n  vertical-align: middle;\n  display: inline-block;\n  width: 1em;\n  height: 1em;\n}\n.cp-tab-ic svg {\n  fill: none;\n  stroke-width: 2.6;\n  stroke-linecap: round;\n  stroke-miterlimit: 4;\n}\n.cp-tab-label {\n  vertical-align: middle;\n  display: inline-block;\n  font-size: 0.875em;\n  line-height: 1em;\n}\n/*.cp-section_cart .cart-tab, .cp-section_wish .wish-tab {\n\t\t\tcursor: default;\n\n\t\t\t.cp-tab-label {\n\t\t\t\tcolor: @panel-selected-color;\n\t\t\t}\n\n\t\t\t.cp-tab-ic {\n\t\t\t\tsvg {\n\t\t\t\t\tstroke: @panel-selected-color;\n\t\t\t\t}\n\t\t\t}\n\t\t}*/\n.cp-back {\n  width: 3em;\n  cursor: pointer;\n}\n.cp-back .cp-tab-ic {\n  position: absolute;\n  top: 50%;\n  -webkit-transform: translate(0.625em, -50%);\n  -moz-transform: translate(0.625em, -50%);\n  -ms-transform: translate(0.625em, -50%);\n  -o-transform: translate(0.625em, -50%);\n  transform: translate(0.625em, -50%);\n}\n.cp-back:hover .cp-tab-ic {\n  -webkit-transform: translate(0.5em, -50%);\n  -moz-transform: translate(0.5em, -50%);\n  -ms-transform: translate(0.5em, -50%);\n  -o-transform: translate(0.5em, -50%);\n  transform: translate(0.5em, -50%);\n}\n.cp-tab-wrapper {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  -webkit-transform: translate(-50%, -50%);\n  -moz-transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  -o-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%);\n}\n.cp-tabs li {\n  cursor: pointer;\n}\n.cp-tabs li.selected {\n  cursor: default;\n}\n.cp-tab-cursor {\n  width: 50%;\n  height: 0.125em;\n  top: 0;\n  left: 0;\n  position: absolute;\n  -webkit-transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);\n  -moz-transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);\n  -o-transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);\n  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);\n}\n.cp-section_cart .cp-tab-cursor {\n  -webkit-transform: translateX(0);\n  -moz-transform: translateX(0);\n  -ms-transform: translateX(0);\n  -o-transform: translateX(0);\n  transform: translateX(0);\n}\n.cp-section_wish .cp-tab-cursor {\n  -webkit-transform: translateX(100%);\n  -moz-transform: translateX(100%);\n  -ms-transform: translateX(100%);\n  -o-transform: translateX(100%);\n  transform: translateX(100%);\n}\n@media screen and (min-width: 20em) {\n  .cp-header {\n    height: 3.75em;\n  }\n  .cp-back {\n    width: 3.75em;\n  }\n  .cp-back .cp-tab-ic {\n    -webkit-transform: translate(1.125em, -50%);\n    -moz-transform: translate(1.125em, -50%);\n    -ms-transform: translate(1.125em, -50%);\n    -o-transform: translate(1.125em, -50%);\n    transform: translate(1.125em, -50%);\n  }\n  .cp-back:hover .cp-tab-ic {\n    -webkit-transform: translate(1em, -50%);\n    -moz-transform: translate(1em, -50%);\n    -ms-transform: translate(1em, -50%);\n    -o-transform: translate(1em, -50%);\n    transform: translate(1em, -50%);\n  }\n  .cp-tab-ic {\n    margin-right: 0.25em;\n    width: 1.1875em;\n    height: 1.1875em;\n  }\n  .cp-tab-label {\n    font-size: 1em;\n    line-height: 1.25em;\n  }\n}\n/**\n\t\t * PORTRAIT MOBILE MODE (~416px)\n\t\t */\n@media (min-width: 26.25em) and (max-height: 26em) {\n  .cp-header {\n    height: 2.5em;\n  }\n  .cp-back {\n    width: 2.5em;\n  }\n  .cp-back .cp-tab-ic {\n    -webkit-transform: translate(0.625em, -50%);\n    -moz-transform: translate(0.625em, -50%);\n    -ms-transform: translate(0.625em, -50%);\n    -o-transform: translate(0.625em, -50%);\n    transform: translate(0.625em, -50%);\n  }\n  .cp-back:hover .cp-tab-ic {\n    -webkit-transform: translate(0.5em, -50%);\n    -moz-transform: translate(0.5em, -50%);\n    -ms-transform: translate(0.5em, -50%);\n    -o-transform: translate(0.5em, -50%);\n    transform: translate(0.5em, -50%);\n  }\n  .cp-tab-ic {\n    margin-right: 0.125em;\n    width: 1em;\n    height: 1em;\n  }\n  .cp-tab-label {\n    font-size: 0.875em;\n    line-height: 1em;\n  }\n}\n.cp-container {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  z-index: 10;\n  top: 0;\n  left: 0;\n  overflow: hidden;\n}\n.cp-container ul {\n  list-style-type: none;\n}\n.cp-container > ul {\n  width: 200%;\n  height: 100%;\n  display: table;\n  position: relative;\n}\n.cp-container > ul > li {\n  height: 100%;\n  width: 50%;\n  position: relative;\n  display: table-cell;\n}\n.cp-container > ul {\n  -webkit-transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);\n  -moz-transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);\n  -o-transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);\n  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);\n}\n.cp-section_cart .cp-container > ul {\n  -webkit-transform: translateX(0);\n  -moz-transform: translateX(0);\n  -ms-transform: translateX(0);\n  -o-transform: translateX(0);\n  transform: translateX(0);\n}\n.cp-section_wish .cp-container > ul {\n  -webkit-transform: translateX(-50%);\n  -moz-transform: translateX(-50%);\n  -ms-transform: translateX(-50%);\n  -o-transform: translateX(-50%);\n  transform: translateX(-50%);\n}\n.cp-section-wrapper {\n  position: relative;\n  width: 100%;\n  height: 100%;\n  overflow: hidden;\n  /* Prevent native touch events on Windows */\n  -ms-touch-action: none;\n  /* Prevent the callout on tap-hold and text selection */\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  /* Prevent text resize on orientation change, useful for web-apps */\n  -webkit-text-size-adjust: none;\n  -moz-text-size-adjust: none;\n  -ms-text-size-adjust: none;\n  -o-text-size-adjust: none;\n  text-size-adjust: none;\n}\n.cp-section-content {\n  position: absolute;\n  width: 100%;\n  /* Prevent elements to be highlighted on tap */\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  /* Put the scroller into the HW Compositing layer right from the start */\n  -webkit-transform: translateZ(0);\n  -moz-transform: translateZ(0);\n  -ms-transform: translateZ(0);\n  -o-transform: translateZ(0);\n  transform: translateZ(0);\n}\n.cp-section-top,\n.cp-section-bottom {\n  display: block;\n}\n.cp-section-top {\n  height: 3.625em;\n}\n.cp-section-cart .cp-section-bottom {\n  height: 3.5em;\n}\n.cp-section-wish .cp-section-bottom {\n  height: 0em;\n}\n.cp-section-list {\n  -webkit-box-sizing: border-box;\n  -moz-box-sizing: border-box;\n  box-sizing: border-box;\n  padding: 0 0.625em;\n}\n.cp-section-list > li {\n  margin-bottom: 0.625em;\n}\n.cp-item-wrapper {\n  width: 100%;\n  position: relative;\n  background-color: #FFF;\n  overflow: hidden;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  border-radius: 20px;\n  -webkit-transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  -moz-transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  -o-transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  -webkit-transform: translateY(10%);\n  -moz-transform: translateY(10%);\n  -ms-transform: translateY(10%);\n  -o-transform: translateY(10%);\n  transform: translateY(10%);\n  opacity: 0;\n}\n.cp-item-wrapper.active {\n  -webkit-transform: translateY(0%);\n  -moz-transform: translateY(0%);\n  -ms-transform: translateY(0%);\n  -o-transform: translateY(0%);\n  transform: translateY(0%);\n  opacity: 1;\n}\n.cp-item-img {\n  width: 100%;\n  padding-bottom: 100%;\n  background-repeat: no-repeat;\n  -webkit-background-size: cover;\n  -moz-background-size: cover;\n  -o-background-size: cover;\n  background-size: cover;\n  -webkit-transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  -moz-transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  -o-transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n}\n/** CART ITEM BLOCK */\n.cp-item-block-wrapper {\n  width: 100%;\n  height: 5em;\n  display: table;\n  -webkit-transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  -moz-transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  -o-transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n  transition: all 0.5s cubic-bezier(0.61, 0, 0.25, 0.99);\n}\n.cp-item-block-wrapper > div {\n  position: relative;\n  display: table-cell;\n}\n.cp-item-description > span {\n  position: absolute;\n  padding: 0 1.125em;\n  top: 50%;\n  -webkit-transform: translate(0, -50%);\n  -moz-transform: translate(0, -50%);\n  -ms-transform: translate(0, -50%);\n  -o-transform: translate(0, -50%);\n  transform: translate(0, -50%);\n}\n.cp-item-label {\n  line-height: 1.3em;\n  max-height: 2.6em;\n  font-size: 0.875em;\n  overflow: hidden;\n  color: #202022;\n  display: block;\n}\n.cp-item-price {\n  font-size: 0.875em;\n  color: #A8A8B2;\n  display: block;\n  margin-top: 0.125em;\n}\n.cp-item-cart,\n.cp-item-wish,\n.cp-item-trash {\n  width: 2.5em;\n  cursor: pointer;\n}\n.cp-item-trash .cp-item-ic {\n  transform: translate(-16px, -50%);\n  left: auto;\n  right: 0;\n}\n.cp-item-ic {\n  position: absolute;\n  display: inline-block;\n  width: 0.9375em;\n  height: 0.9375em;\n  top: 50%;\n  left: 50%;\n  -webkit-transform: translate(-50%, -50%);\n  -moz-transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  -o-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%);\n}\n.cp-item-ic svg {\n  fill: none;\n  stroke: #BDC3C7;\n  stroke-width: 2.6;\n  stroke-linecap: round;\n  stroke-miterlimit: 4;\n}\n@media screen and (min-width: 20em) {\n  .cp-section-top {\n    height: 4.375em;\n  }\n  .cp-section-cart .cp-section-bottom {\n    height: 5em;\n  }\n  .cp-item-ic {\n    width: 1.5em;\n    height: 1.5em;\n  }\n  .cp-item-cart,\n  .cp-item-wish,\n  .cp-item-trash {\n    width: 3em;\n  }\n}\n@media screen and (min-width: 22.5em) {\n  .cp-section-top {\n    height: 5em;\n  }\n  .cp-section-cart .cp-section-bottom {\n    height: 5em;\n  }\n  .cp-section-wish .cp-section-bottom {\n    height: 0em;\n  }\n  .cp-section-list {\n    padding: 0 1.25em;\n  }\n  .cp-section-list > li {\n    margin-bottom: 1.25em;\n  }\n  .cp-item-label {\n    line-height: 1.3em;\n    max-height: 2.6em;\n    font-size: 1em;\n  }\n  .cp-item-price {\n    font-size: 1em;\n  }\n}\n@media screen and (min-width: 26.25em) {\n  .cp-section-list {\n    padding: 0 0.625em;\n  }\n  .cp-section-list > li {\n    margin-bottom: 0.125em;\n  }\n  .cp-section-top {\n    height: 4.375em;\n  }\n  .cp-section-cart .cp-section-bottom {\n    height: 6.125em;\n  }\n  .cp-section-wish .cp-section-bottom {\n    height: 0.5em;\n  }\n  .cp-item-wrapper {\n    height: 5em;\n    display: table;\n    -webkit-border-radius: 5px;\n    -moz-border-radius: 5px;\n    border-radius: 5px;\n    /** CART ITEM IMG */\n  }\n  .cp-item-wrapper > div {\n    display: table-cell;\n  }\n  .cp-item-wrapper .cp-item-img {\n    width: 5em;\n    padding: 0;\n    display: table-cell;\n  }\n  .cp-item-ic {\n    width: 0.9375em;\n    height: 0.9375em;\n  }\n  .cp-item-label {\n    line-height: 1.3em;\n    max-height: 2.6em;\n    font-size: 0.875em;\n  }\n  .cp-item-price {\n    font-size: 0.875em;\n  }\n  .cp-item-cart,\n  .cp-item-wish,\n  .cp-item-trash {\n    width: 2.5em;\n  }\n}\n/**\n\t\t * PORTRAIT MOBILE MODE (~416px)\n\t\t */\n@media (min-width: 26.25em) and (max-height: 26em) {\n  .cp-section-top {\n    height: 3.125em;\n  }\n  .cp-section-cart .cp-section-bottom {\n    height: 4em;\n  }\n}\n@media screen and (min-width: 30em) {\n  .cp-section-list {\n    padding: 0 1.25em;\n  }\n  .cp-section-list > li {\n    margin-bottom: 0.25em;\n  }\n  .cp-section-top {\n    height: 5em;\n  }\n  .cp-section-cart .cp-section-bottom {\n    height: 6.625em;\n  }\n  .cp-section-wish .cp-section-bottom {\n    height: 1em;\n  }\n  .cp-item-cart,\n  .cp-item-wish,\n  .cp-item-trash {\n    width: 3em;\n  }\n}\n/**\n\t\t * PORTRAIT MOBILE MODE (~480px)\n\t\t */\n@media (min-width: 30em) and (max-height: 26em) {\n  .cp-section-top {\n    height: 3.75em;\n  }\n  .cp-section-cart .cp-section-bottom {\n    height: 4.5em;\n  }\n}\n@media screen and (min-width: 64em) {\n  .cp-item-ic {\n    width: 1.5em;\n    height: 1.5em;\n  }\n  .cp-section-list {\n    padding: 0 1.875em;\n  }\n  .cp-section-list > li {\n    margin-bottom: 0.25em;\n  }\n  .cp-section-top {\n    height: 5.625em;\n  }\n  .cp-section-cart .cp-section-bottom {\n    height: 7.25em;\n  }\n  .cp-section-wish .cp-section-bottom {\n    height: 1.625em;\n  }\n  .cp-item-block-wrapper {\n    height: 7.5em;\n  }\n  .cp-item-wrapper {\n    height: 7.5em;\n    /** CART ITEM IMG */\n  }\n  .cp-item-wrapper .cp-item-img {\n    width: 7.5em;\n  }\n  .cp-item-label {\n    line-height: 1.3em;\n    max-height: 2.6em;\n    font-size: 1em;\n  }\n  .cp-item-price {\n    font-size: 1em;\n  }\n  .cp-item-cart,\n  .cp-item-wish,\n  .cp-item-trash {\n    width: 3.75em;\n  }\n  .cp-item-trash .cp-item-ic {\n    left: 50%;\n    right: auto;\n    transform: translate(-50%, -50%);\n  }\n}\n/*.cp-footer {\n\n\t}*/\n.cp-checkout-btn {\n  position: absolute;\n  z-index: 30;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  width: 2.5em;\n  height: 2.5em;\n  -webkit-border-radius: 1.25em;\n  -moz-border-radius: 1.25em;\n  border-radius: 1.25em;\n  bottom: 1em;\n  left: 50%;\n  -webkit-transform: translate(-50%, 0);\n  -moz-transform: translate(-50%, 0);\n  -ms-transform: translate(-50%, 0);\n  -o-transform: translate(-50%, 0);\n  transform: translate(-50%, 0);\n  /*&:hover {\n\t\t\t\tbackground-color: @checkout-color-hover;\n\t\t\t}*/\n  -webkit-transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);\n  -moz-transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);\n  -o-transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);\n  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);\n  -webkit-transition-property: width, height, bottom, -webkit-border-radius, -webkit-transform, opacity;\n  -moz-transition-property: width, height, bottom, border-radius, -moz-transform, opacity;\n  -o-transition-property: width, height, bottom, border-radius, -o-transform, opacity;\n  transition-property: width, height, bottom, border-radius,-webkit-transform,-moz-transform,-o-transform,transform, opacity;\n  -webkit-transition-delay: 0s;\n  -moz-transition-delay: 0s;\n  -o-transition-delay: 0s;\n  transition-delay: 0s;\n}\n.cp-section_wish .cp-checkout-btn {\n  -webkit-transition-delay: 0s;\n  -moz-transition-delay: 0s;\n  -o-transition-delay: 0s;\n  transition-delay: 0s;\n  -webkit-transform: translate(-50%, 300%);\n  -moz-transform: translate(-50%, 300%);\n  -ms-transform: translate(-50%, 300%);\n  -o-transform: translate(-50%, 300%);\n  transform: translate(-50%, 300%);\n  opacity: 0;\n}\n.cp-checkout-label {\n  display: none;\n}\n.cp-checkout-ic {\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  -webkit-transform: translate(-50%, -50%);\n  -moz-transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  -o-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%);\n  display: block;\n  width: 1em;\n  height: 1em;\n}\n.cp-checkout-ic svg {\n  fill: none;\n  stroke: #ffffff;\n  stroke-width: 2.6;\n  stroke-linecap: round;\n  stroke-miterlimit: 4;\n}\n@media screen and (min-width: 20em) {\n  .cp-checkout-ic {\n    width: 1.5em;\n    height: 1.5em;\n  }\n  .cp-checkout-btn {\n    width: 3.75em;\n    height: 3.75em;\n    -webkit-border-radius: 1.875em;\n    -moz-border-radius: 1.875em;\n    border-radius: 1.875em;\n    bottom: 1.25em;\n  }\n}\n@media screen and (min-width: 26.25em) {\n  .cp-checkout-ic {\n    display: none;\n  }\n  .cp-checkout-btn {\n    width: 15.625em;\n    height: 3.125em;\n    bottom: 2.5em;\n  }\n  .cp-checkout-label {\n    position: absolute;\n    left: 50%;\n    top: 50%;\n    -webkit-transform: translate(-50%, -50%);\n    -moz-transform: translate(-50%, -50%);\n    -ms-transform: translate(-50%, -50%);\n    -o-transform: translate(-50%, -50%);\n    transform: translate(-50%, -50%);\n    display: block;\n    color: #ffffff;\n    font-size: 0.875em;\n    text-transform: uppercase;\n  }\n}\n/**\n\t\t * PORTRAIT MOBILE MODE (~416px)\n\t\t */\n@media (min-width: 26.25em) and (max-height: 26em) {\n  .cp-checkout-btn {\n    bottom: 1em;\n    width: 11.25em;\n    height: 2.5em;\n  }\n  .cp-checkout-label {\n    font-size: 0.75em;\n  }\n}\n.cart-tint {\n  width: 100%;\n  height: 100%;\n  display: none;\n  position: fixed;\n  z-index: 20;\n}\n.cart-button {\n  position: fixed;\n  left: auto;\n  top: 1.5em;\n  right: 1.5em;\n  bottom: auto;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  display: none;\n  z-index: 10;\n}\n.cb-wrapper {\n  width: 2.5em;\n  height: 2.5em;\n  position: relative;\n  -webkit-border-radius: 1.25em;\n  -moz-border-radius: 1.25em;\n  border-radius: 1.25em;\n  /*&:hover {\n\t\t\t\tbackground-color: @button-color-hover;\n\t\t\t}*/\n}\n.cb-wrapper ul {\n  display: table;\n  list-style-type: none;\n  height: 100%;\n  width: 100%;\n}\n.cb-wrapper li {\n  display: table-cell;\n  height: 100%;\n}\n.cb-ic {\n  width: 1.125em;\n  height: 1.125em;\n  position: absolute;\n  display: inline-block;\n  top: 50%;\n  left: 50%;\n  -webkit-transform: translate(-50%, -50%);\n  -moz-transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  -o-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%);\n}\n.cb-ic svg {\n  fill: none;\n  stroke-width: 2.6;\n  stroke-linecap: round;\n  stroke-miterlimit: 4;\n}\n.cb-label {\n  display: none;\n}\n.cb-wrapper.cb-state_both .cb-wish-cell,\n.cb-wrapper.cb-state_cart .cb-wish-cell {\n  display: none;\n}\n.cb-wrapper.cb-state_wish .cb-cart-cell {\n  display: none;\n}\n.cb-counter {\n  width: 1.25em;\n  height: 1.25em;\n  position: absolute;\n  display: inline-block;\n  right: -12%;\n  top: -12%;\n  background-color: #ffffff;\n  color: #424346;\n  -webkit-border-radius: 0.625em;\n  -moz-border-radius: 0.625em;\n  border-radius: 0.625em;\n  -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);\n  -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);\n  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);\n  overflow: hidden;\n  z-index: 10;\n}\n.cb-counter-label {\n  position: absolute;\n  display: inline-block;\n  left: 50%;\n  top: 50%;\n  -webkit-transform: translate(-50%, -50%);\n  -moz-transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  -o-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%);\n  font-size: 0.6875em;\n}\n@media screen and (min-width: 20em) {\n  .cb-ic {\n    width: 1.5em;\n    height: 1.5em;\n  }\n  .cb-wrapper {\n    width: 3.75em;\n    height: 3.75em;\n    -webkit-border-radius: 1.875em;\n    -moz-border-radius: 1.875em;\n    border-radius: 1.875em;\n  }\n  .cb-counter {\n    width: 1.625em;\n    height: 1.625em;\n    right: -0.25em;\n    top: -0.25em;\n    -webkit-border-radius: 0.8125em;\n    -moz-border-radius: 0.8125em;\n    border-radius: 0.8125em;\n  }\n  .cb-counter-label {\n    font-size: 0.75em;\n  }\n}\n@media screen and (min-width: 26.25em) {\n  .cb-wrapper.cb-state_both,\n  .cb-wrapper.cb-state_cart {\n    width: auto;\n    height: 3.125em;\n    -webkit-border-radius: 1.5625em;\n    -moz-border-radius: 1.5625em;\n    border-radius: 1.5625em;\n  }\n  .cb-wrapper.cb-state_both ul > li,\n  .cb-wrapper.cb-state_cart ul > li {\n    padding: 0 1em;\n    padding-top: 0.875em;\n  }\n  .cb-wrapper.cb-state_both .cb-ic,\n  .cb-wrapper.cb-state_cart .cb-ic {\n    width: 1.25em;\n    height: 1.25em;\n    position: relative;\n    display: inline-block;\n    top: auto;\n    left: auto;\n    -webkit-transform: translate(0, 0);\n    -moz-transform: translate(0, 0);\n    -ms-transform: translate(0, 0);\n    -o-transform: translate(0, 0);\n    transform: translate(0, 0);\n  }\n  .cb-wrapper.cb-state_both .cb-label,\n  .cb-wrapper.cb-state_cart .cb-label {\n    display: inline-block;\n    font-size: 0.875em;\n    -webkit-transform: translate(0, 0.125em);\n    -moz-transform: translate(0, 0.125em);\n    -ms-transform: translate(0, 0.125em);\n    -o-transform: translate(0, 0.125em);\n    transform: translate(0, 0.125em);\n    vertical-align: top;\n    padding-left: 0.25em;\n  }\n  .cb-counter {\n    right: -0.375em;\n    top: -0.375em;\n  }\n}\n@media screen and (min-width: 48em) {\n  .cb-wrapper.cb-state_both .cb-wish-cell {\n    display: table-cell;\n  }\n  .cb-wrapper.cb-state_both .cb-cart-cell {\n    padding-right: 0;\n  }\n}\n", ""]);
 	
 	// exports
 
@@ -2605,28 +2546,351 @@
 
 
 /***/ },
-/* 29 */
+/* 29 */,
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	
+	
+	/** 
+	 *	Require third-party library
+	 */
+	
+	var $ = __webpack_require__(1),
+		Backbone = __webpack_require__(3),
+		webfont = __webpack_require__(9);
+	
+	
+	/** 
+	 *	Require base
+	 */
+	 
+	var	Lifecycle = __webpack_require__(5),
+		LifecycleEvent = __webpack_require__(6);
+	
+	
+	
+	
+	//┐
+	//│  ╔══════════════════════════════════════════════════════════════════════════════════════════╗
+	//│  ║                                                                                          ║
+	//╠──╢  HOOKS                                                                                   ║
+	//│  ║                                                                                          ║
+	//│  ╚══════════════════════════════════════════════════════════════════════════════════════════╝
+	//┘
+	
+		var Hooks = function () 
+		{
+	
+			// СЛУШАЕТ СОБЫТИЯ LIFECYCLE
+			// ---------------------------------------------------------------------------------
+	
+			this.listenTo(Lifecycle, LifecycleEvent.SHOW, this._onshow);
+			this.listenTo(Lifecycle, LifecycleEvent.HIDE, this._onhide);
+		};
+	
+	
+	
+		//┐
+		//│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+		//╠──┤  ОБРАБОТЧИКИ СОБЫТИЙ LYFECYCLE                                                       │
+		//│  └──────────────────────────────────────────────────────────────────────────────────────┘
+		//┘
+	
+			_.extend(Hooks.prototype,
+			{
+				/** Показывает панель */
+	
+				_onshow: function ()
+				{
+					document.body.addEventListener('touchmove', this._ontouchmove);
+					$('body').addClass('blocked');
+				},
+	
+				_ontouchmove: function (e)
+				{
+					if (!$(e.target).hasClass("scrollable")) {
+						e.preventDefault();
+					}
+				},
+	
+	
+				/** 
+				 *	Скрывает панель
+				 */
+	
+				_onhide: function ()
+				{
+					document.body.removeEventListener('touchmove', this._ontouchmove);
+					$('body').removeClass('blocked');
+				}
+			});
+	
+	
+	
+		//┐
+		//│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+		//╠──┤  ..                                                                                  │
+		//│  └──────────────────────────────────────────────────────────────────────────────────────┘
+		//┘
+	
+			_.extend(Hooks.prototype,
+			{
+				destroy: function ()
+				{
+					this.stopListening();
+					document.body.removeEventListener('touchmove', this._ontouchmove);
+					$('body').removeClass('block');
+				}
+			});
+	
+	
+	
+		//┐
+		//│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+		//╠──┤  РАСШИРЯЕТ BACKBONE EVENTS                                                           │
+		//│  └──────────────────────────────────────────────────────────────────────────────────────┘
+		//┘
+	
+			_.extend(Hooks.prototype, Backbone.Events);
+	
+	
+	module.exports = Hooks;
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	
+	
+	/** 
+	 *	Require third-party library
+	 */
+	
+	var Backbone = __webpack_require__(3);
+	
+	
+	/** 
+	 *	Require base
+	 */
+	 
+	var	Cart = __webpack_require__(7),
+		Lifecycle = __webpack_require__(5),
+		LifecycleEvent = __webpack_require__(6),
+		Utils = __webpack_require__(14);
+	
+	
+	/** 
+	 *	Require component
+	 */
+	 
+	var Options = __webpack_require__(10);
+	
+	
+	/** 
+	 *	Require HTML template
+	 */
+	 
+	var	ItemHTML = __webpack_require__(33);
+	
+	
+	
+	
+	//┐
+	//│  ╔══════════════════════════════════════════════════════════════════════════════════════════╗
+	//│  ║                                                                                          ║
+	//╠──╢  ПРЕДСТАВЛЕНИЕ ПРОДУКТА                                                                  ║
+	//│  ║                                                                                          ║
+	//│  ╚══════════════════════════════════════════════════════════════════════════════════════════╝
+	//┘
+	
+		var CartSectionItem = Backbone.View.extend(
+		{
+			tagName: "li",
+			model: Cart.Item,
+	
+			events: {
+				'click .cp-item-trash': 'trash'
+			},
+	
+			initialize: function () {
+				this.currency = Options.vars.currency;
+				this.listenTo(this.model, 'destroy', this.remove);
+				this.listenTo(this.model, 'change:quantity', this.render);
+			},
+	
+			trash: function ()
+			{
+				this.model.destroy();
+			}
+		});
+	
+	
+	
+		//┐
+		//│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+		//╠──┤  RENDERING                                                                           │
+		//│  └──────────────────────────────────────────────────────────────────────────────────────┘
+		//┘
+	
+			_.extend(CartSectionItem.prototype,
+			{
+				/**
+				 *	Рендер представления
+				 */
+	
+				render: function ()
+				{
+					if (this.model.changed.id !== undefined) {
+						return;
+					}
+	
+					var m = this.model.toJSON();
+						m.price = Utils.format(m.price, this.currency)
+	
+					this.$el.html(ItemHTML(m));
+	
+					return this;
+				}
+			});
+	
+	
+	module.exports = CartSectionItem;
+	
+	
+	
+
+
+/***/ },
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	
+	
+	/** 
+	 *	Require third-party library
+	 */
+	
+	var Backbone = __webpack_require__(3);
+	
+	
+	/** 
+	 *	Require base
+	 */
+	 
+	var	Cart = __webpack_require__(7),
+		Lifecycle = __webpack_require__(5),
+		LifecycleEvent = __webpack_require__(6);
+	
+	
+	/** 
+	 *	Require HTML template
+	 */
+	 
+	var	ItemHTML = __webpack_require__(34);
+	
+	
+	
+	
+	//┐
+	//│  ╔══════════════════════════════════════════════════════════════════════════════════════════╗
+	//│  ║                                                                                          ║
+	//╠──╢  ПРЕДСТАВЛЕНИЕ ПРОДУКТА                                                                  ║
+	//│  ║                                                                                          ║
+	//│  ╚══════════════════════════════════════════════════════════════════════════════════════════╝
+	//┘
+	
+		var WishSectionItem = Backbone.View.extend(
+		{
+			tagName: "li",
+			model: Cart.Item,
+	
+			events: {
+				'click .cp-item-trash': 'trash'
+			},
+	
+			initialize: function () {
+				this.listenTo(this.model, 'destroy', this.remove);
+				this.listenTo(this.model, 'change:quantity', this.render);
+			},
+	
+			trash: function ()
+			{
+				this.model.destroy();
+			}
+		});
+	
+	
+	
+		//┐
+		//│  ┌──────────────────────────────────────────────────────────────────────────────────────┐
+		//╠──┤  RENDERING                                                                           │
+		//│  └──────────────────────────────────────────────────────────────────────────────────────┘
+		//┘
+	
+			_.extend(WishSectionItem.prototype,
+			{
+				/**
+				 *	Рендер представления
+				 */
+	
+				render: function ()
+				{
+					if (this.model.changed.id !== undefined) {
+						return;
+					}
+	
+					this.$el.html(ItemHTML(this.model.toJSON()));
+	
+					return this;
+				}
+			});
+	
+	
+	module.exports = WishSectionItem;
+	
+	
+	
+
+
+/***/ },
+/* 33 */
 /***/ function(module, exports) {
 
 	module.exports = function(obj) {
 	obj || (obj = {});
 	var __t, __p = '';
 	with (obj) {
-	__p += '<!-- <div style="background-color: #555;">\n	<h6>Item</h6>\n	<div>Title: ' +
-	((__t = ( title )) == null ? '' : __t) +
-	'</div>\n	<div>Price: ' +
-	((__t = ( price )) == null ? '' : __t) +
-	'</div>\n	<div>Total price: ' +
-	((__t = ( (price * quantity).toFixed(2) )) == null ? '' : __t) +
-	'</div>\n	<div>Quantity: ' +
-	((__t = ( quantity )) == null ? '' : __t) +
-	'</div>\n	<div class="trash">delete</div>\n</div> -->\n\n<div class="cp-item-wrapper">\n	<div class="cp-item-img" style="background-image: url(\'' +
+	__p += '<div class="cp-item-wrapper">\n	<div class="cp-item-img" style="background-image: url(\'' +
 	((__t = (img)) == null ? '' : __t) +
 	'\');"></div>\n	<div class="cp-item-block">\n		<div class="cp-item-block-wrapper">\n			<div class="cp-item-description">\n				<span>\n					<span class="cp-item-label">' +
 	((__t = (title)) == null ? '' : __t) +
 	'</span>\n					<span class="cp-item-price">' +
 	((__t = (price)) == null ? '' : __t) +
-	'</span>\n				</span>\n			</div>\n			<div class="cp-item-trash">\n				<span class="cp-item-ic">\n					<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve"><g><g><line x1="7" y1="7" x2="25" y2="25"/><g><line x1="25" y1="7" x2="7" y2="25"/></g></g></g></svg>\n				</span>\n			</div>\n		</div>\n	</div>\n</div>';
+	'</span>\n				</span>\n			</div>\n			<div class="cp-item-wish">\n				<span class="cp-item-ic">\n					<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve"> <path d="M22.6,6.5c-2.9,0-5.4,1.7-6.6,4.1c-1.2-2.4-3.7-4.1-6.6-4.1C5.3,6.5,2,9.8,2,13.9C2,23.7,15.8,29,15.8,29 S30,23.6,30,13.9C30,9.8,26.7,6.5,22.6,6.5L22.6,6.5z"/></svg>\n				</span>\n			</div>\n			<div class="cp-item-trash">\n				<span class="cp-item-ic">\n					<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve"><g><g><line x1="7" y1="7" x2="25" y2="25"/><g><line x1="25" y1="7" x2="7" y2="25"/></g></g></g></svg>\n				</span>\n			</div>\n		</div>\n	</div>\n</div>';
+	
+	}
+	return __p
+	};
+
+/***/ },
+/* 34 */
+/***/ function(module, exports) {
+
+	module.exports = function(obj) {
+	obj || (obj = {});
+	var __t, __p = '';
+	with (obj) {
+	__p += '<div class="cp-item-wrapper">\n	<div class="cp-item-img" style="background-image: url(\'' +
+	((__t = (img)) == null ? '' : __t) +
+	'\');"></div>\n	<div class="cp-item-block">\n		<div class="cp-item-block-wrapper">\n			<div class="cp-item-description">\n				<span>\n					<span class="cp-item-label">' +
+	((__t = (title)) == null ? '' : __t) +
+	'</span>\n					<span class="cp-item-price">' +
+	((__t = (price)) == null ? '' : __t) +
+	'</span>\n				</span>\n			</div>\n			<div class="cp-item-cart">\n				<span class="cp-item-ic">\n					<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve"><g><path d="M25.4,29H6.6c-1.7,0-3-1.4-2.8-2.9l1.9-13.8C5.9,11,6.6,10,8,10h16c1.4,0,2.1,1,2.3,2.3l1.9,13.8 C28.4,27.6,27.1,29,25.4,29z"/><path d="M10.6,12.7V8.4C10.6,5.4,13,3,16,3h0c3,0,5.4,2.4,5.4,5.4v4.3"/></g></svg>\n				</span>\n			</div>\n			<div class="cp-item-trash">\n				<span class="cp-item-ic">\n					<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve"><g><g><line x1="7" y1="7" x2="25" y2="25"/><g><line x1="25" y1="7" x2="7" y2="25"/></g></g></g></svg>\n				</span>\n			</div>\n		</div>\n	</div>\n</div>';
 	
 	}
 	return __p
