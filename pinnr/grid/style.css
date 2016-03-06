@@ -147,7 +147,7 @@ body {
 /* LANDSCAPE MOBILE MODE (~416px)
  */
 
-@media (max-height: 30em) {
+@media (max-height: 26em) {
 	.grid-tile { width: 33.3333% }
 }
 
