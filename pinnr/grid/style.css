@@ -54,8 +54,17 @@ body {
     background-size: cover;
 }
 
+.item-img:hover {
+	cursor: -webkit-grab; cursor: -moz-grab;
+}
+
+.item-img:active {
+	cursor: -webkit-grabbing; cursor: -moz-grabbing;
+}
+
+
 .item-pnl {
-	position: relative;
+	/*position: relative;*/
 	width: 100%;
 }
 
@@ -66,12 +75,12 @@ body {
 }
 
 .pnl-wrapper > div {
-	position: relative;
 	display: table-cell;
 	vertical-align: middle;
 }
 
 .pnl-description {
+	position: relative;
 	padding: 0 1.125em;
 }
 
@@ -115,6 +124,7 @@ body {
 	width: 40px;
 	cursor: pointer;
 	text-align: center;
+	position: relative;
 }
 
 
@@ -148,7 +158,12 @@ body {
  */
 
 @media (max-height: 26em) {
+	.pnl-wrapper { height: 48px }
 	.grid-tile { width: 33.3333% }
+	.pnl-label { font-size: 0.7em; line-height: 14px; }
+	.pnl-price { font-size: 0.7em; line-height: 14px; }
+	.pnl-favorites { position: absolute; width: 40px; height: 40px; top:0; right: 0 }
+	.pnl-ic { width: 14px; height: 14px }
 }
 
 
