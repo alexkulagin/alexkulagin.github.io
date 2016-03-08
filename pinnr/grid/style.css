@@ -16,6 +16,7 @@ body {
 	font-size: 16px;
 	line-height: 1.5em;
 	font-weight: 400;
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 .inner {
@@ -81,14 +82,15 @@ body {
 
 .pnl-description {
 	position: relative;
-	padding: 0 1.125em;
+	padding: 0;
+	padding-left: 0.5em;
 }
 
 .pnl-label {
 	color: #424346;
 	line-height: 16px;
 	max-height: 2.6em;
-	font-size: 0.875em;
+	font-size: 0.75em;
 	overflow: hidden;
 	display: block;
 }
@@ -97,12 +99,20 @@ body {
 	line-height: 16px;
 	color: #111;
 	font-weight: 700;
-	font-size: 0.875em;
+	font-size: 0.75em;
 	display: block;
 	/*margin-top: 0.125em;*/
 }
 
-.pnl-wrapper svg {
+.pnl-ic-wrapper {
+	width: 32px; height: 32px;
+	line-height: 0;
+	position: relative;
+	margin: 0 auto;
+	transform: scale(0.5);
+}
+
+.pnl-ic-wrapper svg {
     fill: none;
     stroke-width: 2.0;
     stroke-linecap: round;
@@ -113,7 +123,7 @@ body {
 .pnl-ic {
 	display: inline-block;
 	vertical-align: middle;
-	width: 18px; height: 18px;
+	width: 100%; height: 100%;
 }
 
 .pnl-favorites svg {
@@ -121,19 +131,28 @@ body {
 }
 
 .pnl-favorites {
-	width: 40px;
+	width: 32px;
 	cursor: pointer;
-	text-align: center;
+	position: relative;
+}
+
+.pnl-tocart svg {
+    stroke: #a1a8ad;
+}
+
+.pnl-tocart {
+	width: 32px;
+	cursor: pointer;
 	position: relative;
 }
 
 
 @media screen and (min-width: 320px) {
 	.pnl-wrapper { height: 70px }
-	.pnl-label { font-size: 1em; line-height: 20px; }
-	.pnl-price { font-size: 1em; line-height: 20px; }
-	.pnl-favorites { width: 60px }
-	.pnl-ic { width: 24px; height: 24px }
+	.pnl-label, .pnl-price { font-size: 1em; line-height: 20px; }
+	.pnl-favorites, .pnl-tocart { width: 56px }
+	.pnl-ic-wrapper { transform: scale(0.75) }
+	.pnl-description { padding-left: 1.0em }
 }
 
 
@@ -141,17 +160,24 @@ body {
 	.inner { padding: 0 1.0em; padding-top: 1.0em }
 	.grid { margin: 0 0 0 -1.0em }
 	.grid-tile { padding: 0 0 1.0em 1.0em }
+	.pnl-description { padding-left: 1.5em }
+	.pnl-wrapper { height: 70px }
 }
 
 
 /* PORTRAIT MOBILE MODE
  */
 
-@media screen and (min-width: 420px) {
+@media screen and (min-width: 480px) {
 	.inner { padding: 0 0.5em; padding-top: 0.5em }
 	.grid { margin: 0 0 0 -0.5em }
 	.grid-tile { padding: 0 0 0.5em 0.5em }
 	.grid-tile { width: 50% }
+	.pnl-wrapper { height: 60px }
+	.pnl-description { padding-left: 0.5em }
+	.pnl-label, .pnl-price { font-size: 0.75em; line-height: 18px; }
+	.pnl-ic-wrapper { transform: scale(0.5) }
+	.pnl-favorites, .pnl-tocart { width: 40px }
 }
 
 /* LANDSCAPE MOBILE MODE (~416px)
@@ -163,7 +189,7 @@ body {
 	.pnl-label { font-size: 0.7em; line-height: 14px; }
 	.pnl-price { font-size: 0.7em; line-height: 14px; }
 	.pnl-favorites { position: absolute; width: 40px; height: 40px; top:0; right: 0 }
-	.pnl-ic { width: 14px; height: 14px }
+	.pnl-ic-wrapper { transform: scale(0.5) }
 }
 
 
@@ -172,6 +198,11 @@ body {
 	.inner { padding: 0 1.0em; padding-top: 1.0em }
 	.grid { margin: 0 0 0 -1.0em }
 	.grid-tile { padding: 0 0 1.0em 1.0em }
+	.pnl-wrapper { height: 70px }
+	.pnl-label, .pnl-price { font-size: 1em; line-height: 20px; }
+	.pnl-favorites, .pnl-tocart { width: 56px }
+	.pnl-ic-wrapper { transform: scale(0.75) }
+	.pnl-description { padding-left: 1.0em }
 }
 
 
@@ -182,8 +213,18 @@ body {
 }
 
 
+@media screen and (min-width: 912px) {
+	
+}
+
+
 @media screen and (min-width: 1024px) {
 	.grid-tile { width: 33.3333% }
+}
+
+
+@media screen and (min-width: 1300px) {
+	.pnl-description { padding-left: 1.5em }
 }
 
 
