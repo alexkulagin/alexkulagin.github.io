@@ -1,0 +1,282 @@
+
+<!DOCTYPE html>
+<html lang='en-US' id='top' class='revised slug-dimensions /lab base-dimensions view-default' itemscope>
+<meta charset=utf-8>
+<title>Device and Viewport Size In JavaScript</title>
+<meta name=viewport content="width=device-width, initial-scale=1">
+<meta name='author' content='Ryan Van Etten'>
+<meta name='description' content='Live comparison of how to get current viewport size and device dimensions in JavaScript and jQuery.'>
+
+<link rel=stylesheet href="/css/sitewide.2016042307.css">
+<link rel=stylesheet href="/css/default.2016042307.css" media="screen,projection,print">
+
+<header class="site-header" role="banner">
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/" rel="home">
+        <abbr title="Ryan Van Etten" style="background:#ed3;color:black;padding:6px;border:0;display:inline-block;font:bold 68px/1 arial,sans-serif;">
+          <span style="display:block;float:left;">R</span>
+          <span style="display:block;float:left;padding:.26em 0 0 .2em;font-size:.4em;">
+            <span style="display:block;">V</span><span style="display:block;">E</span>
+          </span>
+        </abbr>
+      </a>
+    </h1>
+  </div>
+</header>
+
+<main id="main" role="main">
+
+    <article class="hentry revised slug-dimensions" itemtype="http://schema.org/Article" itemscope>
+      <header class="entry-header">
+        <h1 class="entry-title">
+          <a rel="bookmark" itemprop="url" href="http://ryanve.com/lab/dimensions" title="Permalink">
+            <span itemprop="name">Device and Viewport Size In JavaScript</span>
+          </a>
+        </h1>
+        <div class="byline vcard">
+          <time itemprop="datePublished" datetime="2012-01-15">2012</time>
+          <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">CC-BY</a>
+          <a itemprop="author" class="url fn n" rel="author" href="http://ryanve.com">Ryan Van Etten</a>
+        </div>
+      </header>
+
+      <div itemprop="articleBody" class="entry-content">
+                <noscript>
+  To experience full functionality of this page, you need to enable JavaScript. All outputs will
+  appear undefined when JavaScript is off. Click <a href="http://enable-javascript.com">here to learn how to enable JavaScript</a>.
+</noscript>
+<h2 id="viewport"><a href="#viewport">Viewport</a>: How to get viewport size.</h2>
+<div>
+  <p>
+    <code>jQuery<b>(</b>window<b>)</b><wbr>.width<b>()</b></code> 
+    <a href="https://github.com/jquery/jquery/blob/1.9.1/src/dimensions.js#L12-L17">uses</a> 
+    <code>document<wbr>.documentElement<wbr>.clientWidth</code> and is
+    <a href="http://stackoverflow.com/a/3044612/770127">regarded</a> as cross-browser compatible. 
+    Directly using <code>.clientWidth</code> is 
+    <a href="http://jsperf.com/viewport-width-pure-js-vs-jquery/6">faster</a> 
+    and equally <a href="http://www.quirksmode.org/mobile/tableViewport.html">compatible</a>.
+    The tables below compare these live against the inner/outer methods to determine the most accurate method:
+    <a href="http://verge.airve.com/">verge</a> wins because it 
+    <a href="https://github.com/ryanve/verge/blob/master/verge.js#files">normalizes</a>
+    browser <a href="https://github.com/ryanve/response.js/issues/17">nuances</a> 
+    to accurately match <code>@media</code> breakpoints.
+  </p>
+  <table id="viewport-width">
+    <tr>
+      <th scope="col"><a href="#viewport-width">width methods</a></th>
+      <th scope="col">live output</th>
+    </tr>
+    <tr>
+      <td><a class="match-media" href="./lab.js" title="highest pixel value for which a `min-width` media query returns true as detected by .matchMedia/.msMatchMedia (see the source)">@media breakpoint</a></td>
+      <td id="output-27"></td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/ryanve/verge#viewportw" title="Corresponds to @media breakpoint"><code>verge<wbr>.viewportW()</code></a></td>
+      <td id="output-31"></td>
+    </tr>
+    <tr>
+      <td><a class="recommended" href="http://api.jquery.com/width/" title="jQuery docs says that this &quot;returns width of browser viewport.&quot; (widely used, used by jQuery Mobile)"><code>$(window)<wbr>.width()</code></a></td>
+      <td id="output-1">undefined</td>
+    </tr>
+    <tr>
+      <td><a class="recommended" href="https://developer.mozilla.org/en/DOM/element.clientWidth" title="=== $(window).width()"><code>document<wbr>.documentElement<wbr>.clientWidth</code></a></td>
+      <td id="output-2">undefined</td>
+    </tr>
+    <tr>
+      <td><a class="notwhatyouwant" href="https://developer.mozilla.org/en/DOM/window.innerWidth" title="Modern browsers."><code>window<wbr>.innerWidth</code></a></td>
+      <td id="output-3">undefined</td>
+    </tr>
+    <tr>
+      <td><a class="notwhatyouwant" href="https://developer.mozilla.org/en/DOM/window.outerWidth" title="Inconsistent."><code>window<wbr>.outerWidth</code></a></td>
+      <td id="output-4">undefined</td>
+    </tr>
+  </table>
+  <table id="viewport-height">
+    <tr>
+      <th scope="col"><a href="#viewport-height">height methods</a></th>
+      <th scope="col">live output</th>
+    </tr>
+    <tr>
+      <td><a class="match-media" href="./lab.js" title="highest pixel value for which a `min-height` media query returns true as detected by .matchMedia/.msMatchMedia (see the source)">@media breakpoint</a></td>
+      <td id="output-28"></td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/ryanve/verge#viewporth" title="Corresponds to @media breakpoint"><code>verge<wbr>.viewportH()</code></a></td>
+      <td id="output-32"></td>
+    </tr>
+    <tr>
+      <td><a class="recommended" href="http://api.jquery.com/height/" title="jQuery docs says that this &quot;returns height of browser viewport.&quot; (widely used, used by jQuery Mobile)"><code>$(window)<wbr>.height()</code></a></td>
+      <td id="output-6">undefined</td>
+    </tr>
+    <tr>
+      <td><a class="recommended" href="https://developer.mozilla.org/en/DOM/element.clientHeight" title="=== $(window).height()"><code>document<wbr>.documentElement<wbr>.clientHeight</code></a></td>
+      <td id="output-7">undefined</td>
+    </tr>
+    <tr>
+      <td><a class="notwhatyouwant" href="https://developer.mozilla.org/en/DOM/window.innerHeight" title="Modern browsers."><code>window<wbr>.innerHeight</code></a></td>
+      <td id="output-8">undefined</td>
+    </tr>
+    <tr>
+      <td><a class="notwhatyouwant" href="https://developer.mozilla.org/en/DOM/window.outerHeight" title="Inconsistent."><code>window<wbr>.outerHeight</code></a></td>
+      <td id="output-9">undefined</td>
+    </tr>
+  </table>
+</div>
+
+<h2 id="device" contentEditable="true"><a href="#device">Device</a>: How to get device size.</h2>
+<div>
+  <p>
+    Use <code>window.screen.width</code> for device width 
+    and <code>window.screen.height</code> for device height. 
+    <code>.availWidth</code> and <code>.availHeight</code> 
+    give you the device size minus UI taskbars. (Try on an iPhone.)
+    Device size is static and does not change when the page is resized or rotated.
+  </p>
+  <table id="device-width">
+    <tr>
+      <th scope="col"><a href="#device-width">width methods</a></th>
+      <th scope="col">live output</th>
+    </tr>
+    <tr>
+      <td><a class="match-media" href="./lab.js" title="highest pixel value for which a `min-device-width` media query returns true as detected by .matchMedia/.msMatchMedia (see the source)">@media breakpoint</a></td>
+      <td id="output-29"></td>
+    </tr>
+    <tr>
+      <td><a class="recommended" href="https://developer.mozilla.org/en/DOM/window.screen.width" title="MDN: &quot;Returns the width of the screen in pixels.&quot;"><code>window<wbr>.screen<wbr>.width</code></a></td>
+      <td id="output-11">undefined</td>
+    </tr>
+    <tr>
+      <td><a class="notwhatyouwant" href="https://developer.mozilla.org/en/DOM/window.screen.availWidth" title="MDN: &quot;Returns the amount of horizontal space in pixels available to the window.&quot;"><code>window<wbr>.screen<wbr>.availWidth</code></a></td>
+      <td id="output-12">undefined</td>
+    </tr>
+  </table>
+  <table id="device-height">
+    <tr>
+      <th scope="col"><a href="#device-height">height methods</a></th>
+      <th scope="col">live output</th>
+    </tr>
+    <tr>
+      <td><a class="match-media" href="./lab.js" title="highest pixel value for which a `min-device-height` media query returns true as detected by .matchMedia/.msMatchMedia (see the source)">@media breakpoint</a></td>
+      <td id="output-30"></td>
+    </tr>
+    <tr>
+      <td><a class="recommended" href="https://developer.mozilla.org/en/DOM/window.screen.height" title="MDN: &quot;Returns the height of the screen in pixels.&quot;"><code>window<wbr>.screen<wbr>.height</code></a></td>
+      <td id="output-13">undefined</td></tr>
+    <tr>
+      <td><a class="notwhatyouwant" href="https://developer.mozilla.org/en/DOM/window.screen.availHeight" title="MDN: &quot;Returns the amount of vertical space in pixels available to the window.&quot;"><code>window<wbr>.screen<wbr>.availHeight</code></a></td>
+      <td id="output-14">undefined</td>
+    </tr>
+  </table>
+</div>
+
+<h2 id="document"><a href="#document">Document</a>: How to get document size.</h2>
+<div>
+  <p>
+    Document size methods are often needed in scrolling apps. 
+    Note the difference between <code>jQuery<b>(</b>document<b>)</b><wbr>.width<b>()</b></code> and 
+    the native properties (especially when the window is wider than the <code>max-width</code> of the body). 
+    jQuery <a href="https://github.com/jquery/jquery/blob/1.9.1/src/dimensions.js#L20-L30">uses</a>
+    the <code>Math.max</code> of 5 numbers to calculate this. For decent cross-browser support, 
+    the <code>Math.max</code> of the 3 <code>document<wbr>.documentElement</code> properties seems to suffice.
+  </p>
+  <table id="document-width">
+    <tr>
+      <th scope="col"><a href="#document-width">width methods</a></th>
+      <th scope="col">live output</th>
+    </tr>
+    <tr>
+      <td><a class="recommended" href="http://api.jquery.com/width/" title="jQuery docs says that this &quot;returns width of HTML document&quot;"><code>$(document)<wbr>.width()</code></a></td>
+      <td id="output-5">undefined</td>
+    </tr>
+    <tr>
+      <td><a class="notwhatyouwant" href="https://developer.mozilla.org/en/DOM/element.clientWidth" title="MDN's recommended alternative to the now obsolete document.width - but NOT always what you want"><code>document<wbr>.body<wbr>.clientWidth</code></a></td>
+      <td id="output-15">undefined</td>
+    </tr>
+    <tr>
+      <td><a class="maybewhatyouwant" href="https://developer.mozilla.org/en/DOM/element.offsetWidth"><code>document<wbr>.body<wbr>.offsetWidth</code></a></td>
+      <td id="output-22">undefined</td>
+    </tr>
+    <tr>
+      <td><a class="maybewhatyouwant" href="https://developer.mozilla.org/en/DOM/element.scrollWidth"><code>document<wbr>.body<wbr>.scrollWidth</code></a></td>
+      <td id="output-18">undefined</td>
+    </tr>
+    <tr>
+      <td><a class="maybewhatyouwant" href="https://developer.mozilla.org/en/DOM/element.clientWidth"><code>document<wbr>.documentElement<wbr>.clientWidth</code></a></td>
+      <td id="output-25">undefined</td>
+    </tr>
+    <tr>
+      <td><a class="maybewhatyouwant" href="https://developer.mozilla.org/en/DOM/element.offsetWidth"><code>document<wbr>.documentElement<wbr>.offsetWidth</code></a></td>
+      <td id="output-21">undefined</td>
+    </tr>
+    <tr>
+      <td><a class="maybewhatyouwant" href="https://developer.mozilla.org/en/DOM/element.scrollWidth"><code>document<wbr>.documentElement<wbr>.scrollWidth</code></a></td>
+      <td id="output-17">undefined</td>
+    </tr>
+  </table>
+  <table id="document-height">
+    <tr>
+      <th scope="col"><a href="#document-height">height methods</a></th>
+      <th scope="col">live output</th>
+    </tr>
+    <tr>
+      <td><a class="recommended" href="http://api.jquery.com/height/" title="jQuery docs says that this &quot;returns height of HTML document&quot;"><code>$(document)<wbr>.height()</code></a></td>
+      <td id="output-10">undefined</td>
+    </tr>
+    <tr>
+      <td><a class="notwhatyouwant" href="https://developer.mozilla.org/en/DOM/element.clientHeight" title="MDN's recommended alternative to the now obsolete document.height - but NOT always what you want"><code>document<wbr>.body<wbr>.clientHeight</code></a></td>
+      <td id="output-16">undefined</td>
+    </tr>
+    <tr>
+      <td><a class="maybewhatyouwant" href="https://developer.mozilla.org/en/DOM/element.offsetWidth"><code>document<wbr>.body<wbr>.offsetHeight</code></a></td>
+      <td id="output-24">undefined</td>
+    </tr>
+    <tr>
+      <td><a class="maybewhatyouwant" href="https://developer.mozilla.org/en/DOM/element.scrollHeight"><code>document<wbr>.body<wbr>.scrollHeight</code></a></td>
+      <td id="output-20">undefined</td>
+    </tr>
+    <tr>
+      <td><a class="maybewhatyouwant" href="https://developer.mozilla.org/en/DOM/element.clientHeight"><code>document<wbr>.documentElement<wbr>.clientHeight</code></a></td>
+      <td id="output-26">undefined</td>
+    </tr>
+    <tr>
+      <td><a class="maybewhatyouwant" href="https://developer.mozilla.org/en/DOM/element.offsetWidth"><code>document<wbr>.documentElement<wbr>.offsetHeight</code></a></td>
+      <td id="output-23">undefined</td>
+    </tr>
+    <tr>
+      <td><a class="maybewhatyouwant" href="https://developer.mozilla.org/en/DOM/element.scrollHeight"><code>document<wbr>.documentElement<wbr>.scrollHeight</code></a></td>
+      <td id="output-19">undefined</td>
+    </tr>
+  </table>
+</div>
+
+<h2 id="related"><a href="#related">Related</a> <a href="../" rel="index">labs</a></h2>
+<ul>
+  <li><a href="../resolution">../resolution</a></li>
+</ul>
+
+      </div>
+    </article>
+</main>
+
+<footer class="site-footer">
+  <nav id="bottom">
+    <ul>
+      <li><a href="#top" accesskey=a>#top</a>
+      <li hidden><a href="#bottom" accesskey=z>#bottom</a>
+      <li><a href="/" rel="home">Home</a>
+    </ul>
+  </nav>
+  <section class="hidden" hidden>
+    <h3>Testing</h3>
+    <ul>
+      <li><a accesskey="x" rel="nofollow" href="http://html5.validator.nu/?doc=http://ryanve.com/lab/dimensions">validate</a>
+      <li><a accesskey="o" rel="nofollow" href="http://gsnedders.html5.org/outliner/process.py?url=http://ryanve.com/lab/dimensions">outline</a>
+      <li><a accesskey="d" rel="nofollow" href="http://www.google.com/webmasters/tools/richsnippets?url=http://ryanve.com/lab/dimensions">data</a>
+    </ul>
+  </section>
+</footer>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="http://airve.github.io/js/verge/verge.min.js"></script>
+<script src="lab.js"></script>
