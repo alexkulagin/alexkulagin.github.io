@@ -45,32 +45,25 @@
 			<li><a href="https://www.linkedin.com/in/pavelkosov" target="_blank">Linkedin</a></li>
 		</ul>
 	</div>
-	<div class="line"></div>
+	<div class="divider"><div class="line"></div></div>
 	<!-- projects -->
-	<div class="header">
-		<p class="title">Selected Projects</p>
-		<p class="caption">Made with love by <b>Pavel Kosov</b></p>
-	</div>
 	<div class="projects">
+		<div class="header">
+			<p class="title">Selected Projects</p>
+			<p class="caption">Made with love by <b>Pavel Kosov</b></p>
+		</div>
 		<ul><li><a href="https://www.behance.net/gallery/33738810/InteractiveArts" target="_blank"><img class="echo" data-echo="projects/Interactivearts.png" src="projects/Interactivearts.png" alt="Test image"></a></li><li><a href="https://www.behance.net/gallery/33711166/Jambusker-Let-Music-Do-the-Talking" target="_blank"><img class="echo" data-echo="projects/Jambusker.png" src="projects/Jambusker.png" alt="Test image"></a></li><li><a href="https://www.behance.net/gallery/33739556/Playloft-GAGA" target="_blank"><img class="echo" data-echo="projects/Gaga.png" src="projects/Gaga.png" alt="Test image"></a></li><li><a href="https://www.behance.net/gallery/33739038/Vitaly-Kate-Photography" target="_blank"><img class="echo" data-echo="projects/Vitalyandkate.png" src="projects/Vitalyandkate.png" alt="Test image"></a></li><li><a href="http://artworkpeople.com/" target="_blank"><img class="echo" data-echo="projects/Artworkpeople.png" src="projects/Artworkpeople.png" alt="Test image"></a></li><li><a href="https://www.behance.net/gallery/33760862/Coachlab" target="_blank"><img class="echo" data-echo="projects/Coachlab.png" src="projects/Coachlab.png" alt="Test image"></a></li></ul>
 	</div>
 	<!-- contact -->
-	<div class="screen contacts">
-		<div class="text">
-			<div class="blurb">
-				<div class="line"></div>
-				<h1><a href="mailto:p.kosoff@gmail.com">Contact me</a></h1>
-				<p>I'm always interested in working<br>on new projects.</p>
-			</div>
+	<div class="divider"><div class="line"></div></div>
 
-			<div class="stamp">
-				<a href="http://interactivearts.me/" target="_blank">
-				<img src="img/logo-gold.svg" alt="INTERACTIVE ARTS" width="88" height="88">
-				</a>
-			</div>
-		</div>
-		<div class="terms">Made with love in Moscow by Pavel Kosov. 2016</div>
+	<div class="contacts">
+		<div class="header">Contact me</div>
+		<div class="caption">I'm always interested in working<br>on new projects.</div>
+		<div class="logo"><a href="http://interactivearts.me/" target="_blank"><img src="img/logo-gold.svg"></a></div>
+		<div class="copyright">Made with love in Moscow by Pavel Kosov. 2016</div>
 	</div>
+
 </div>
 <!-- preloader -->
 <div class="preloader">
@@ -94,8 +87,8 @@
 <script type="text/javascript">
 	
 	// preloader timeline
-	var ptl = new TimelineLite();
-		ptl.to(".logo", 0.3, { y: "-200", opacity: 0, ease: Back.easeIn.config(2) })
+	var ptl = new TimelineLite({delay: 3});
+		ptl.to(".preloader .logo", 0.3, { y: "-200", opacity: 0, ease: Back.easeIn.config(2) })
 		.add([
 			TweenLite.to("#vl-1", 0.3, { height: "0", ease: Power3.easeInOut }),
 			TweenLite.to("#vl-2", 0.3, { height: "0", ease: Power3.easeInOut, delay: 0.1 }),
@@ -105,7 +98,14 @@
 			TweenLite.to("#hl-1", 0.3, { width: "0", ease: Power3.easeInOut, delay: 0.2 }),
 			TweenLite.to("#hl-2", 0.3, { width: "0", ease: Power3.easeInOut, delay: 0.3 })
 
-		], "+=0.0", "normal", 0.00); //position, align, stagger
+		], "+=0.0", "normal", 0.00).to(".preloader", 0, { display:'none' }); //position, align, stagger
+
+
+	// scroll animation
+	var scrollup = [],
+		scrolldown = [],
+		elements = [],
+		sp = 0;
 
 </script>
 </body>

@@ -43,7 +43,7 @@ body {
 	border: 24px solid rgba(255, 255, 255, 0.95);
 	border: 0px solid rgba(255, 255, 255, 0.95);
 	margin: 0px;
-	z-index: 100;
+	z-index: -98;
 }
 
 
@@ -96,13 +96,6 @@ body {
 }
 
 
-/*.preloader .vl li:nth-child(1) { background-color:#F80; }
-.preloader .vl li:nth-child(2) { background-color:#F60; }
-.preloader .vl li:nth-child(3) { background-color:#F20; }
-.preloader .vl li:nth-child(4) { background-color:#F60; }
-.preloader .vl li:nth-child(5) { background-color:#F80; }*/
-
-
 /* CONTAINER */
 
 .container {
@@ -138,14 +131,13 @@ body {
 .social a {
 	color: #917a50;
 	font-weight: 700;
-	font-size: 0.8em;
+	font-size: 0.6em;
 	text-transform: uppercase;
 	text-decoration: none;
 }
 
 .social ul {
 	text-align: center;
-	margin-bottom: 4.2em;
 }
 
 .social li {
@@ -155,25 +147,25 @@ body {
 
 /* PROJECTS */
 
-.header {
+.projects .header {
 	text-align: center;
 	margin-bottom: 2em;
 }
 
-.header .title {
+.projects .header .title {
 	font-weight: 700;
 	font-size: 1.8em;
 	margin-bottom: 0.25em;
 }
 
-.header .caption {
+.projects .header .caption {
 	letter-spacing: 2px;
-    text-transform: uppercase;
+	text-transform: uppercase;
 	font-size: 0.4em;
 	font-weight: 700;
 }
 
-.header .caption b {
+.projects .header .caption b {
 	color: #917a50;
 }
 
@@ -200,4 +192,58 @@ body {
 
 .projects img {
 	width: 100%;
+}
+
+
+/* DIVIDER LINE */
+
+.divider {
+	position: relative;
+	width: 100%;
+	height: 10em;
+	margin: 4em auto;
+}
+
+.divider .line {
+	position: absolute;
+	width: 1px;
+	height: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: #917a50;
+}
+
+
+/* CONTACTS */
+.contacts {
+	text-align: center;
+	padding-bottom: 3em;
+}
+
+.contacts .header {
+	font-weight: 700;
+	font-size: 1.8em;
+	margin-bottom: 0.25em;
+}
+
+.contacts .caption {
+	font-size: 1.1em;
+	font-weight: 700;
+	/*-----------------smooth*/
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+	text-rendering: optimizeLegibility !important;
+	-webkit-font-smoothing: antialiased !important;
+}
+
+.contacts .logo {
+	width: 4em; height: 4em;
+	margin: 3em auto;
+}
+
+.contacts .copyright {
+	font-weight: 100;
+	font-size: 0.45em;
+	text-transform: uppercase;
+	color: #444;
+	letter-spacing: 0.24em;
 }
