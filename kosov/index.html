@@ -52,7 +52,14 @@
 			<p class="title">Selected Projects</p>
 			<p class="caption">Made with love by <b>Pavel Kosov</b></p>
 		</div>
-		<ul><li><a href="https://www.behance.net/gallery/33738810/InteractiveArts" target="_blank"><img class="echo" data-echo="projects/Interactivearts.png" src="projects/Interactivearts.png" alt="Test image"></a></li><li><a href="https://www.behance.net/gallery/33711166/Jambusker-Let-Music-Do-the-Talking" target="_blank"><img class="echo" data-echo="projects/Jambusker.png" src="projects/Jambusker.png" alt="Test image"></a></li><li><a href="https://www.behance.net/gallery/33739556/Playloft-GAGA" target="_blank"><img class="echo" data-echo="projects/Gaga.png" src="projects/Gaga.png" alt="Test image"></a></li><li><a href="https://www.behance.net/gallery/33739038/Vitaly-Kate-Photography" target="_blank"><img class="echo" data-echo="projects/Vitalyandkate.png" src="projects/Vitalyandkate.png" alt="Test image"></a></li><li><a href="http://artworkpeople.com/" target="_blank"><img class="echo" data-echo="projects/Artworkpeople.png" src="projects/Artworkpeople.png" alt="Test image"></a></li><li><a href="https://www.behance.net/gallery/33760862/Coachlab" target="_blank"><img class="echo" data-echo="projects/Coachlab.png" src="projects/Coachlab.png" alt="Test image"></a></li></ul>
+		<ul>
+			<li><a href="https://www.behance.net/gallery/33738810/InteractiveArts" target="_blank"><img class="echo" data-echo="projects/Interactivearts.png" src="projects/Interactivearts.png" alt="Test image"></a></li>
+			<li><a href="https://www.behance.net/gallery/33711166/Jambusker-Let-Music-Do-the-Talking" target="_blank"><img class="echo" data-echo="projects/Jambusker.png" src="projects/Jambusker.png" alt="Test image"></a></li>
+			<li><a href="https://www.behance.net/gallery/33739556/Playloft-GAGA" target="_blank"><img class="echo" data-echo="projects/Gaga.png" src="projects/Gaga.png" alt="Test image"></a></li>
+			<li><a href="https://www.behance.net/gallery/33739038/Vitaly-Kate-Photography" target="_blank"><img class="echo" data-echo="projects/Vitalyandkate.png" src="projects/Vitalyandkate.png" alt="Test image"></a></li>
+			<li><a href="http://artworkpeople.com/" target="_blank"><img class="echo" data-echo="projects/Artworkpeople.png" src="projects/Artworkpeople.png" alt="Test image"></a></li>
+			<li><a href="https://www.behance.net/gallery/33760862/Coachlab" target="_blank"><img class="echo" data-echo="projects/Coachlab.png" src="projects/Coachlab.png" alt="Test image"></a></li>
+		</ul>
 	</div>
 	<!-- contact -->
 	<div class="divider"><div class="line"></div></div>
@@ -68,8 +75,17 @@
 <!-- preloader -->
 <div class="preloader">
 	<div class="logo"><img src="img/logo-gold.svg"></div>
-	<ul class="vl"><li><div id="vl-1" class="box"></div></li><li><div id="vl-2" class="box"></div></li><li><div id="vl-3" class="box"></div></li><li><div id="vl-4" class="box"></div></li><li><div id="vl-5" class="box"></div></li></ul>
-	<ul class="hl"><li><div id="hl-1" class="box"></div></li><li><div id="hl-2" class="box"></div></li></ul>
+	<ul class="vl">
+		<li><div id="vl-1" class="box"></div></li>
+		<li><div id="vl-2" class="box"></div></li>
+		<li><div id="vl-3" class="box"></div></li>
+		<li><div id="vl-4" class="box"></div></li>
+		<li><div id="vl-5" class="box"></div></li>
+	</ul>
+	<ul class="hl">
+		<li><div id="hl-1" class="box"></div></li>
+		<li><div id="hl-2" class="box"></div></li>
+	</ul>
 </div>
 <!-- border -->
 <div class="border"></div>
@@ -86,8 +102,11 @@
 <script type="text/javascript" src="js/tween.js"></script>
 <script type="text/javascript">
 	
+	
+
+
 	// preloader timeline
-	var ptl = new TimelineLite({delay: 3});
+	var ptl = new TimelineLite({ delay: 0 });
 		ptl.to(".preloader .logo", 0.3, { y: "-200", opacity: 0, ease: Back.easeIn.config(2) })
 		.add([
 			TweenLite.to("#vl-1", 0.3, { height: "0", ease: Power3.easeInOut }),
@@ -98,14 +117,37 @@
 			TweenLite.to("#hl-1", 0.3, { width: "0", ease: Power3.easeInOut, delay: 0.2 }),
 			TweenLite.to("#hl-2", 0.3, { width: "0", ease: Power3.easeInOut, delay: 0.3 })
 
-		], "+=0.0", "normal", 0.00).to(".preloader", 0, { display:'none' }); //position, align, stagger
+		], "+=0.0", "normal", 0.00)
+		.to(".preloader", 0, { display:'none' }); //position, align, stagger
+
+
+	$('.intro').flowtype({
+		minimum: 768, maximum: 1440,
+		minFont: 16, maxFont: 32,
+		fontRatio: 50
+	});
 
 
 	// scroll animation
-	var scrollup = [],
+
+	/*var scrollup = [],
 		scrolldown = [],
 		elements = [],
 		sp = 0;
+
+
+	var $cont = $(".contacts");
+	var $win = $(window);
+	var f = false;
+	TweenLite.to(".contacts", 0.0, { y: "200"});
+	window.onscroll = function() {
+		console.log($cont.offset().top - $win.scrollTop() - window.innerHeight);
+
+		if ($cont.offset().top - $win.scrollTop() - window.innerHeight < 200 && !f) {
+			f = true;
+			TweenLite.to(".contacts", 1, { y: "0", ease: Power2.easeInOut });
+		}
+	}*/
 
 </script>
 </body>
