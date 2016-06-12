@@ -106,7 +106,7 @@
 
 
 	// preloader timeline
-	var ptl = new TimelineLite({ delay: 0 });
+	var ptl = new TimelineLite({ delay: 1 });
 		ptl.to(".preloader .logo", 0.3, { y: "-200", opacity: 0, ease: Back.easeIn.config(2) })
 		.add([
 			TweenLite.to("#vl-1", 0.3, { height: "0", ease: Power3.easeInOut }),
