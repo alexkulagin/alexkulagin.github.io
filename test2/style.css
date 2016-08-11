@@ -152,6 +152,4 @@ body {
 .review {
   position: absolute;
   top: 0;
-  height: 200%;
-  transform: translateY(-25%);
 }
