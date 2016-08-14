@@ -78,7 +78,6 @@ body {
 /* DOCUMENT STYLE */
 body {
   padding: 0;
-  /* ~20px (desktop, mobile) */
   font-family: 'Montserrat';
   background-color: #ffffff;
   color: #111111;
@@ -86,70 +85,112 @@ body {
 .app {
   width: 100%;
   position: relative;
-  background-color: #ffffff;
 }
+/* NAVBAR */
 .navbar {
   width: 100%;
   height: 6.4rem;
-  position: relative;
+  /* SWITCHER */
 }
-.navbar .button {
+.navbar .plus-btn {
+  width: 3.2rem;
+  height: 3.2rem;
+  position: relative;
+  transform: translate(0.8rem, 1.6rem);
+}
+.navbar .plus-btn svg {
   width: 2.4rem;
   height: 2.4rem;
-}
-.navbar .button.add {
   position: absolute;
-  top: 2rem;
-  left: 1.6rem;
-}
-.navbar .social {
-  position: absolute;
-  top: 2rem;
-  right: 1.6rem;
-}
-.navbar .social .button {
-  display: inline-block;
-}
-.header {
-  margin-top: 4rem;
-  width: 100%;
-  padding: 2% 5% 2% 5%;
-  box-sizing: border-box;
-}
-.subheader {
-  padding: 0 5% 0 5%;
-}
-.subheader h2 {
-  text-align: center;
-  font-size: 1em;
-  font-weight: 400;
-  transform: translateY(-40%);
-  line-height: 1.5em;
-}
-.divider {
-  width: 100%;
-  height: 20rem;
-  position: relative;
-}
-.divider .line {
-  width: 0.2rem;
-  height: 100%;
-  position: absolute;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
-  background-color: #111111;
+  transform: translate(-50%, -50%);
 }
-.review-list ul {
-  padding: 0 5% 0 5%;
-  list-style-type: none;
-}
-.review-wrapper {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  padding-top: 56.25%;
-}
-.review {
+.navbar .switch-to-mobile {
+  height: 3.2rem;
   position: absolute;
   top: 0;
+  right: 0;
+  transform: translate(-1.6rem, 1.6rem);
+}
+.navbar .switch-to-mobile ul {
+  margin-top: 0.9rem;
+  display: table;
+  list-style: none;
+}
+.navbar .switch-to-mobile li {
+  display: table-cell;
+  text-transform: uppercase;
+  font-size: 0.75em;
+}
+.navbar .switch-to-mobile .selector {
+  width: 6.0rem;
+  height: 1.1rem;
+  position: absolute;
+  top: 0;
+  transform: translateY(1rem);
+  background-color: #fff95c;
+  z-index: -1;
+}
+/* HEADER */
+.header {
+  width: 100%;
+  padding-top: 2rem;
+  /* DOSE NAVIGATION */
+}
+.header .logo {
+  width: 70%;
+  margin: 0 auto;
+}
+.header .subheader {
+  text-align: center;
+  margin-top: 0.8rem;
+}
+.header .subheader p {
+  margin: 0;
+  font-size: 0.8em;
+  line-height: 1.5em;
+  letter-spacing: 0.15em;
+}
+.header .navdose {
+  height: 16rem;
+  overflow: hidden;
+}
+.header .navdose ul {
+  list-style: none;
+}
+.header .navdose .list {
+  height: 100%;
+  position: relative;
+  display: table;
+}
+.header .navdose .list.animate {
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  -o-transition: all .3s;
+  transition: all .3s;
+}
+.header .navdose .item {
+  height: 100%;
+  position: relative;
+  text-align: center;
+  display: table-cell;
+}
+.header .navdose .item .label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.4em;
+  font-weight: 700;
+  letter-spacing: -0.028em;
+}
+/* SCRIM */
+.scrim {
+  width: 100%;
+  height: 500%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -10;
 }
