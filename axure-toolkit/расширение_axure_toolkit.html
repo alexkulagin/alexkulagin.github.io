@@ -1,0 +1,468 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <title>Расширение Axure Toolkit</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/><script>window.toolkitActivation=function(){if(window.$axure&&window.jQuery){const d=Array.isArray||function(p){return'[object Array]'===toString.call(p)},e=function(p){return'string'==typeof p||p instanceof String},g=function(p){return'function'==typeof p||!1},h=function(p){return!isNaN(parseFloat(p))&&isFinite(p)},k=function(p,q,r){if(!q)return null;var y,t=[],u=[],w=p.$(),x=m(q);const z=function(C,D){$.each(C,function(E,F){D.push(F)})};if(void 0==r)y=w.find(x),z(y,t);else{if(d(r))for(var A=0;A<r.length;A++)y=$('#'+r[A]).find(x),z(y,t);e(r)&&(y=$('#'+r).find(x),z(y,t))}for(var B in t)u[B]=t[B].id;return 0==u.length?null:$axure(function(C,D){for(var E=0;E<u.length;E++)if(u[E]==D)return!0;return!1})},m=function(p){var t,q='',r=0;if(d(p)&&0<p.length)for(t=p.length,r;r<t;r++)q+='[data-label="'+p[r]+'"],';else q='[data-label="'+p+'"]';return q};var o;!function(){'use strict';function p(){this.version='1.5',this.name='axure.toolkit',q.$a=r.query,q.$d={},q.$m=this,q.addEventListener('message',E),o=B,A()}const q=window,r=q.$axure,t=r.internal(function(G){return G}),u=t.evaluateSTO,w=q.parent,x=q.frames,y=[],z={};p.prototype={addExtension:function(G,H){t.public.fn[G]=H},addExpression:function(G,H){z[G]=H},send:function(G,H){G&&(e(G)||d(G))&&q.postMessage({channel:G,message:H},'*')},listen:function(G,H,I){(d(H)||g(H)||e(H))&&y.push({channel:G,listener:H,once:I})},instance:{}};const A=function(){return t.evaluateSTO=D,t.public.fn.run=C,!0},B=function(){var J,G=[],H=[],I=[];if(r('*').each(function(K){K.label&&(K.label.match('ax.bundle.')&&G.push(K),K.label.match('ax.import.')&&H.push(K),K.label.match('ax.init.')&&I.push(K))}),0<H.length)for(J=0;J<H.length;J++)r('@'+H[J].label).run().$().remove();if(0<G.length)for(J=0;J<G.length;J++)r('@'+G[J].label).$().remove();if(console.log('Axure extensions initialized and ready!'),r('@ax.ready').moveBy(0,0,{}),0<I.length)for(J=0;J<I.length;J++)r('@'+I[J].label).moveBy(0,0,{})},C=function(){return this.each(function(G,H){if('vectorShape'===G.type){var I=r('#'+H).text();if(''!==I)try{q.eval(I)}catch(J){console.error('Exception:\n'+J+'\n\nTrace:\n'+J.stack)}}}),this},D=function(G,H,I){if('fCall'!==G.sto||'trim'!==G.func||0===G.arguments.length)return u.apply(null,arguments);var J=u(G.thisSTO,H,I);'string'!=G.thisSTO.computedType&&(J=J.toString());var K=z[J.trim()];if(!K||'function'!=typeof K)console.error('Error:\nMethod "'+J+'" not found!');else{for(var L=[],M=0;M<G.arguments.length;M++)L.push(u(G.arguments[M],H,I));try{return K.apply({scope:H,eventInfo:I},L)}catch(N){console.error('Exception:\n'+N+'\n\nTrace:\n'+N.stack)}}return''},E=function(G){var H=G.source,I=G.data,J=I.channel,K=I.message,L=0;for(L;L<y.length;L++)if(y[L]&&F(y[L].channel,J)){var M=y[L].listener;if(e(M)&&r('@'+M).moveBy(0,0,{}),g(M)&&M.call(q,J,K),d(M))for(var N=0;N<M.length;N++)e(M[N])&&r('@'+M[N]).moveBy(0,0,{}),g(M[N])&&M[N].call(q,J,K);y[L].once&&delete y[L]}if(w!==H&&w.postMessage(I,'*'),0<x.length)for(L=0;L<x.length;L++)x[L]!==G.source&&x[L].postMessage(I,'*')},F=function(G,H){if(G==H)return!0;if(d(G)){for(var I=0;I<G.length;I++)if(d(H)){for(var J=0;J<H.length;J++)if(G[I]==H[J])return!0;}else if(G[I]==H)return!0;}else if(d(H))for(var I=0;I<H.length;I++)if(H[I]==G)return!0;return!1};new p}(),!function(){'use strict';function p(y,z,A){var B=this.private;B.target=y,B.el=z,B.id=A,B.states=w(A),this.options={}}const q=window,r=q.$axure,t=q.jQuery,u=r.internal(function(y){return y});p.prototype={private:{},state:function(y,z){var C,D,E,A=this.private,B=A.states;for(var F in z||(z=this.options),E=u.visibility.GetPanelState(A.id),B)B[F].id==E&&(C=B[F]),y&&(h(y)&&y==B[F].index&&(D=B[F]),e(y)&&y==B[F].label&&(D=B[F]));return C?y?void(D&&D.index!=C.index&&A.target.SetPanelState(D.index,z)):C:void 0},getWidget:function(y,z){var A=this.private,B=A.states;return 0==B.length?null:(z=z?x(B,z):void 0,k(A.target,y,z))}};const w=function(y){for(var z=t('#'+y).children(),A=[],B=0;B<z.length;B++)A.push({id:z[B].id,index:B+1,label:z[B].dataset.label,$state:z[B]});return A},x=function(y,z){var B,C,D,E,A=y.length;if(d(z)){for(E=[],C=0;C<z.length;C++)for(D=z[C],B=0;B<A;B++)(e(D)&&y[B].label==D||h(D)&&y[B].index==D)&&E.push(y[B].id);if(0<E.length)return E}else for(B=0;B<A;B++)if(e(z)&&y[B].label==z||h(z)&&y[B].index==z)return y[B].id};q.$m.addExtension('getPanelController',function(){var B,y=this,z=1==y.getElementIds().length,A=q.$m.instance;return z&&this.each(function(C,D){'dynamicPanel'==C.type&&(A[D]?B=A[D]:B=A[D]=new p(y,C,D))}),B||null})}(),!function(){'use strict';function p(I,J,K){var L=this.private;L.target=I,L.el=J,L.id=K,L.rows=L.el.data,this.model=u.deepCopy(L.rows),this.filtered=!1,this.filters=[]}const q=window,r=q.$axure,t=q.jQuery,u=r.internal(function(I){return I});p.prototype={private:{},render:function(){var I=this.private,J=this.filtered?y(this.filters,this.model):this.model;G(I.id),H(I.id,J),B(I.id)},clear:function(){return this.model=[],this},recover:function(){return this.model=u.deepCopy(this.private.rows),this},get:function(I,J,K){var L=K&&this.filtered?y(this.filters,this.model):this.model,M=I?z(L,I,J):L;return M},copy:function(I,J,K){var L=this.get(I,J,K);return u.deepCopy(L)},update:function(I,J,K){var L,M,N,O=0;if(!I)return this;if(M=J?z(this.model,J,K):this.model,1>M.length)return this;for(N=M.length,O=0,O;O<N;O++)for(var P in L=M[O],I)L.hasOwnProperty(P)&&(L[P].text=I[P]);return this},remove:function(I,J){var J=J||!1;return this.model=I?z(this.model,I,!J):this.model,this},applyRows:function(I){return this.model=I,this},insertAfter:function(I,J){var K=[],L=this.model,M=L.length;if(!J||!d(J)||0==J.length)return this;if(0==M)return this.model=J,this;--I,I=0>I?0:I,I=I>M?M-1:I;for(var N=0;N<M;N++)if(I==N){K.push(L[N]);for(var O=0;O<J.length;O++)K.push(J[O])}else K.push(L[N]);return this.model=K,this},insertBefore:function(I,J){var K=[],L=this.model,M=L.length;if(!J||!d(J)||0==J.length)return this;if(0==M)return this.model=J,this;--I,I=0>I?0:I,I=I>M?M-1:I;for(var N=0;N<M;N++)if(I==N){for(var O=0;O<J.length;O++)K.push(J[O]);K.push(L[N])}else K.push(L[N]);return this.model=K,this},append:function(I){return I&&d(I)&&0!=I.length?(this.model=this.model.concat(I),this):this},preppend:function(I){return I&&d(I)&&0!=I.length?(this.model=I.concat(this.model),this):this},applyFilter:function(I,J){return I?(this.filters.push({filter:I,exclude:J||!1}),this.filtered||(this.filtered=!0),this):this},clearFilters:function(){return this.filters=[],this.filtered=!1,this},hasColumn:function(I){for(var J=this.private.el.dataProps,K=0;K<J.length;K++)if(J[K]==I)return!0;return!1},getColumn:function(I,J){for(var M,K=[],L=J&&this.filtered?y(this.filters,this.model):this.model,N=0;N<L.length;N++)M=L[N],M.hasOwnProperty(I)&&K.push(M[I].text);return K},getSum:function(I,J){for(var M,K=this.getColumn(I,J),L=0,N=0;N<K.length;N++)M=K[N],h(M)&&(L+=+M);return L},getLength:function(I){var J=I&&this.filtered?y(this.filters,this.model):this.model;return J.length},getWidget:function(I,J){var K=this.private,L=this.model;return 0==L.length?null:(J=J?w(K.id,J):void 0,k(this.private.target,I,J))}};const w=function(I,J){var L,M,N,K=t('#'+I).children();if(h(J)&&0<J||J<=K.length)return K[J].id;if(d(J)&&0<J.length){for(L=[],N=0;N<J.length;N++)M=J[N],(h(M)&&0<M||M<=K.length)&&L.push(K[M].id);if(0<L.length)return L}},x=function(I,J,K){if(!J||!J.condition)return[];var N,O,P,Q,R,L=J.condition,M=J.any||!1,K=K||!1,S=t.grep(I,function(T){for(var V in O=!!K,N=!K,L)if(T.hasOwnProperty(V)){if(Q=!1,P=T[V].text,R=L[V],d(R))for(var W in R)P==R[W]&&(Q=!0);else P==R&&(Q=!0);Q?O=!K:N=!!K}return M?O:N});return S},y=function(I,J){var K,L=0;for(L;L<I.length;L++)K=I[L],J=x(J,K.filter,K.exclude);return J},z=function(I,J,K){var L,M,K=K||!1;if(h(J)){for(var N in L=[],J-=1,I)(K&&N!=J||!K&&N==J)&&L.push(I[N]);return L}if(d(J)){if(1>J.length)return[];for(var N in L=[],I){for(var O in M=!1,J)N==J[O]-1&&(M=!0);(K&&!M||!K&&M)&&L.push(I[N])}return L}return x(I,J,K)},A=u.repeater.getAllItemIds,B=u.repeater.refreshRepeater,C=u.repeater.addEditItems,D=u.repeater.deleteItems,E=u.repeater.addItem,F=function(I){var J;return r(function(K){return'repeater'==K.type}).each(function(K,L){L==I&&(J=K)}),J},G=function(I){var J=A(I);C(I,J),D(I,{},'marked',void 0)},H=function(I,J){for(var K={targetElement:void 0,srcElement:void 0},L=F(I),M=L.dataProps,N=0,O=J.length;N<O;N++){for(var P=J[N],Q={},R=0,S=M.length;R<S;R++){var T=M[R],U=P[T];U=void 0===U?{type:'text',text:''}:u.deepCopy(U),Q[T]=U}E(I,Q,K)}};q.$m.addExtension('getRepeaterController',function(){var L,I=this,J=1==I.getElementIds().length,K=q.$m.instance;return J&&this.each(function(M,N){'repeater'==M.type&&(K[N]?L=K[N]:L=K[N]=new p(I,M,N))}),L||null})}(),o&&o()}},!function(){'use strict';const _w=window,_o=_w.open;_w.open=function(url){if('javascript:'!==url.substring(0,11))return _o.apply(null,arguments);var script=url.substring(11).trim();try{eval(script)}catch(d){return console.error('Exception:\n'+d)}},_w.onload=function(){},document.addEventListener('DOMContentLoaded',function(){_fix()&&_w.toolkitActivation()});const _fix=function(){var d=_w.$axure.internal(function(e){return e});return d.public.getGlobalVariable=d.getGlobalVariable=function(e){return d.globalVariableProvider.getVariableValue(e)},d.public.fn.value=function(){if(void 0==arguments[0]){var e=this.getElementIds()[0];if(!e)return;var g=d.getTypeFromElementId(e);return d.public.fn.IsComboBox(g)||d.public.fn.IsListBox(g)?$('#'+e+' :selected').text():d.public.fn.IsCheckBox(g)||d.public.fn.IsRadioButton(g)?$('#'+e+'_input').is(':checked'):d.public.fn.IsTextBox(g)?$('#'+e+'_input').val():this.jQuery().first().val()}for(var h=this.getElementIds(),k=0;k<h.length;k++){var g=d.getTypeFromElementId(h[k]),m=$('#'+h[k]);d.public.fn.IsCheckBox(g)||d.public.fn.IsRadioButton(g)?!0==arguments[0]?m.attr('checked',!0):!1==arguments[0]&&m.removeAttr('checked'):d.public.fn.IsTextBox(g)?$('#'+m[0].id+'_input').val(arguments[0]):m.val(arguments[0])}return this},!0}}();</script><meta name=""/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <link href="resources/css/axure_rp_page.css" type="text/css" rel="stylesheet"/>
+    <link href="data/styles.css" type="text/css" rel="stylesheet"/>
+    <link href="files/расширение_axure_toolkit/styles.css" type="text/css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,500,700&amp;subset=cyrillic" type="text/css" rel="stylesheet"/>
+    <script src="resources/scripts/jquery-1.7.1.min.js"></script>
+    <script src="resources/scripts/jquery-ui-1.8.10.custom.min.js"></script>
+    <script src="resources/scripts/axure/axQuery.js"></script>
+    <script src="resources/scripts/axure/globals.js"></script>
+    <script src="resources/scripts/axutils.js"></script>
+    <script src="resources/scripts/axure/annotation.js"></script>
+    <script src="resources/scripts/axure/axQuery.std.js"></script>
+    <script src="resources/scripts/axure/doc.js"></script>
+    <script src="data/document.js"></script>
+    <script src="resources/scripts/messagecenter.js"></script>
+    <script src="resources/scripts/axure/events.js"></script>
+    <script src="resources/scripts/axure/recording.js"></script>
+    <script src="resources/scripts/axure/action.js"></script>
+    <script src="resources/scripts/axure/expr.js"></script>
+    <script src="resources/scripts/axure/geometry.js"></script>
+    <script src="resources/scripts/axure/flyout.js"></script>
+    <script src="resources/scripts/axure/ie.js"></script>
+    <script src="resources/scripts/axure/model.js"></script>
+    <script src="resources/scripts/axure/repeater.js"></script>
+    <script src="resources/scripts/axure/sto.js"></script>
+    <script src="resources/scripts/axure/utils.temp.js"></script>
+    <script src="resources/scripts/axure/variables.js"></script>
+    <script src="resources/scripts/axure/drag.js"></script>
+    <script src="resources/scripts/axure/move.js"></script>
+    <script src="resources/scripts/axure/visibility.js"></script>
+    <script src="resources/scripts/axure/style.js"></script>
+    <script src="resources/scripts/axure/adaptive.js"></script>
+    <script src="resources/scripts/axure/tree.js"></script>
+    <script src="resources/scripts/axure/init.temp.js"></script>
+    <script src="files/расширение_axure_toolkit/data.js"></script>
+    <script src="resources/scripts/axure/legacy.js"></script>
+    <script src="resources/scripts/axure/viewer.js"></script>
+    <script src="resources/scripts/axure/math.js"></script>
+    <script type="text/javascript">
+      $axure.utils.getTransparentGifPath = function() { return 'resources/images/transparent.gif'; };
+      $axure.utils.getOtherPath = function() { return 'resources/Other.html'; };
+      $axure.utils.getReloadPath = function() { return 'resources/reload.html'; };
+    </script>
+  </head>
+  <body>
+    <div id="base" class="">
+
+      <!-- sections (Group) -->
+      <div id="u0" class="ax_default" data-label="sections" data-width="680" data-height="2556">
+
+        <!-- Unnamed (doc.content) -->
+
+        <!-- Divider x72 (Rectangle) -->
+        <div id="u2" class="ax_default empty" data-label="Divider x72">
+          <div id="u2_div" class=""></div>
+          <!-- Unnamed () -->
+          <div id="u3" class="text" style="display:none; visibility: hidden">
+            <p><span></span></p>
+          </div>
+        </div>
+
+        <!-- links (Group) -->
+        <div id="u4" class="ax_default" data-label="links" data-width="680" data-height="56">
+
+          <!-- Item (Rectangle) -->
+          <div id="u5" class="ax_default content_item" data-label="Item">
+            <div id="u5_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u6" class="text">
+              <p><span>Как использовать JavaScript сценарии в Axure</span></p>
+            </div>
+          </div>
+
+          <!-- Item (Rectangle) [reference page] -->
+          <div id="u5_ref" class="reference_page"></div>
+
+          <!-- Item (Rectangle) -->
+          <div id="u7" class="ax_default content_item" data-label="Item">
+            <div id="u7_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u8" class="text">
+              <p><span>Расширение Axure Toolkit</span></p>
+            </div>
+          </div>
+
+          <!-- Item (Rectangle) [reference page] -->
+          <div id="u7_ref" class="reference_page"></div>
+
+          <!-- Number (Rectangle) -->
+          <div id="u9" class="ax_default paragraph1" data-label="Number">
+            <div id="u9_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u10" class="text">
+              <p><span>00</span></p><p><span>01</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Header (Rectangle) -->
+        <div id="u11" class="ax_default content_header" data-label="Header">
+          <div id="u11_div" class=""></div>
+          <!-- Unnamed () -->
+          <div id="u12" class="text">
+            <p><span>Содержание</span></p>
+          </div>
+        </div>
+
+        <!-- Divider x24 (Rectangle) -->
+        <div id="u13" class="ax_default empty" data-label="Divider x24">
+          <div id="u13_div" class=""></div>
+          <!-- Unnamed () -->
+          <div id="u14" class="text" style="display:none; visibility: hidden">
+            <p><span></span></p>
+          </div>
+        </div>
+
+        <!-- Когда происходит активация расширения (Group) -->
+        <div id="u15" class="ax_default" data-label="Когда происходит активация расширения" data-width="680" data-height="216">
+
+          <!-- Paragraph (Rectangle) -->
+          <div id="u16" class="ax_default paragraph" data-label="Paragraph">
+            <div id="u16_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u17" class="text">
+              <p><span>Расширение Axure Toolkit во время выполнения подписывается на событие &quot;DOMContentLoaded&quot;, которое срабатывает сразу после загрузки страницы, не дожидаясь получения графических ресурсов и стилей. В момент срабатывания, сценарии Axure API и HTML представления доступны из кода — именно поэтому к этому событию привязана активация расширения Axure Toolkit.</span></p>
+            </div>
+          </div>
+
+          <!-- Header (Rectangle) -->
+          <div id="u18" class="ax_default header" data-label="Header">
+            <div id="u18_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u19" class="text">
+              <p><span>Когда происходит активация расширения</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Как происходит внедрение расширения (Group) -->
+        <div id="u20" class="ax_default" data-label="Как происходит внедрение расширения" data-width="680" data-height="336">
+
+          <!-- Paragraph (Rectangle) -->
+          <div id="u21" class="ax_default paragraph" data-label="Paragraph">
+            <div id="u21_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u22" class="text">
+              <p><span>Эта возможность позволяет расширению внедриться на все страницы прототипа и гарантированно выполнить скрипт до запуска любого сценария из Axure API.</span></p>
+            </div>
+          </div>
+
+          <!-- Script (Group) -->
+          <div id="u23" class="ax_default" data-label="Script" data-width="680" data-height="92">
+
+            <!-- Divider x24 (Rectangle) -->
+            <div id="u24" class="ax_default empty" data-label="Divider x24">
+              <div id="u24_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u25" class="text" style="display:none; visibility: hidden">
+                <p><span></span></p>
+              </div>
+            </div>
+
+            <!-- Shadowholder (Rectangle) -->
+            <div id="u26" class="ax_default shadowholder" data-label="Shadowholder">
+              <div id="u26_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u27" class="text" style="display:none; visibility: hidden">
+                <p><span></span></p>
+              </div>
+            </div>
+
+            <!-- Script (Rectangle) -->
+            <div id="u28" class="ax_default script" data-label="Script">
+              <div id="u28_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u29" class="text">
+                <p><span>no&quot;/&gt;&lt;script&gt; Your JavaScript Injection &lt;/script&gt;&lt;meta name=&quot;</span></p>
+              </div>
+            </div>
+
+            <!-- Divider x24 (Rectangle) -->
+            <div id="u30" class="ax_default empty" data-label="Divider x24">
+              <div id="u30_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u31" class="text" style="display:none; visibility: hidden">
+                <p><span></span></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Paragraph (Rectangle) -->
+          <div id="u32" class="ax_default paragraph" data-label="Paragraph">
+            <div id="u32_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u33" class="text">
+              <p><span>Поля настройки &quot;Include Viewport Tag&quot; во время генерации прототипа не валидируются и передаются как есть. Вместе со значением метатега можно передать инъекцию с кодом — для этого нужно закрыть из поля значения текущий метатег, вставить сценарий и открыть метатег пустышку:</span></p>
+            </div>
+          </div>
+
+          <!-- Header (Rectangle) -->
+          <div id="u34" class="ax_default header" data-label="Header">
+            <div id="u34_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u35" class="text">
+              <p><span>Как происходит внедрение расширения</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Добавление Axure Toolkit в прототип (Group) -->
+        <div id="u36" class="ax_default" data-label="Добавление Axure Toolkit в прототип" data-width="680" data-height="1012">
+
+          <!-- Paragraph (Rectangle) -->
+          <div id="u37" class="ax_default paragraph" data-label="Paragraph">
+            <div id="u37_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u38" class="text">
+              <p><span>После вставки кода, расширение будет доступно на всех страницах прототипа, включая вложенные фреймы.</span></p>
+            </div>
+          </div>
+
+          <!-- Image (Group) -->
+          <div id="u39" class="ax_default" data-label="Image" data-width="680" data-height="544">
+
+            <!-- Divider (Rectangle) -->
+            <div id="u40" class="ax_default empty" data-label="Divider">
+              <div id="u40_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u41" class="text" style="display:none; visibility: hidden">
+                <p><span></span></p>
+              </div>
+            </div>
+
+            <!-- Unnamed (Image) -->
+            <div id="u42" class="ax_default shadowholder">
+              <img id="u42_img" class="img " src="images/расширение_axure_toolkit/u42.png"/>
+              <!-- Unnamed () -->
+              <div id="u43" class="text" style="display:none; visibility: hidden">
+                <p><span></span></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Paragraph (Rectangle) -->
+          <div id="u44" class="ax_default paragraph" data-label="Paragraph">
+            <div id="u44_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u45" class="text">
+              <p><span>2. Вставить скопированный код в поле &quot;User Scalable&quot;, которое находится в окне для настроек генерации прототипа &quot;Main menu / Publish / Generate HTML Files&quot;:</span></p>
+            </div>
+          </div>
+
+          <!-- Script (Group) -->
+          <div id="u46" class="ax_default" data-label="Script" data-width="680" data-height="252">
+
+            <!-- Divider x24 (Rectangle) -->
+            <div id="u47" class="ax_default empty" data-label="Divider x24">
+              <div id="u47_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u48" class="text" style="display:none; visibility: hidden">
+                <p><span></span></p>
+              </div>
+            </div>
+
+            <!-- Shadowholder (Rectangle) -->
+            <div id="u49" class="ax_default shadowholder" data-label="Shadowholder">
+              <div id="u49_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u50" class="text" style="display:none; visibility: hidden">
+                <p><span></span></p>
+              </div>
+            </div>
+
+            <!-- injection (Dynamic Panel) -->
+            <div id="u51" class="ax_default" data-label="injection">
+              <div id="u51_state0" class="panel_state" data-label="container">
+                <div id="u51_state0_content" class="panel_state_content">
+
+                  <!-- InjectionCode (Rectangle) -->
+                  <div id="u52" class="ax_default script" data-label="InjectionCode">
+                    <div id="u52_div" class=""></div>
+                    <!-- Unnamed () -->
+                    <div id="u53" class="text">
+                      <p><span>no&quot;/&gt;&lt;script&gt;window.toolkitActivation=function(){if(window.$axure&amp;&amp;window.jQuery){const d=Array.isArray||function(p){return'[object Array]'===toString.call(p)},e=function(p){return'string'==typeof p||p instanceof String},g=function(p){return'function'==typeof p||!1},h=function(p){return!isNaN(parseFloat(p))&amp;&amp;isFinite(p)},k=function(p,q,r){if(!q)return null;var y,t=[],u=[],w=p.$(),x=m(q);const z=function(C,D){$.each(C,function(E,F){D.push(F)})};if(void 0==r)y=w.find(x),z(y,t);else{if(d(r))for(var A=0;A&lt;r.length;A++)y=$('#'+r[A]).find(x),z(y,t);e(r)&amp;&amp;(y=$('#'+r).find(x),z(y,t))}for(var B in t)u[B]=t[B].id;return 0==u.length?null:$axure(function(C,D){for(var E=0;E&lt;u.length;E++)if(u[E]==D)return!0;return!1})},m=function(p){var t,q='',r=0;if(d(p)&amp;&amp;0&lt;p.length)for(t=p.length,r;r&lt;t;r++)q+='[data-label=&quot;'+p[r]+'&quot;],';else q='[data-label=&quot;'+p+'&quot;]';return q};var o;!function(){'use strict';function p(){this.version='1.5',this.name='axure.toolkit',q.$a=r.query,q.$d={},q.$m=this,q.addEventListener('message',E),o=B,A()}const q=window,r=q.$axure,t=r.internal(function(G){return G}),u=t.evaluateSTO,w=q.parent,x=q.frames,y=[],z={};p.prototype={addExtension:function(G,H){t.public.fn[G]=H},addExpression:function(G,H){z[G]=H},send:function(G,H){G&amp;&amp;(e(G)||d(G))&amp;&amp;q.postMessage({channel:G,message:H},'*')},listen:function(G,H,I){(d(H)||g(H)||e(H))&amp;&amp;y.push({channel:G,listener:H,once:I})},instance:{}};const A=function(){return t.evaluateSTO=D,t.public.fn.run=C,!0},B=function(){var J,G=[],H=[],I=[];if(r('*').each(function(K){K.label&amp;&amp;(K.label.match('ax.bundle.')&amp;&amp;G.push(K),K.label.match('ax.import.')&amp;&amp;H.push(K),K.label.match('ax.init.')&amp;&amp;I.push(K))}),0&lt;H.length)for(J=0;J&lt;H.length;J++)r('@'+H[J].label).run().$().remove();if(0&lt;G.length)for(J=0;J&lt;G.length;J++)r('@'+G[J].label).$().remove();if(console.log('Axure extensions initialized and ready!'),r('@ax.ready').moveBy(0,0,{}),0&lt;I.length)for(J=0;J&lt;I.length;J++)r('@'+I[J].label).moveBy(0,0,{})},C=function(){return this.each(function(G,H){if('vectorShape'===G.type){var I=r('#'+H).text();if(''!==I)try{q.eval(I)}catch(J){console.error('Exception:\n'+J+'\n\nTrace:\n'+J.stack)}}}),this},D=function(G,H,I){if('fCall'!==G.sto||'trim'!==G.func||0===G.arguments.length)return u.apply(null,arguments);var J=u(G.thisSTO,H,I);'string'!=G.thisSTO.computedType&amp;&amp;(J=J.toString());var K=z[J.trim()];if(!K||'function'!=typeof K)console.error('Error:\nMethod &quot;'+J+'&quot; not found!');else{for(var L=[],M=0;M&lt;G.arguments.length;M++)L.push(u(G.arguments[M],H,I));try{return K.apply({scope:H,eventInfo:I},L)}catch(N){console.error('Exception:\n'+N+'\n\nTrace:\n'+N.stack)}}return''},E=function(G){var H=G.source,I=G.data,J=I.channel,K=I.message,L=0;for(L;L&lt;y.length;L++)if(y[L]&amp;&amp;F(y[L].channel,J)){var M=y[L].listener;if(e(M)&amp;&amp;r('@'+M).moveBy(0,0,{}),g(M)&amp;&amp;M.call(q,J,K),d(M))for(var N=0;N&lt;M.length;N++)e(M[N])&amp;&amp;r('@'+M[N]).moveBy(0,0,{}),g(M[N])&amp;&amp;M[N].call(q,J,K);y[L].once&amp;&amp;delete y[L]}if(w!==H&amp;&amp;w.postMessage(I,'*'),0&lt;x.length)for(L=0;L&lt;x.length;L++)x[L]!==G.source&amp;&amp;x[L].postMessage(I,'*')},F=function(G,H){if(G==H)return!0;if(d(G)){for(var I=0;I&lt;G.length;I++)if(d(H)){for(var J=0;J&lt;H.length;J++)if(G[I]==H[J])return!0;}else if(G[I]==H)return!0;}else if(d(H))for(var I=0;I&lt;H.length;I++)if(H[I]==G)return!0;return!1};new p}(),!function(){'use strict';function p(y,z,A){var B=this.private;B.target=y,B.el=z,B.id=A,B.states=w(A),this.options={}}const q=window,r=q.$axure,t=q.jQuery,u=r.internal(function(y){return y});p.prototype={private:{},state:function(y,z){var C,D,E,A=this.private,B=A.states;for(var F in z||(z=this.options),E=u.visibility.GetPanelState(A.id),B)B[F].id==E&amp;&amp;(C=B[F]),y&amp;&amp;(h(y)&amp;&amp;y==B[F].index&amp;&amp;(D=B[F]),e(y)&amp;&amp;y==B[F].label&amp;&amp;(D=B[F]));return C?y?void(D&amp;&amp;D.index!=C.index&amp;&amp;A.target.SetPanelState(D.index,z)):C:void 0},getWidget:function(y,z){var A=this.private,B=A.states;return 0==B.length?null:(z=z?x(B,z):void 0,k(A.target,y,z))}};const w=function(y){for(var z=t('#'+y).children(),A=[],B=0;B&lt;z.length;B++)A.push({id:z[B].id,index:B+1,label:z[B].dataset.label,$state:z[B]});return A},x=function(y,z){var B,C,D,E,A=y.length;if(d(z)){for(E=[],C=0;C&lt;z.length;C++)for(D=z[C],B=0;B&lt;A;B++)(e(D)&amp;&amp;y[B].label==D||h(D)&amp;&amp;y[B].index==D)&amp;&amp;E.push(y[B].id);if(0&lt;E.length)return E}else for(B=0;B&lt;A;B++)if(e(z)&amp;&amp;y[B].label==z||h(z)&amp;&amp;y[B].index==z)return y[B].id};q.$m.addExtension('getPanelController',function(){var B,y=this,z=1==y.getElementIds().length,A=q.$m.instance;return z&amp;&amp;this.each(function(C,D){'dynamicPanel'==C.type&amp;&amp;(A[D]?B=A[D]:B=A[D]=new p(y,C,D))}),B||null})}(),!function(){'use strict';function p(I,J,K){var L=this.private;L.target=I,L.el=J,L.id=K,L.rows=L.el.data,this.model=u.deepCopy(L.rows),this.filtered=!1,this.filters=[]}const q=window,r=q.$axure,t=q.jQuery,u=r.internal(function(I){return I});p.prototype={private:{},render:function(){var I=this.private,J=this.filtered?y(this.filters,this.model):this.model;G(I.id),H(I.id,J),B(I.id)},clear:function(){return this.model=[],this},recover:function(){return this.model=u.deepCopy(this.private.rows),this},get:function(I,J,K){var L=K&amp;&amp;this.filtered?y(this.filters,this.model):this.model,M=I?z(L,I,J):L;return M},copy:function(I,J,K){var L=this.get(I,J,K);return u.deepCopy(L)},update:function(I,J,K){var L,M,N,O=0;if(!I)return this;if(M=J?z(this.model,J,K):this.model,1&gt;M.length)return this;for(N=M.length,O=0,O;O&lt;N;O++)for(var P in L=M[O],I)L.hasOwnProperty(P)&amp;&amp;(L[P].text=I[P]);return this},remove:function(I,J){var J=J||!1;return this.model=I?z(this.model,I,!J):this.model,this},applyRows:function(I){return this.model=I,this},insertAfter:function(I,J){var K=[],L=this.model,M=L.length;if(!J||!d(J)||0==J.length)return this;if(0==M)return this.model=J,this;--I,I=0&gt;I?0:I,I=I&gt;M?M-1:I;for(var N=0;N&lt;M;N++)if(I==N){K.push(L[N]);for(var O=0;O&lt;J.length;O++)K.push(J[O])}else K.push(L[N]);return this.model=K,this},insertBefore:function(I,J){var K=[],L=this.model,M=L.length;if(!J||!d(J)||0==J.length)return this;if(0==M)return this.model=J,this;--I,I=0&gt;I?0:I,I=I&gt;M?M-1:I;for(var N=0;N&lt;M;N++)if(I==N){for(var O=0;O&lt;J.length;O++)K.push(J[O]);K.push(L[N])}else K.push(L[N]);return this.model=K,this},append:function(I){return I&amp;&amp;d(I)&amp;&amp;0!=I.length?(this.model=this.model.concat(I),this):this},preppend:function(I){return I&amp;&amp;d(I)&amp;&amp;0!=I.length?(this.model=I.concat(this.model),this):this},applyFilter:function(I,J){return I?(this.filters.push({filter:I,exclude:J||!1}),this.filtered||(this.filtered=!0),this):this},clearFilters:function(){return this.filters=[],this.filtered=!1,this},hasColumn:function(I){for(var J=this.private.el.dataProps,K=0;K&lt;J.length;K++)if(J[K]==I)return!0;return!1},getColumn:function(I,J){for(var M,K=[],L=J&amp;&amp;this.filtered?y(this.filters,this.model):this.model,N=0;N&lt;L.length;N++)M=L[N],M.hasOwnProperty(I)&amp;&amp;K.push(M[I].text);return K},getSum:function(I,J){for(var M,K=this.getColumn(I,J),L=0,N=0;N&lt;K.length;N++)M=K[N],h(M)&amp;&amp;(L+=+M);return L},getLength:function(I){var J=I&amp;&amp;this.filtered?y(this.filters,this.model):this.model;return J.length},getWidget:function(I,J){var K=this.private,L=this.model;return 0==L.length?null:(J=J?w(K.id,J):void 0,k(this.private.target,I,J))}};const w=function(I,J){var L,M,N,K=t('#'+I).children();if(h(J)&amp;&amp;0&lt;J||J&lt;=K.length)return K[J].id;if(d(J)&amp;&amp;0&lt;J.length){for(L=[],N=0;N&lt;J.length;N++)M=J[N],(h(M)&amp;&amp;0&lt;M||M&lt;=K.length)&amp;&amp;L.push(K[M].id);if(0&lt;L.length)return L}},x=function(I,J,K){if(!J||!J.condition)return[];var N,O,P,Q,R,L=J.condition,M=J.any||!1,K=K||!1,S=t.grep(I,function(T){for(var V in O=!!K,N=!K,L)if(T.hasOwnProperty(V)){if(Q=!1,P=T[V].text,R=L[V],d(R))for(var W in R)P==R[W]&amp;&amp;(Q=!0);else P==R&amp;&amp;(Q=!0);Q?O=!K:N=!!K}return M?O:N});return S},y=function(I,J){var K,L=0;for(L;L&lt;I.length;L++)K=I[L],J=x(J,K.filter,K.exclude);return J},z=function(I,J,K){var L,M,K=K||!1;if(h(J)){for(var N in L=[],J-=1,I)(K&amp;&amp;N!=J||!K&amp;&amp;N==J)&amp;&amp;L.push(I[N]);return L}if(d(J)){if(1&gt;J.length)return[];for(var N in L=[],I){for(var O in M=!1,J)N==J[O]-1&amp;&amp;(M=!0);(K&amp;&amp;!M||!K&amp;&amp;M)&amp;&amp;L.push(I[N])}return L}return x(I,J,K)},A=u.repeater.getAllItemIds,B=u.repeater.refreshRepeater,C=u.repeater.addEditItems,D=u.repeater.deleteItems,E=u.repeater.addItem,F=function(I){var J;return r(function(K){return'repeater'==K.type}).each(function(K,L){L==I&amp;&amp;(J=K)}),J},G=function(I){var J=A(I);C(I,J),D(I,{},'marked',void 0)},H=function(I,J){for(var K={targetElement:void 0,srcElement:void 0},L=F(I),M=L.dataProps,N=0,O=J.length;N&lt;O;N++){for(var P=J[N],Q={},R=0,S=M.length;R&lt;S;R++){var T=M[R],U=P[T];U=void 0===U?{type:'text',text:''}:u.deepCopy(U),Q[T]=U}E(I,Q,K)}};q.$m.addExtension('getRepeaterController',function(){var L,I=this,J=1==I.getElementIds().length,K=q.$m.instance;return J&amp;&amp;this.each(function(M,N){'repeater'==M.type&amp;&amp;(K[N]?L=K[N]:L=K[N]=new p(I,M,N))}),L||null})}(),o&amp;&amp;o()}},!function(){'use strict';const _w=window,_o=_w.open;_w.open=function(url){if('javascript:'!==url.substring(0,11))return _o.apply(null,arguments);var script=url.substring(11).trim();try{eval(script)}catch(d){return console.error('Exception:\n'+d)}},_w.onload=function(){},document.addEventListener('DOMContentLoaded',function(){_fix()&amp;&amp;_w.toolkitActivation()});const _fix=function(){var d=_w.$axure.internal(function(e){return e});return d.public.getGlobalVariable=d.getGlobalVariable=function(e){return d.globalVariableProvider.getVariableValue(e)},d.public.fn.value=function(){if(void 0==arguments[0]){var e=this.getElementIds()[0];if(!e)return;var g=d.getTypeFromElementId(e);return d.public.fn.IsComboBox(g)||d.public.fn.IsListBox(g)?$('#'+e+' :selected').text():d.public.fn.IsCheckBox(g)||d.public.fn.IsRadioButton(g)?$('#'+e+'_input').is(':checked'):d.public.fn.IsTextBox(g)?$('#'+e+'_input').val():this.jQuery().first().val()}for(var h=this.getElementIds(),k=0;k&lt;h.length;k++){var g=d.getTypeFromElementId(h[k]),m=$('#'+h[k]);d.public.fn.IsCheckBox(g)||d.public.fn.IsRadioButton(g)?!0==arguments[0]?m.attr('checked',!0):!1==arguments[0]&amp;&amp;m.removeAttr('checked'):d.public.fn.IsTextBox(g)?$('#'+m[0].id+'_input').val(arguments[0]):m.val(arguments[0])}return this},!0}}();&lt;/script&gt;&lt;meta name=&quot;</span></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Divider x24 (Rectangle) -->
+            <div id="u54" class="ax_default empty" data-label="Divider x24">
+              <div id="u54_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u55" class="text" style="display:none; visibility: hidden">
+                <p><span></span></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Paragraph (Rectangle) -->
+          <div id="u56" class="ax_default paragraph" data-label="Paragraph">
+            <div id="u56_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u57" class="text">
+              <p><span>1. Скопировать содержимое файла &quot;</span><a id="u58" class="link"><span style="color:#4339AB;">ax.toolkit.txt</span></a><span>&quot;:</span></p>
+            </div>
+          </div>
+
+          <!-- Header (Rectangle) -->
+          <div id="u59" class="ax_default header" data-label="Header">
+            <div id="u59_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u60" class="text">
+              <p><span>Добавление Axure Toolkit в прототип</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Что делает Axure Toolkit (Group) -->
+        <div id="u61" class="ax_default" data-label="Что делает Axure Toolkit" data-width="680" data-height="468">
+
+          <!-- Paragraph (Rectangle) -->
+          <div id="u62" class="ax_default paragraph" data-label="Paragraph">
+            <div id="u62_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u63" class="text">
+              <p><span>Активирует возможность запуска сценариев из действия &quot;Открыть ссылку в новом окне&quot; (Open Link in New Window/Tab).</span></p><p><span><br></span></p><p><span>Добавляет в прототип широковещательные сообщения, которые можно адресовать в любое место прототипа – в динамическую панель, в местер, в любой фрейм, где бы он не находился.</span></p><p><span><br></span></p><p><span>Добавляет возможность вызова пользовательских функций из </span><a id="u64" class="link"><span style="color:#4339AB;">выражений</span></a><span> прототипа. Выражения могут использоваться практически со всеми возможными действиями Axure RP.</span></p><p><span><br></span></p><p><span>Предоставляет способ для импорта и инициализации JavaScript сценариев до запуска внутреннего события &quot;OnPageLoad&quot;.</span></p><p><span><br></span></p><p><span>Расширяет возможности виджетов Dynamic Panel и Repeater.</span></p>
+            </div>
+          </div>
+
+          <!-- Header (Rectangle) -->
+          <div id="u65" class="ax_default header" data-label="Header">
+            <div id="u65_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u66" class="text">
+              <p><span>Что делает Axure Toolkit</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Axure Toolkit (Group) -->
+        <div id="u67" class="ax_default" data-label="Axure Toolkit" data-width="680" data-height="300">
+
+          <!-- Требования (Group) -->
+          <div id="u68" class="ax_default" data-label="Требования" data-width="680" data-height="168">
+
+            <!-- Paragraph (Rectangle) -->
+            <div id="u69" class="ax_default paragraph" data-label="Paragraph">
+              <div id="u69_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u70" class="text">
+                <p><span>&#149; Продвинутые навыки работы с Axure</span></p><p><span>&#149; Базовые знания JavaScript (уровень &quot;начинающий&quot;)</span></p><p><span>&#149; Базовые знания HTML/CSS</span></p><p><span>&#149; Современный браузер</span></p>
+              </div>
+            </div>
+
+            <!-- Subheader (Rectangle) -->
+            <div id="u71" class="ax_default subheader" data-label="Subheader">
+              <div id="u71_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u72" class="text">
+                <p><span>Требования к проектировщику</span></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Header (Rectangle) -->
+          <div id="u73" class="ax_default header" data-label="Header">
+            <div id="u73_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u74" class="text">
+              <p><span>Axure Toolkit</span></p>
+            </div>
+          </div>
+
+          <!-- Paragraph (Rectangle) -->
+          <div id="u75" class="ax_default paragraph" data-label="Paragraph">
+            <div id="u75_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u76" class="text">
+              <p><span>Набор инструментов для расширения возможностей прототипа </span><a id="u77" class="link"><span style="color:#4339AB;">Axure RP 8</span></a><span> с помощью простых JavaScript сценариев.</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- intro (Group) -->
+      <div id="u78" class="ax_default" data-label="intro" data-width="680" data-height="256">
+
+        <!-- gradient (Rectangle) -->
+        <div id="u79" class="ax_default intro_gradient" data-label="gradient">
+          <div id="u79_div" class=""></div>
+          <!-- Unnamed () -->
+          <div id="u80" class="text" style="display:none; visibility: hidden">
+            <p><span></span></p>
+          </div>
+        </div>
+
+        <!-- gif (Image) -->
+        <div id="u81" class="ax_default intro_gif" data-label="gif">
+          <img id="u81_img" class="img " src="images/расширение_axure_toolkit/gif_u81.gif"/>
+          <!-- Unnamed () -->
+          <div id="u82" class="text" style="display:none; visibility: hidden">
+            <p><span></span></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Unnamed (doc.header) -->
+
+      <!-- header (Group) -->
+      <div id="u84" class="ax_default" data-label="header" data-width="680" data-height="168">
+
+        <!-- Divider x48 (Rectangle) -->
+        <div id="u85" class="ax_default empty" data-label="Divider x48">
+          <div id="u85_div" class=""></div>
+          <!-- Unnamed () -->
+          <div id="u86" class="text" style="display:none; visibility: hidden">
+            <p><span></span></p>
+          </div>
+        </div>
+
+        <!-- Empty (Rectangle) -->
+        <div id="u87" class="ax_default empty" data-label="Empty">
+          <div id="u87_div" class=""></div>
+          <!-- Unnamed () -->
+          <div id="u88" class="text" style="display:none; visibility: hidden">
+            <p><span></span></p>
+          </div>
+        </div>
+
+        <!-- Main subheader (Rectangle) -->
+        <div id="u89" class="ax_default main_subheader" data-label="Main subheader">
+          <div id="u89_div" class=""></div>
+          <!-- Unnamed () -->
+          <div id="u90" class="text">
+            <p><span>Набор инструментов для расширения API Axure RP 8</span></p>
+          </div>
+        </div>
+
+        <!-- Main header (Rectangle) -->
+        <div id="u91" class="ax_default main_header" data-label="Main header">
+          <div id="u91_div" class=""></div>
+          <!-- Unnamed () -->
+          <div id="u92" class="text">
+            <p><span>AXURE TOOLKIT</span></p>
+          </div>
+        </div>
+
+        <!-- logo (Image) -->
+        <div id="u93" class="ax_default main_logo" data-label="logo">
+          <img id="u93_img" class="img " src="images/расширение_axure_toolkit/logo_u93.png"/>
+          <!-- Unnamed () -->
+          <div id="u94" class="text" style="display:none; visibility: hidden">
+            <p><span></span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

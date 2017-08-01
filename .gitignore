@@ -1,0 +1,9 @@
+
+.DS_Store
+axure-toolkit/plugins/debug/*
+axure-toolkit/plugins/page_notes/*
+axure-toolkit/plugins/recordplay/*
+axure-toolkit/plugins/sitemap/*
+axure-toolkit/resources/images/*
+axure-toolkit/resources/css/images/*
+axure-toolkit/resources/chrome/*
