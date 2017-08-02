@@ -119,9 +119,6 @@
 }
 .intro_gradient {
 }
-.text_link {
-  color:#4339AB;
-}
 .flow_shape {
 }
 .text_link_mouse_over {
@@ -155,6 +152,12 @@
   color:#5E5E5E;
   text-align:left;
   line-height:20px;
+}
+.text_link {
+  font-family:'RobotoMono-Regular', 'Roboto Mono';
+  font-weight:400;
+  font-style:normal;
+  color:#4339AB;
 }
 .section_button_a {
   font-family:'RobotoMono-Regular', 'Roboto Mono';
@@ -252,4 +255,7 @@
 .box_2 {
 }
 .full_image {
+}
+.text_link1 {
+  color:#4339AB;
 }
