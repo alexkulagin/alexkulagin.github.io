@@ -4,7 +4,7 @@
   background-image:none;
   position:static;
   left:auto;
-  width:302px;
+  width:352px;
   margin-left:0;
   margin-right:0;
   text-align:left;
@@ -13,11 +13,11 @@
   position:absolute;
   z-index:0;
 }
-#u373_div {
+#u461_div {
   position:absolute;
   left:0px;
   top:0px;
-  width:135px;
+  width:160px;
   height:28px;
   background:inherit;
   background-color:rgba(67, 57, 171, 1);
@@ -27,18 +27,18 @@
   -webkit-box-shadow:none;
   box-shadow:none;
 }
-#u373 {
+#u461 {
   position:absolute;
   left:24px;
   top:24px;
-  width:135px;
+  width:160px;
   height:28px;
 }
-#u373_div.mouseOver {
+#u461_div.mouseOver {
   position:absolute;
   left:0px;
   top:0px;
-  width:135px;
+  width:160px;
   height:28px;
   background:inherit;
   background-color:rgba(77, 65, 200, 1);
@@ -48,13 +48,13 @@
   -webkit-box-shadow:none;
   box-shadow:none;
 }
-#u373.mouseOver {
+#u461.mouseOver {
 }
-#u373_div.disabled {
+#u461_div.disabled {
   position:absolute;
   left:0px;
   top:0px;
-  width:135px;
+  width:160px;
   height:28px;
   background:inherit;
   background-color:rgba(67, 57, 171, 1);
@@ -64,21 +64,21 @@
   -webkit-box-shadow:none;
   box-shadow:none;
 }
-#u373.disabled {
+#u461.disabled {
   opacity:0.64;
 }
-#u374 {
+#u462 {
   position:absolute;
   left:32px;
   top:6px;
-  width:71px;
-  white-space:nowrap;
+  width:96px;
+  word-wrap:break-word;
 }
-#u375_div {
+#u463_div {
   position:absolute;
   left:0px;
   top:0px;
-  width:135px;
+  width:160px;
   height:28px;
   background:inherit;
   background-color:rgba(67, 57, 171, 1);
@@ -88,18 +88,18 @@
   -webkit-box-shadow:none;
   box-shadow:none;
 }
-#u375 {
+#u463 {
   position:absolute;
-  left:167px;
+  left:192px;
   top:24px;
-  width:135px;
+  width:160px;
   height:28px;
 }
-#u375_div.mouseOver {
+#u463_div.mouseOver {
   position:absolute;
   left:0px;
   top:0px;
-  width:135px;
+  width:160px;
   height:28px;
   background:inherit;
   background-color:rgba(77, 65, 200, 1);
@@ -109,13 +109,13 @@
   -webkit-box-shadow:none;
   box-shadow:none;
 }
-#u375.mouseOver {
+#u463.mouseOver {
 }
-#u375_div.disabled {
+#u463_div.disabled {
   position:absolute;
   left:0px;
   top:0px;
-  width:135px;
+  width:160px;
   height:28px;
   background:inherit;
   background-color:rgba(67, 57, 171, 1);
@@ -125,13 +125,13 @@
   -webkit-box-shadow:none;
   box-shadow:none;
 }
-#u375.disabled {
+#u463.disabled {
   opacity:0.64;
 }
-#u376 {
+#u464 {
   position:absolute;
   left:32px;
   top:6px;
-  width:71px;
-  white-space:nowrap;
+  width:96px;
+  word-wrap:break-word;
 }
