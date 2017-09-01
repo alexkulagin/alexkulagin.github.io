@@ -1,0 +1,1402 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <title>Методы для вставки</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/><script>window.toolkitActivation=function(){if(window.$axure&&window.jQuery){const d=Array.isArray||function(r){return'[object Array]'===toString.call(r)},e=function(r){return'string'==typeof r||r instanceof String},g=function(r){return'function'==typeof r||!1},h=function(r){return!isNaN(parseFloat(r))&&isFinite(r)},m=function(r,t,u){if(!t)return null;var A,w=[],x=[],y=r.$(),z=o(t);const B=function(E,F){$.each(E,function(G,H){F.push(H)})};if(void 0==u)A=y.find(z),B(A,w);else{if(d(u))for(var C=0;C<u.length;C++)A=$('#'+u[C]).find(z),B(A,w);e(u)&&(A=$('#'+u).find(z),B(A,w))}for(var D in w)x[D]=w[D].id;return 0==x.length?null:$axure(function(E,F){for(var G=0;G<x.length;G++)if(x[G]==F)return!0;return!1})},o=function(r){var w,t='',u=0;if(d(r)&&0<r.length)for(w=r.length,u;u<w;u++)t+='[data-label="'+r[u]+'"],';else t='[data-label="'+r+'"]';return t};var q;!function(){'use strict';function r(){this.version='1.7',this.name='ax.toolkit',t.$a=u,t.$d={},t.$m=this,t.addEventListener('message',G),q=D,C()}const t=window,u=t.$axure,w=u.internal(function(I){return I}),x=w.evaluateSTO,y=t.parent,z=t.frames,A=[],B={};r.prototype={addExtension:function(I,J){w.public.fn[I]=J},addExpression:function(I,J){B[I]=J},send:function(I,J){I&&(e(I)||d(I))&&t.postMessage({channel:I,message:J},'*')},listen:function(I,J,K){(d(J)||g(J)||e(J))&&A.push({channel:I,listener:J,once:K})},instance:{}};const C=function(){return w.evaluateSTO=F,w.public.fn.run=E,!0},D=function(){var L,I=[],J=[],K=[];if(u('*').each(function(M){M.label&&(M.label.match('ax.bundle')&&I.push(M),M.label.match('ax.import')&&J.push(M),M.label.match('ax.init')&&K.push(M))}),0<J.length)for(L=0;L<J.length;L++)u('@'+J[L].label).run().$().remove();if(0<I.length)for(L=0;L<I.length;L++)u('@'+I[L].label).$().remove();if(console.log('Axure toolkit initialized and ready!'),u('@ax.ready').moveBy(0,0,{}),0<K.length)for(L=0;L<K.length;L++)u('@'+K[L].label).moveBy(0,0,{})},E=function(){return this.each(function(I,J){if('vectorShape'===I.type){var K=u('#'+J).text();if(''!==K)try{t.eval(K)}catch(L){console.error('Exception:\n'+L+'\n\nTrace:\n'+L.stack)}}}),this},F=function(I,J,K){if('fCall'!==I.sto||'trim'!==I.func||0===I.arguments.length)return x.apply(null,arguments);var L=x(I.thisSTO,J,K);'string'!=I.thisSTO.computedType&&(L=L.toString());var M=B[L.trim()];if(!M||'function'!=typeof M)console.error('Error:\nMethod "'+L+'" not found!');else{for(var N=[],O=0;O<I.arguments.length;O++)N.push(x(I.arguments[O],J,K));try{return M.apply({scope:J,eventInfo:K},N)}catch(P){console.error('Exception:\n'+P+'\n\nTrace:\n'+P.stack)}}return''},G=function(I){var O,J=I.source,K=I.data,L=K.channel,M=K.message,N=0;for(N;N<A.length;N++)if(O=A[N],O&&('*'===O.channel||H(O.channel,L))){var P=O.listener;if(e(P)&&u('@'+P).moveBy(0,0,{}),g(P)&&P.call(t,L,M),d(P))for(var Q=0;Q<P.length;Q++)e(P[Q])&&u('@'+P[Q]).moveBy(0,0,{}),g(P[Q])&&P[Q].call(t,L,M);O.once&&delete A[N]}if(y!==J&&y.postMessage(K,'*'),0<z.length)for(N=0;N<z.length;N++)z[N]!==I.source&&z[N].postMessage(K,'*')},H=function(I,J){if(I==J)return!0;if(d(I)){for(var K=0;K<I.length;K++)if(d(J)){for(var L=0;L<J.length;L++)if(I[K]==J[L])return!0;}else if(I[K]==J)return!0;}else if(d(J))for(var K=0;K<J.length;K++)if(J[K]==I)return!0;return!1};new r}(),!function(){'use strict';function r(A,B,C){var D=this.private;D.target=A,D.el=B,D.id=C,D.states=y(C)}const t=window,u=t.$axure,w=t.jQuery,x=u.internal(function(A){return A});r.prototype={private:{},options:{},state:function(A,B){var E,F,G,C=this.private,D=C.states;for(var H in B||(B=this.options),G=x.visibility.GetPanelState(C.id),D)D[H].id==G&&(E=D[H]),A&&(h(A)&&A==D[H].index&&(F=D[H]),e(A)&&A==D[H].label&&(F=D[H]));return E?A?void(F&&F.index!=E.index&&C.target.SetPanelState(F.index,B)):E:void 0},getWidget:function(A,B){var C=this.private,D=C.states;return 0==D.length?null:(B=B?z(D,B):void 0,m(C.target,A,B))}};const y=function(A){for(var B=w('#'+A).children(),C=[],D=0;D<B.length;D++)C.push({id:B[D].id,index:D+1,label:B[D].dataset.label,$state:B[D]});return C},z=function(A,B){var D,E,F,G,C=A.length;if(d(B)){for(G=[],E=0;E<B.length;E++)for(F=B[E],D=0;D<C;D++)(e(F)&&A[D].label==F||h(F)&&A[D].index==F)&&G.push(A[D].id);if(0<G.length)return G}else for(D=0;D<C;D++)if(e(B)&&A[D].label==B||h(B)&&A[D].index==B)return A[D].id};t.$m.addExtension('getPanelController',function(){var D,A=this,B=1==A.getElementIds().length,C=t.$m.instance;return B&&this.each(function(E,F){'dynamicPanel'==E.type&&(C[F]?D=C[F]:D=C[F]=new r(A,E,F))}),D||null})}(),!function(){'use strict';function r(K,L,M){var N=this.private;N.target=K,N.el=L,N.id=M,N.rows=N.el.data,this.model=x.deepCopy(N.rows),this.filtered=!1,this.filters=[]}const t=window,u=t.$axure,w=t.jQuery,x=u.internal(function(K){return K});r.prototype={private:{},render:function(){var K=this.private,L=this.filtered?A(this.filters,this.model):this.model;I(K.id),J(K.id,L),D(K.id)},clear:function(){return this.model=[],this},recover:function(){return this.model=x.deepCopy(this.private.rows),this},get:function(K,L,M){var N=M&&this.filtered?A(this.filters,this.model):this.model,O=K?B(N,K,L):N;return O},copy:function(K,L,M){var N=this.get(K,L,M);return x.deepCopy(N)},update:function(K,L,M){var N,O,P,Q=0;if(!K)return this;if(O=L?B(this.model,L,M):this.model,1>O.length)return this;for(P=O.length,Q=0,Q;Q<P;Q++)for(var R in N=O[Q],K)N.hasOwnProperty(R)&&(N[R].text=K[R]);return this},remove:function(K,L){var L=L||!1;return this.model=K?B(this.model,K,!L):this.model,this},applyRows:function(K){return this.model=K,this},insertAfter:function(K,L){var M=[],N=this.model,O=N.length;if(!L||!d(L)||0==L.length)return this;if(0==O)return this.model=L,this;--K,K=0>K?0:K,K=K>O?O-1:K;for(var P=0;P<O;P++)if(K==P){M.push(N[P]);for(var Q=0;Q<L.length;Q++)M.push(L[Q])}else M.push(N[P]);return this.model=M,this},insertBefore:function(K,L){var M=[],N=this.model,O=N.length;if(!L||!d(L)||0==L.length)return this;if(0==O)return this.model=L,this;--K,K=0>K?0:K,K=K>O?O-1:K;for(var P=0;P<O;P++)if(K==P){for(var Q=0;Q<L.length;Q++)M.push(L[Q]);M.push(N[P])}else M.push(N[P]);return this.model=M,this},append:function(K){return K&&d(K)&&0!=K.length?(this.model=this.model.concat(K),this):this},preppend:function(K){return K&&d(K)&&0!=K.length?(this.model=K.concat(this.model),this):this},applyFilter:function(K,L){return K?(this.filters.push({filter:K,exclude:L||!1}),this.filtered||(this.filtered=!0),this):this},clearFilters:function(){return this.filters=[],this.filtered=!1,this},hasColumn:function(K){for(var L=this.private.el.dataProps,M=0;M<L.length;M++)if(L[M]==K)return!0;return!1},getColumn:function(K,L){for(var O,M=[],N=L&&this.filtered?A(this.filters,this.model):this.model,P=0;P<N.length;P++)O=N[P],O.hasOwnProperty(K)&&M.push(O[K].text);return M},getSum:function(K,L){for(var O,M=this.getColumn(K,L),N=0,P=0;P<M.length;P++)O=M[P],h(O)&&(N+=+O);return N},getLength:function(K){var L=K&&this.filtered?A(this.filters,this.model):this.model;return L.length},getWidget:function(K,L){var M=this.private,N=this.model;return 0==N.length?null:(L=L?y(M.id,L):void 0,m(this.private.target,K,L))}};const y=function(K,L){var N,O,P,M=w('#'+K).children();if(h(L)&&0<L||L<=M.length)return M[L].id;if(d(L)&&0<L.length){for(N=[],P=0;P<L.length;P++)O=L[P],(h(O)&&0<O||O<=M.length)&&N.push(M[O].id);if(0<N.length)return N}},z=function(K,L,M){if(!L||!L.condition)return[];var P,Q,R,S,T,N=L.condition,O=L.any||!1,M=M||!1,U=w.grep(K,function(V){for(var X in Q=!!M,P=!M,N)if(V.hasOwnProperty(X)){if(S=!1,R=V[X].text,T=N[X],d(T))for(var Y in T)R==T[Y]&&(S=!0);else R==T&&(S=!0);S?Q=!M:P=!!M}return O?Q:P});return U},A=function(K,L){var M,N=0;for(N;N<K.length;N++)M=K[N],L=z(L,M.filter,M.exclude);return L},B=function(K,L,M){var N,O,M=M||!1;if(h(L)){for(var P in N=[],L-=1,K)(M&&P!=L||!M&&P==L)&&N.push(K[P]);return N}if(d(L)){if(1>L.length)return[];for(var P in N=[],K){for(var Q in O=!1,L)P==L[Q]-1&&(O=!0);(M&&!O||!M&&O)&&N.push(K[P])}return N}return z(K,L,M)},C=x.repeater.getAllItemIds,D=x.repeater.refreshRepeater,E=x.repeater.addEditItems,F=x.repeater.deleteItems,G=x.repeater.addItem,H=function(K){var L;return u(function(M){return'repeater'==M.type}).each(function(M,N){N==K&&(L=M)}),L},I=function(K){var L=C(K);E(K,L),F(K,{},'marked',void 0)},J=function(K,L){for(var M={targetElement:void 0,srcElement:void 0},N=H(K),O=N.dataProps,P=0,Q=L.length;P<Q;P++){for(var R=L[P],S={},T=0,U=O.length;T<U;T++){var V=O[T],W=R[V];W=void 0===W?{type:'text',text:''}:x.deepCopy(W),S[V]=W}G(K,S,M)}};t.$m.addExtension('getRepeaterController',function(){var N,K=this,L=1==K.getElementIds().length,M=t.$m.instance;return L&&this.each(function(O,P){'repeater'==O.type&&(M[P]?N=M[P]:N=M[P]=new r(K,O,P))}),N||null})}(),q&&q()}},!function(){'use strict';const _w=window,_o=_w.open;_w.open=function(url){if('javascript:'!==url.substring(0,11))return _o.apply(null,arguments);var script=url.substring(11).trim();try{eval(script)}catch(d){return console.error('Exception:\n'+d)}},_w.onload=function(){},document.addEventListener('DOMContentLoaded',function(){_fix()&&_w.toolkitActivation()});const _fix=function(){var d=_w.$axure.internal(function(g){return g});d.public.getGlobalVariable=d.getGlobalVariable=function(g){return d.globalVariableProvider.getVariableValue(g)},d.public.fn.value=function(){if(arguments[0]==void 0){var g=this.getElementIds()[0];if(!g)return;var h=d.getTypeFromElementId(g);return d.public.fn.IsComboBox(h)||d.public.fn.IsListBox(h)?$('#'+g+' :selected').text():d.public.fn.IsCheckBox(h)||d.public.fn.IsRadioButton(h)?$('#'+g+'_input').is(':checked'):d.public.fn.IsTextBox(h)?$('#'+g+'_input').val():this.jQuery().first().val()}for(var m=this.getElementIds(),o=0;o<m.length;o++){var h=d.getTypeFromElementId(m[o]),p=$('#'+m[o]);d.public.fn.IsCheckBox(h)||d.public.fn.IsRadioButton(h)?!0==arguments[0]?p.attr('checked',!0):!1==arguments[0]&&p.removeAttr('checked'):d.public.fn.IsTextBox(h)?$('#'+p[0].id+'_input').val(arguments[0]):p.val(arguments[0])}return this},d.public.fn.text=function(){if(arguments[0]==void 0){var g=this.getElementIds()[0];return g?e(g):void 0}for(var h=''+arguments[0],m=this.getElementIds(),o=0;o<m.length;o++){var p=m[o],q=d.getTypeFromElementId(p);if(d.public.fn.IsTextBox(q)||d.public.fn.IsTextArea(q))SetWidgetFormText(p,h);else{var r='#'+p;if(0==$(r).length&&(r='#u'+(+p.substring(1)+1)),0!=$(r).length&&0<$(r).find('p').find('span').length){$(r).find('p:not(:first)').remove(),$(r).find('p').find('span:not(:first)').remove();var t=h.replace(/\n/g,'--NEWLINE--'),u=$('<div/>').text(t).html();$(r).find('span').html(u.replace(/--NEWLINE--/g,'<br>'))}}}return this};var e=function(g){var h=$jobj(g),m=$jobj(d.INPUT(g));if(m.length&&(h=m),h.is('input')&&(d.public.fn.IsCheckBox(h.attr('type'))||'radio'==h.attr('type'))&&(h=h.parent().find('label').find('div')),h.is('div')){var o=h.hasClass('text')?h:h.find('.text');if(0==o.length)return;var p='';return o.children('p').each(function(r){0!=r&&(p+='\n');var t=$(this).html().replace(/<br[^>]*>/ig,'\n').replace(/&nbsp;/ig,' ');p+=$(t).text()}),p}var q=h.val();return void 0==q?'':q};return!0}}();</script><script>(function(b,c,d,e,f,h,j){b.GoogleAnalyticsObject=f,b[f]=b[f]||function(){(b[f].q=b[f].q||[]).push(arguments)},b[f].l=1*new Date,h=c.createElement(d),j=c.getElementsByTagName(d)[0],h.async=1,h.src=e,j.parentNode.insertBefore(h,j)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga'),ga('create','UA-39631643-1','auto'),ga('send','pageview');</script><meta name=""/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <link href="resources/css/axure_rp_page.css" type="text/css" rel="stylesheet"/>
+    <link href="data/styles.css" type="text/css" rel="stylesheet"/>
+    <link href="files/методы_для_вставки/styles.css" type="text/css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,500,700&amp;subset=cyrillic" type="text/css" rel="stylesheet"/>
+    <script src="resources/scripts/jquery-1.7.1.min.js"></script>
+    <script src="resources/scripts/jquery-ui-1.8.10.custom.min.js"></script>
+    <script src="resources/scripts/axure/axQuery.js"></script>
+    <script src="resources/scripts/axure/globals.js"></script>
+    <script src="resources/scripts/axutils.js"></script>
+    <script src="resources/scripts/axure/annotation.js"></script>
+    <script src="resources/scripts/axure/axQuery.std.js"></script>
+    <script src="resources/scripts/axure/doc.js"></script>
+    <script src="data/document.js"></script>
+    <script src="resources/scripts/messagecenter.js"></script>
+    <script src="resources/scripts/axure/events.js"></script>
+    <script src="resources/scripts/axure/recording.js"></script>
+    <script src="resources/scripts/axure/action.js"></script>
+    <script src="resources/scripts/axure/expr.js"></script>
+    <script src="resources/scripts/axure/geometry.js"></script>
+    <script src="resources/scripts/axure/flyout.js"></script>
+    <script src="resources/scripts/axure/ie.js"></script>
+    <script src="resources/scripts/axure/model.js"></script>
+    <script src="resources/scripts/axure/repeater.js"></script>
+    <script src="resources/scripts/axure/sto.js"></script>
+    <script src="resources/scripts/axure/utils.temp.js"></script>
+    <script src="resources/scripts/axure/variables.js"></script>
+    <script src="resources/scripts/axure/drag.js"></script>
+    <script src="resources/scripts/axure/move.js"></script>
+    <script src="resources/scripts/axure/visibility.js"></script>
+    <script src="resources/scripts/axure/style.js"></script>
+    <script src="resources/scripts/axure/adaptive.js"></script>
+    <script src="resources/scripts/axure/tree.js"></script>
+    <script src="resources/scripts/axure/init.temp.js"></script>
+    <script src="files/методы_для_вставки/data.js"></script>
+    <script src="resources/scripts/axure/legacy.js"></script>
+    <script src="resources/scripts/axure/viewer.js"></script>
+    <script src="resources/scripts/axure/math.js"></script>
+    <script type="text/javascript">
+      $axure.utils.getTransparentGifPath = function() { return 'resources/images/transparent.gif'; };
+      $axure.utils.getOtherPath = function() { return 'resources/Other.html'; };
+      $axure.utils.getReloadPath = function() { return 'resources/reload.html'; };
+    </script>
+  </head>
+  <body>
+    <div id="base" class="">
+
+      <!-- sections (Group) -->
+      <div id="u5596" class="ax_default" data-label="sections" data-width="680" data-height="1956">
+
+        <!-- Unnamed (repeater.content) -->
+
+        <!-- Divider x72 (Rectangle) -->
+        <div id="u5598" class="ax_default empty" data-label="Divider x72">
+          <div id="u5598_div" class=""></div>
+          <!-- Unnamed () -->
+          <div id="u5599" class="text" style="display:none; visibility: hidden">
+            <p><span></span></p>
+          </div>
+        </div>
+
+        <!-- links (Group) -->
+        <div id="u5600" class="ax_default" data-label="links" data-width="291" data-height="252">
+
+          <!-- Item (Rectangle) -->
+          <div id="u5601" class="ax_default content_item" data-label="Item">
+            <div id="u5601_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5602" class="text">
+              <p><span>Фильтрация данных</span></p>
+            </div>
+          </div>
+
+          <!-- Item (Rectangle) [reference page] -->
+          <div id="u5601_ref" class="reference_page"></div>
+
+          <!-- Item (Rectangle) -->
+          <div id="u5603" class="ax_default content_item" data-label="Item">
+            <div id="u5603_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5604" class="text">
+              <p><span>Методы для фильтрации</span></p>
+            </div>
+          </div>
+
+          <!-- Item (Rectangle) [reference page] -->
+          <div id="u5603_ref" class="reference_page"></div>
+
+          <!-- Item (Rectangle) -->
+          <div id="u5605" class="ax_default content_item" data-label="Item">
+            <div id="u5605_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5606" class="text">
+              <p><span>Методы для удаления</span></p>
+            </div>
+          </div>
+
+          <!-- Item (Rectangle) [reference page] -->
+          <div id="u5605_ref" class="reference_page"></div>
+
+          <!-- Item (Rectangle) -->
+          <div id="u5607" class="ax_default content_item" data-label="Item">
+            <div id="u5607_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5608" class="text">
+              <p><span>Методы для модификации</span></p>
+            </div>
+          </div>
+
+          <!-- Item (Rectangle) [reference page] -->
+          <div id="u5607_ref" class="reference_page"></div>
+
+          <!-- Item (Rectangle) -->
+          <div id="u5609" class="ax_default content_item" data-label="Item">
+            <div id="u5609_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5610" class="text">
+              <p><span>Методы для вставки</span></p>
+            </div>
+          </div>
+
+          <!-- Item (Rectangle) [reference page] -->
+          <div id="u5609_ref" class="reference_page"></div>
+
+          <!-- Item (Rectangle) -->
+          <div id="u5611" class="ax_default content_item" data-label="Item">
+            <div id="u5611_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5612" class="text">
+              <p><span>Методы для возврата</span></p>
+            </div>
+          </div>
+
+          <!-- Item (Rectangle) [reference page] -->
+          <div id="u5611_ref" class="reference_page"></div>
+
+          <!-- Item (Rectangle) -->
+          <div id="u5613" class="ax_default content_item" data-label="Item">
+            <div id="u5613_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5614" class="text">
+              <p><span>Методы контроллера</span></p>
+            </div>
+          </div>
+
+          <!-- Item (Rectangle) [reference page] -->
+          <div id="u5613_ref" class="reference_page"></div>
+
+          <!-- Item (Rectangle) -->
+          <div id="u5615" class="ax_default content_item" data-label="Item">
+            <div id="u5615_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5616" class="text">
+              <p><span>Взаимодействие с контроллером</span></p>
+            </div>
+          </div>
+
+          <!-- Item (Rectangle) [reference page] -->
+          <div id="u5615_ref" class="reference_page"></div>
+
+          <!-- Item (Rectangle) -->
+          <div id="u5617" class="ax_default content_item" data-label="Item">
+            <div id="u5617_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5618" class="text">
+              <p><span>Контроллер виджета Repeater</span></p>
+            </div>
+          </div>
+
+          <!-- Item (Rectangle) [reference page] -->
+          <div id="u5617_ref" class="reference_page"></div>
+
+          <!-- Number (Rectangle) -->
+          <div id="u5619" class="ax_default content_number" data-label="Number">
+            <div id="u5619_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5620" class="text">
+              <p><span>01</span></p><p><span>02</span></p><p><span>03</span></p><p><span>04</span></p><p><span>05</span></p><p><span>06</span></p><p><span>07</span></p><p><span>08</span></p><p><span>09</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Header (Rectangle) -->
+        <div id="u5621" class="ax_default content_header" data-label="Header">
+          <div id="u5621_div" class=""></div>
+          <!-- Unnamed () -->
+          <div id="u5622" class="text">
+            <p><span>Возможности Repeater</span></p>
+          </div>
+        </div>
+
+        <!-- Divider x24 (Rectangle) -->
+        <div id="u5623" class="ax_default empty" data-label="Divider x24">
+          <div id="u5623_div" class=""></div>
+          <!-- Unnamed () -->
+          <div id="u5624" class="text" style="display:none; visibility: hidden">
+            <p><span></span></p>
+          </div>
+        </div>
+
+        <!-- Метод preppend (Group) -->
+        <div id="u5625" class="ax_default" data-label="Метод preppend" data-width="680" data-height="276">
+
+          <!-- Section Script (Group) -->
+          <div id="u5626" class="ax_default" data-label="Section Script" data-width="680" data-height="172">
+
+            <!-- Section Divider x24 (Rectangle) -->
+            <div id="u5627" class="ax_default section_divider" data-label="Section Divider x24">
+              <div id="u5627_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5628" class="text" style="display:none; visibility: hidden">
+                <p><span></span></p>
+              </div>
+            </div>
+
+            <!-- scriptholder (Rectangle) -->
+            <div id="u5629" class="ax_default shadowholder" data-label="scriptholder">
+              <div id="u5629_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5630" class="text" style="display:none; visibility: hidden">
+                <p><span></span></p>
+              </div>
+            </div>
+
+            <!-- script (Rectangle) -->
+            <div id="u5631" class="ax_default script" data-label="script">
+              <div id="u5631_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5632" class="text">
+                <p><span>/* записывает в переменную строку */</span></p><p><span>var rows = controller.get(5);</span></p><p><span><br></span></p><p><span>/* вставляет rows в начало списка */</span></p><p><span>controller.preppend(rows).render();</span></p>
+              </div>
+            </div>
+
+            <!-- Section Divider x24 (Rectangle) -->
+            <div id="u5633" class="ax_default section_divider" data-label="Section Divider x24">
+              <div id="u5633_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5634" class="text" style="display:none; visibility: hidden">
+                <p><span></span></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Paragraph (Rectangle) -->
+          <div id="u5635" class="ax_default paragraph" data-label="Paragraph">
+            <div id="u5635_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5636" class="text">
+              <p><span>Добавляет строки в начало списка.</span></p>
+            </div>
+          </div>
+
+          <!-- Header (Rectangle) -->
+          <div id="u5637" class="ax_default header" data-label="Header">
+            <div id="u5637_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5638" class="text">
+              <p><span>Метод preppend</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Метод append (Group) -->
+        <div id="u5639" class="ax_default" data-label="Метод append" data-width="680" data-height="276">
+
+          <!-- Section Script (Group) -->
+          <div id="u5640" class="ax_default" data-label="Section Script" data-width="680" data-height="172">
+
+            <!-- Section Divider x24 (Rectangle) -->
+            <div id="u5641" class="ax_default section_divider" data-label="Section Divider x24">
+              <div id="u5641_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5642" class="text" style="display:none; visibility: hidden">
+                <p><span></span></p>
+              </div>
+            </div>
+
+            <!-- scriptholder (Rectangle) -->
+            <div id="u5643" class="ax_default shadowholder" data-label="scriptholder">
+              <div id="u5643_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5644" class="text" style="display:none; visibility: hidden">
+                <p><span></span></p>
+              </div>
+            </div>
+
+            <!-- script (Rectangle) -->
+            <div id="u5645" class="ax_default script" data-label="script">
+              <div id="u5645_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5646" class="text">
+                <p><span>/* записывает в переменную строки */</span></p><p><span>var rows = controller.get([3, 4]);</span></p><p><span><br></span></p><p><span>/* вставляет rows в конец списка */</span></p><p><span>controller.append(rows).render();</span></p>
+              </div>
+            </div>
+
+            <!-- Section Divider x24 (Rectangle) -->
+            <div id="u5647" class="ax_default section_divider" data-label="Section Divider x24">
+              <div id="u5647_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5648" class="text" style="display:none; visibility: hidden">
+                <p><span></span></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Paragraph (Rectangle) -->
+          <div id="u5649" class="ax_default paragraph" data-label="Paragraph">
+            <div id="u5649_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5650" class="text">
+              <p><span>Добавляет строки в конец списка.</span></p>
+            </div>
+          </div>
+
+          <!-- Header (Rectangle) -->
+          <div id="u5651" class="ax_default header" data-label="Header">
+            <div id="u5651_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5652" class="text">
+              <p><span>Метод append</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Метод insertBefore (Group) -->
+        <div id="u5653" class="ax_default" data-label="Метод insertBefore" data-width="680" data-height="276">
+
+          <!-- Section Script (Group) -->
+          <div id="u5654" class="ax_default" data-label="Section Script" data-width="680" data-height="172">
+
+            <!-- Section Divider x24 (Rectangle) -->
+            <div id="u5655" class="ax_default section_divider" data-label="Section Divider x24">
+              <div id="u5655_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5656" class="text" style="display:none; visibility: hidden">
+                <p><span></span></p>
+              </div>
+            </div>
+
+            <!-- scriptholder (Rectangle) -->
+            <div id="u5657" class="ax_default shadowholder" data-label="scriptholder">
+              <div id="u5657_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5658" class="text" style="display:none; visibility: hidden">
+                <p><span></span></p>
+              </div>
+            </div>
+
+            <!-- script (Rectangle) -->
+            <div id="u5659" class="ax_default script" data-label="script">
+              <div id="u5659_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5660" class="text">
+                <p><span>/* записывает в переменную строки */</span></p><p><span>var rows = controller.get([1, 5]);</span></p><p><span><br></span></p><p><span>/* вставляет rows до первой строки */</span></p><p><span>controller.insertBefore(1, rows).render();</span></p>
+              </div>
+            </div>
+
+            <!-- Section Divider x24 (Rectangle) -->
+            <div id="u5661" class="ax_default section_divider" data-label="Section Divider x24">
+              <div id="u5661_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5662" class="text" style="display:none; visibility: hidden">
+                <p><span></span></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Paragraph (Rectangle) -->
+          <div id="u5663" class="ax_default paragraph" data-label="Paragraph">
+            <div id="u5663_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5664" class="text">
+              <p><span>Вставляет новые строки в модель перед указанным индексом.</span></p>
+            </div>
+          </div>
+
+          <!-- Header (Rectangle) -->
+          <div id="u5665" class="ax_default header" data-label="Header">
+            <div id="u5665_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5666" class="text">
+              <p><span>Метод insertBefore</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Метод insertAfter (Group) -->
+        <div id="u5667" class="ax_default" data-label="Метод insertAfter" data-width="680" data-height="276">
+
+          <!-- Section Script (Group) -->
+          <div id="u5668" class="ax_default" data-label="Section Script" data-width="680" data-height="172">
+
+            <!-- Section Divider x24 (Rectangle) -->
+            <div id="u5669" class="ax_default section_divider" data-label="Section Divider x24">
+              <div id="u5669_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5670" class="text" style="display:none; visibility: hidden">
+                <p><span></span></p>
+              </div>
+            </div>
+
+            <!-- scriptholder (Rectangle) -->
+            <div id="u5671" class="ax_default shadowholder" data-label="scriptholder">
+              <div id="u5671_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5672" class="text" style="display:none; visibility: hidden">
+                <p><span></span></p>
+              </div>
+            </div>
+
+            <!-- script (Rectangle) -->
+            <div id="u5673" class="ax_default script" data-label="script">
+              <div id="u5673_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5674" class="text">
+                <p><span>/* записывает в переменную строки */</span></p><p><span>var rows = controller.get([2, 3, 4]);</span></p><p><span><br></span></p><p><span>/* вставляет rows после второй строки */</span></p><p><span>controller.insertAfter(2, rows).render();</span></p>
+              </div>
+            </div>
+
+            <!-- Section Divider x24 (Rectangle) -->
+            <div id="u5675" class="ax_default section_divider" data-label="Section Divider x24">
+              <div id="u5675_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5676" class="text" style="display:none; visibility: hidden">
+                <p><span></span></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Paragraph (Rectangle) -->
+          <div id="u5677" class="ax_default paragraph" data-label="Paragraph">
+            <div id="u5677_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5678" class="text">
+              <p><span>Вставляет новые строки в модель после указанного индекса.</span></p>
+            </div>
+          </div>
+
+          <!-- Header (Rectangle) -->
+          <div id="u5679" class="ax_default header" data-label="Header">
+            <div id="u5679_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5680" class="text">
+              <p><span>Метод insertAfter</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Методы контроллера (Group) -->
+        <div id="u5681" class="ax_default" data-label="Методы контроллера" data-width="680" data-height="264">
+
+          <!-- Список (Group) -->
+          <div id="u5682" class="ax_default" data-label="Список" data-width="680" data-height="188">
+
+            <!-- Divider x48 (Rectangle) -->
+            <div id="u5683" class="ax_default empty" data-label="Divider x48">
+              <div id="u5683_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5684" class="text" style="display:none; visibility: hidden">
+                <p><span></span></p>
+              </div>
+            </div>
+
+            <!-- Item (Rectangle) -->
+            <div id="u5685" class="ax_default content_item" data-label="Item">
+              <div id="u5685_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5686" class="text">
+                <p><span>Методы для фильтрации</span></p>
+              </div>
+            </div>
+
+            <!-- Item (Rectangle) [reference page] -->
+            <div id="u5685_ref" class="reference_page"></div>
+
+            <!-- Item (Rectangle) -->
+            <div id="u5687" class="ax_default content_item" data-label="Item">
+              <div id="u5687_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5688" class="text">
+                <p><span>Методы для удаления</span></p>
+              </div>
+            </div>
+
+            <!-- Item (Rectangle) [reference page] -->
+            <div id="u5687_ref" class="reference_page"></div>
+
+            <!-- Item (Rectangle) -->
+            <div id="u5689" class="ax_default content_item" data-label="Item">
+              <div id="u5689_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5690" class="text">
+                <p><span>Методы для модификации</span></p>
+              </div>
+            </div>
+
+            <!-- Item (Rectangle) [reference page] -->
+            <div id="u5689_ref" class="reference_page"></div>
+
+            <!-- Item (Rectangle) -->
+            <div id="u5691" class="ax_default content_item" data-label="Item">
+              <div id="u5691_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5692" class="text">
+                <p><span>Методы для вставки</span></p>
+              </div>
+            </div>
+
+            <!-- Item (Rectangle) [reference page] -->
+            <div id="u5691_ref" class="reference_page"></div>
+
+            <!-- Item (Rectangle) -->
+            <div id="u5693" class="ax_default content_item" data-label="Item">
+              <div id="u5693_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5694" class="text">
+                <p><span>Методы для возврата</span></p>
+              </div>
+            </div>
+
+            <!-- Item (Rectangle) [reference page] -->
+            <div id="u5693_ref" class="reference_page"></div>
+
+            <!-- Content Number (Rectangle) -->
+            <div id="u5695" class="ax_default content_number" data-label="Content Number">
+              <div id="u5695_div" class=""></div>
+              <!-- Unnamed () -->
+              <div id="u5696" class="text">
+                <p><span>01</span></p><p><span>02</span></p><p><span>03</span></p><p><span>04</span></p><p><span>05</span></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Header (Rectangle) -->
+          <div id="u5697" class="ax_default header" data-label="Header">
+            <div id="u5697_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5698" class="text">
+              <p><span>Методы контроллера</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Unnamed (extensions.header) -->
+
+        <!-- header (Group) -->
+        <div id="u5700" class="ax_default" data-label="header" data-width="680" data-height="168">
+
+          <!-- Divider x48 (Rectangle) -->
+          <div id="u5701" class="ax_default empty" data-label="Divider x48">
+            <div id="u5701_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5702" class="text" style="display:none; visibility: hidden">
+              <p><span></span></p>
+            </div>
+          </div>
+
+          <!-- Empty (Rectangle) -->
+          <div id="u5703" class="ax_default empty" data-label="Empty">
+            <div id="u5703_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5704" class="text" style="display:none; visibility: hidden">
+              <p><span></span></p>
+            </div>
+          </div>
+
+          <!-- Main subheader (Rectangle) -->
+          <div id="u5705" class="ax_default main_subheader" data-label="Main subheader">
+            <div id="u5705_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5706" class="text">
+              <p><span>Новые возможности виджетов в Axure RP 8</span></p>
+            </div>
+          </div>
+
+          <!-- Main header (Rectangle) -->
+          <div id="u5707" class="ax_default main_header" data-label="Main header">
+            <div id="u5707_div" class=""></div>
+            <!-- Unnamed () -->
+            <div id="u5708" class="text">
+              <p><span>WIDGET EXTENSIONS</span></p>
+            </div>
+          </div>
+
+          <!-- logo (Image) -->
+          <div id="u5709" class="ax_default main_logo" data-label="logo">
+            <img id="u5709_img" class="img " src="images/контроллер_виджета_dynamic_panel/logo_u3855.png"/>
+            <!-- Unnamed () -->
+            <div id="u5710" class="text" style="display:none; visibility: hidden">
+              <p><span></span></p>
+            </div>
+          </div>
+
+          <!-- Unnamed (github.top.link) -->
+
+          <!-- icons (Dynamic Panel) -->
+          <div id="u5712" class="ax_default" data-label="icons">
+            <div id="u5712_state0" class="panel_state" data-label="____">
+              <div id="u5712_state0_content" class="panel_state_content">
+
+                <!-- github.logo (Image) -->
+                <div id="u5713" class="ax_default main_logo" data-label="github.logo">
+                  <img id="u5713_img" class="img " src="images/javascript_сценарии_в_прототипах_axure/github_logo_u15.png"/>
+                  <!-- Unnamed () -->
+                  <div id="u5714" class="text" style="display:none; visibility: hidden">
+                    <p><span></span></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- github (Image) -->
+          <div id="u5715" class="ax_default main_logo" data-label="github">
+            <img id="u5715_img" class="img " src="images/javascript_сценарии_в_прототипах_axure/github_u17.png"/>
+            <!-- Unnamed () -->
+            <div id="u5716" class="text" style="display:none; visibility: hidden">
+              <p><span></span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Unnamed (main-menu) -->
+
+      <!-- main-menu (Dynamic Panel) -->
+      <div id="u5718" class="ax_default" data-label="main-menu">
+        <div id="u5718_state0" class="panel_state" data-label="_">
+          <div id="u5718_state0_content" class="panel_state_content">
+
+            <!-- Unnamed (main-menu.list) -->
+
+            <!-- main-menu (Group) -->
+            <div id="u5720" class="ax_default" data-label="main-menu" data-width="712" data-height="640">
+
+              <!-- main-menu.background (Rectangle) -->
+              <div id="u5721" class="ax_default empty ax_default_hidden" data-label="main-menu.background" style="display:none; visibility: hidden">
+                <div id="u5721_div" class=""></div>
+                <!-- Unnamed () -->
+                <div id="u5722" class="text" style="display:none; visibility: hidden">
+                  <p><span></span></p>
+                </div>
+              </div>
+
+              <!-- main-menu.button (Group) -->
+              <div id="u5723" class="ax_default" data-label="main-menu.button" data-width="84" data-height="72">
+
+                <!-- main-menu.placeholder (Rectangle) -->
+                <div id="u5724" class="ax_default empty" data-label="main-menu.placeholder">
+                  <div id="u5724_div" class=""></div>
+                  <!-- Unnamed () -->
+                  <div id="u5725" class="text" style="display:none; visibility: hidden">
+                    <p><span></span></p>
+                  </div>
+                </div>
+
+                <!-- main-menu.group (Group) -->
+                <div id="u5726" class="ax_default" data-label="main-menu.group" data-width="72" data-height="28">
+
+                  <!-- main-menu.line-2 (Rectangle) -->
+                  <div id="u5727" class="ax_default empty" data-label="main-menu.line-2">
+                    <div id="u5727_div" class=""></div>
+                    <!-- Unnamed () -->
+                    <div id="u5728" class="text" style="display:none; visibility: hidden">
+                      <p><span></span></p>
+                    </div>
+                  </div>
+
+                  <!-- main-menu.line-1 (Rectangle) -->
+                  <div id="u5729" class="ax_default empty" data-label="main-menu.line-1">
+                    <div id="u5729_div" class=""></div>
+                    <!-- Unnamed () -->
+                    <div id="u5730" class="text" style="display:none; visibility: hidden">
+                      <p><span></span></p>
+                    </div>
+                  </div>
+
+                  <!-- main-menu.label (Rectangle) -->
+                  <div id="u5731" class="ax_default paragraph" data-label="main-menu.label">
+                    <div id="u5731_div" class=""></div>
+                    <!-- Unnamed () -->
+                    <div id="u5732" class="text">
+                      <p><span>Menu</span></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- main-menu.content (Dynamic Panel) -->
+              <div id="u5733" class="ax_default" data-label="main-menu.content">
+                <div id="u5733_state0" class="panel_state" data-label="____">
+                  <div id="u5733_state0_content" class="panel_state_content">
+
+                    <!-- main-menu.wrapper (Group) -->
+                    <div id="u5734" class="ax_default" data-label="main-menu.wrapper" data-width="752" data-height="1524">
+
+                      <!-- Unnamed (main-menu.content) -->
+
+                      <!-- Section Placeholder (Rectangle) -->
+                      <div id="u5736" class="ax_default empty" data-label="Section Placeholder">
+                        <div id="u5736_div" class=""></div>
+                        <!-- Unnamed () -->
+                        <div id="u5737" class="text" style="display:none; visibility: hidden">
+                          <p><span></span></p>
+                        </div>
+                      </div>
+
+                      <!-- main-menu.close (Group) -->
+                      <div id="u5738" class="ax_default" data-label="main-menu.close" data-width="72" data-height="72">
+
+                        <!-- main-menu.close.placeholder (Rectangle) -->
+                        <div id="u5739" class="ax_default empty" data-label="main-menu.close.placeholder">
+                          <div id="u5739_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5740" class="text" style="display:none; visibility: hidden">
+                            <p><span></span></p>
+                          </div>
+                        </div>
+
+                        <!-- main-menu.close.group (Group) -->
+                        <div id="u5741" class="ax_default" data-label="main-menu.close.group" data-width="14.8492424049176" data-height="14.8492424049176">
+
+                          <!-- main-menu.close.line-2 (Rectangle) -->
+                          <div id="u5742" class="ax_default empty" data-label="main-menu.close.line-2">
+                            <div id="u5742_div" class=""></div>
+                            <!-- Unnamed () -->
+                            <div id="u5743" class="text" style="display:none; visibility: hidden">
+                              <p><span></span></p>
+                            </div>
+                          </div>
+
+                          <!-- main-menu.close.line-1 (Rectangle) -->
+                          <div id="u5744" class="ax_default empty" data-label="main-menu.close.line-1">
+                            <div id="u5744_div" class=""></div>
+                            <!-- Unnamed () -->
+                            <div id="u5745" class="text" style="display:none; visibility: hidden">
+                              <p><span></span></p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- logo (Image) -->
+                      <div id="u5746" class="ax_default main_logo1" data-label="logo">
+                        <img id="u5746_img" class="img " src="images/javascript_сценарии_в_прототипах_axure/logo_u99.png"/>
+                        <!-- Unnamed () -->
+                        <div id="u5747" class="text" style="display:none; visibility: hidden">
+                          <p><span></span></p>
+                        </div>
+                      </div>
+
+                      <!-- Section Divider x32 (Rectangle) -->
+                      <div id="u5748" class="ax_default section_divider" data-label="Section Divider x32">
+                        <div id="u5748_div" class=""></div>
+                        <!-- Unnamed () -->
+                        <div id="u5749" class="text" style="display:none; visibility: hidden">
+                          <p><span></span></p>
+                        </div>
+                      </div>
+
+                      <!-- Unnamed (repeater.content) -->
+
+                      <!-- Divider x72 (Rectangle) -->
+                      <div id="u5751" class="ax_default empty" data-label="Divider x72">
+                        <div id="u5751_div" class=""></div>
+                        <!-- Unnamed () -->
+                        <div id="u5752" class="text" style="display:none; visibility: hidden">
+                          <p><span></span></p>
+                        </div>
+                      </div>
+
+                      <!-- links (Group) -->
+                      <div id="u5753" class="ax_default" data-label="links" data-width="291" data-height="252">
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5754" class="ax_default content_item" data-label="Item">
+                          <div id="u5754_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5755" class="text">
+                            <p><span>Фильтрация данных</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5754_ref" class="reference_page"></div>
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5756" class="ax_default content_item" data-label="Item">
+                          <div id="u5756_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5757" class="text">
+                            <p><span>Методы для фильтрации</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5756_ref" class="reference_page"></div>
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5758" class="ax_default content_item" data-label="Item">
+                          <div id="u5758_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5759" class="text">
+                            <p><span>Методы для удаления</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5758_ref" class="reference_page"></div>
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5760" class="ax_default content_item" data-label="Item">
+                          <div id="u5760_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5761" class="text">
+                            <p><span>Методы для модификации</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5760_ref" class="reference_page"></div>
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5762" class="ax_default content_item" data-label="Item">
+                          <div id="u5762_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5763" class="text">
+                            <p><span>Методы для вставки</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5762_ref" class="reference_page"></div>
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5764" class="ax_default content_item" data-label="Item">
+                          <div id="u5764_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5765" class="text">
+                            <p><span>Методы для возврата</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5764_ref" class="reference_page"></div>
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5766" class="ax_default content_item" data-label="Item">
+                          <div id="u5766_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5767" class="text">
+                            <p><span>Методы контроллера</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5766_ref" class="reference_page"></div>
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5768" class="ax_default content_item" data-label="Item">
+                          <div id="u5768_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5769" class="text">
+                            <p><span>Взаимодействие с контроллером</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5768_ref" class="reference_page"></div>
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5770" class="ax_default content_item" data-label="Item">
+                          <div id="u5770_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5771" class="text">
+                            <p><span>Контроллер виджета Repeater</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5770_ref" class="reference_page"></div>
+
+                        <!-- Number (Rectangle) -->
+                        <div id="u5772" class="ax_default content_number" data-label="Number">
+                          <div id="u5772_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5773" class="text">
+                            <p><span>01</span></p><p><span>02</span></p><p><span>03</span></p><p><span>04</span></p><p><span>05</span></p><p><span>06</span></p><p><span>07</span></p><p><span>08</span></p><p><span>09</span></p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Header (Rectangle) -->
+                      <div id="u5774" class="ax_default content_header" data-label="Header">
+                        <div id="u5774_div" class=""></div>
+                        <!-- Unnamed () -->
+                        <div id="u5775" class="text">
+                          <p><span>Возможности Repeater</span></p>
+                        </div>
+                      </div>
+
+                      <!-- Divider x24 (Rectangle) -->
+                      <div id="u5776" class="ax_default empty" data-label="Divider x24">
+                        <div id="u5776_div" class=""></div>
+                        <!-- Unnamed () -->
+                        <div id="u5777" class="text" style="display:none; visibility: hidden">
+                          <p><span></span></p>
+                        </div>
+                      </div>
+
+                      <!-- Unnamed (panel.content) -->
+
+                      <!-- Divider x72 (Rectangle) -->
+                      <div id="u5779" class="ax_default empty" data-label="Divider x72">
+                        <div id="u5779_div" class=""></div>
+                        <!-- Unnamed () -->
+                        <div id="u5780" class="text" style="display:none; visibility: hidden">
+                          <p><span></span></p>
+                        </div>
+                      </div>
+
+                      <!-- links (Group) -->
+                      <div id="u5781" class="ax_default" data-label="links" data-width="315" data-height="84">
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5782" class="ax_default content_item" data-label="Item">
+                          <div id="u5782_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5783" class="text">
+                            <p><span>Методы контроллера</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5782_ref" class="reference_page"></div>
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5784" class="ax_default content_item" data-label="Item">
+                          <div id="u5784_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5785" class="text">
+                            <p><span>Взаимодействие с контроллером</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5784_ref" class="reference_page"></div>
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5786" class="ax_default content_item" data-label="Item">
+                          <div id="u5786_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5787" class="text">
+                            <p><span>Контроллер виджета Dynamic Panel</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5786_ref" class="reference_page"></div>
+
+                        <!-- Number (Rectangle) -->
+                        <div id="u5788" class="ax_default content_number" data-label="Number">
+                          <div id="u5788_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5789" class="text">
+                            <p><span>01</span></p><p><span>02</span></p><p><span>03</span></p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Header (Rectangle) -->
+                      <div id="u5790" class="ax_default content_header" data-label="Header">
+                        <div id="u5790_div" class=""></div>
+                        <!-- Unnamed () -->
+                        <div id="u5791" class="text">
+                          <p><span>Возможности Dynamic Panel</span></p>
+                        </div>
+                      </div>
+
+                      <!-- Divider x24 (Rectangle) -->
+                      <div id="u5792" class="ax_default empty" data-label="Divider x24">
+                        <div id="u5792_div" class=""></div>
+                        <!-- Unnamed () -->
+                        <div id="u5793" class="text" style="display:none; visibility: hidden">
+                          <p><span></span></p>
+                        </div>
+                      </div>
+
+                      <!-- Unnamed (expressions.content) -->
+
+                      <!-- Divider x72 (Rectangle) -->
+                      <div id="u5795" class="ax_default empty" data-label="Divider x72">
+                        <div id="u5795_div" class=""></div>
+                        <!-- Unnamed () -->
+                        <div id="u5796" class="text" style="display:none; visibility: hidden">
+                          <p><span></span></p>
+                        </div>
+                      </div>
+
+                      <!-- links (Group) -->
+                      <div id="u5797" class="ax_default" data-label="links" data-width="315" data-height="84">
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5798" class="ax_default content_item" data-label="Item">
+                          <div id="u5798_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5799" class="text">
+                            <p><span>Примеры пользовательских функций</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5798_ref" class="reference_page"></div>
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5800" class="ax_default content_item" data-label="Item">
+                          <div id="u5800_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5801" class="text">
+                            <p><span>Как зарегистрировать функцию</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5800_ref" class="reference_page"></div>
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5802" class="ax_default content_item" data-label="Item">
+                          <div id="u5802_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5803" class="text">
+                            <p><span>Функции в выражениях Axure</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5802_ref" class="reference_page"></div>
+
+                        <!-- Number (Rectangle) -->
+                        <div id="u5804" class="ax_default content_number" data-label="Number">
+                          <div id="u5804_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5805" class="text">
+                            <p><span>01</span></p><p><span>02</span></p><p><span>03</span></p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Header (Rectangle) -->
+                      <div id="u5806" class="ax_default content_header" data-label="Header">
+                        <div id="u5806_div" class=""></div>
+                        <!-- Unnamed () -->
+                        <div id="u5807" class="text">
+                          <p><span>Возможности выражений</span></p>
+                        </div>
+                      </div>
+
+                      <!-- Divider x24 (Rectangle) -->
+                      <div id="u5808" class="ax_default empty" data-label="Divider x24">
+                        <div id="u5808_div" class=""></div>
+                        <!-- Unnamed () -->
+                        <div id="u5809" class="text" style="display:none; visibility: hidden">
+                          <p><span></span></p>
+                        </div>
+                      </div>
+
+                      <!-- Unnamed (messages.content) -->
+
+                      <!-- Divider x72 (Rectangle) -->
+                      <div id="u5811" class="ax_default empty" data-label="Divider x72">
+                        <div id="u5811_div" class=""></div>
+                        <!-- Unnamed () -->
+                        <div id="u5812" class="text" style="display:none; visibility: hidden">
+                          <p><span></span></p>
+                        </div>
+                      </div>
+
+                      <!-- links (Group) -->
+                      <div id="u5813" class="ax_default" data-label="links" data-width="339" data-height="112">
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5814" class="ax_default content_item" data-label="Item">
+                          <div id="u5814_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5815" class="text">
+                            <p><span>Сценарии для взаимодействия</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5814_ref" class="reference_page"></div>
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5816" class="ax_default content_item" data-label="Item">
+                          <div id="u5816_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5817" class="text">
+                            <p><span>Методы send и listen</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5816_ref" class="reference_page"></div>
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5818" class="ax_default content_item" data-label="Item">
+                          <div id="u5818_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5819" class="text">
+                            <p><span>Примеры широковещательных сообщений</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5818_ref" class="reference_page"></div>
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5820" class="ax_default content_item" data-label="Item">
+                          <div id="u5820_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5821" class="text">
+                            <p><span>Широковещательные сообщения</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5820_ref" class="reference_page"></div>
+
+                        <!-- Number (Rectangle) -->
+                        <div id="u5822" class="ax_default content_number" data-label="Number">
+                          <div id="u5822_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5823" class="text">
+                            <p><span>01</span></p><p><span>02</span></p><p><span>03</span></p><p><span>04</span></p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Header (Rectangle) -->
+                      <div id="u5824" class="ax_default content_header" data-label="Header">
+                        <div id="u5824_div" class=""></div>
+                        <!-- Unnamed () -->
+                        <div id="u5825" class="text">
+                          <p><span>Широковещательные сообщения</span></p>
+                        </div>
+                      </div>
+
+                      <!-- Divider x24 (Rectangle) -->
+                      <div id="u5826" class="ax_default empty" data-label="Divider x24">
+                        <div id="u5826_div" class=""></div>
+                        <!-- Unnamed () -->
+                        <div id="u5827" class="text" style="display:none; visibility: hidden">
+                          <p><span></span></p>
+                        </div>
+                      </div>
+
+                      <!-- Unnamed (toolkit.content) -->
+
+                      <!-- Divider x72 (Rectangle) -->
+                      <div id="u5829" class="ax_default empty" data-label="Divider x72">
+                        <div id="u5829_div" class=""></div>
+                        <!-- Unnamed () -->
+                        <div id="u5830" class="text" style="display:none; visibility: hidden">
+                          <p><span></span></p>
+                        </div>
+                      </div>
+
+                      <!-- links (Group) -->
+                      <div id="u5831" class="ax_default" data-label="links" data-width="363" data-height="140">
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5832" class="ax_default content_item" data-label="Item">
+                          <div id="u5832_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5833" class="text">
+                            <p><span>Помощники Axure Toolkit</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5832_ref" class="reference_page"></div>
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5834" class="ax_default content_item" data-label="Item">
+                          <div id="u5834_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5835" class="text">
+                            <p><span>Импорт JavaScript сценариев</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5834_ref" class="reference_page"></div>
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5836" class="ax_default content_item" data-label="Item">
+                          <div id="u5836_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5837" class="text">
+                            <p><span>Инициализация JavaScript сценариев</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5836_ref" class="reference_page"></div>
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5838" class="ax_default content_item" data-label="Item">
+                          <div id="u5838_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5839" class="text">
+                            <p><span>Запуск нескольких JavaScript сценариев</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5838_ref" class="reference_page"></div>
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5840" class="ax_default content_item" data-label="Item">
+                          <div id="u5840_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5841" class="text">
+                            <p><span>Расширение Axure Toolkit</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5840_ref" class="reference_page"></div>
+
+                        <!-- Number (Rectangle) -->
+                        <div id="u5842" class="ax_default content_number" data-label="Number">
+                          <div id="u5842_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5843" class="text">
+                            <p><span>01</span></p><p><span>02</span></p><p><span>03</span></p><p><span>04</span></p><p><span>05</span></p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Header (Rectangle) -->
+                      <div id="u5844" class="ax_default content_header" data-label="Header">
+                        <div id="u5844_div" class=""></div>
+                        <!-- Unnamed () -->
+                        <div id="u5845" class="text">
+                          <p><span>Инструменты Toolkit</span></p>
+                        </div>
+                      </div>
+
+                      <!-- Divider x24 (Rectangle) -->
+                      <div id="u5846" class="ax_default empty" data-label="Divider x24">
+                        <div id="u5846_div" class=""></div>
+                        <!-- Unnamed () -->
+                        <div id="u5847" class="text" style="display:none; visibility: hidden">
+                          <p><span></span></p>
+                        </div>
+                      </div>
+
+                      <!-- Unnamed (js.content) -->
+
+                      <!-- Divider x72 (Rectangle) -->
+                      <div id="u5849" class="ax_default empty" data-label="Divider x72">
+                        <div id="u5849_div" class=""></div>
+                        <!-- Unnamed () -->
+                        <div id="u5850" class="text" style="display:none; visibility: hidden">
+                          <p><span></span></p>
+                        </div>
+                      </div>
+
+                      <!-- links (Group) -->
+                      <div id="u5851" class="ax_default" data-label="links" data-width="363" data-height="84">
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5852" class="ax_default content_item" data-label="Item">
+                          <div id="u5852_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5853" class="text">
+                            <p><span>Примеры JavaScript сценариев</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5852_ref" class="reference_page"></div>
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5854" class="ax_default content_item" data-label="Item">
+                          <div id="u5854_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5855" class="text">
+                            <p><span>Особенности использования сценариев</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5854_ref" class="reference_page"></div>
+
+                        <!-- Item (Rectangle) -->
+                        <div id="u5856" class="ax_default content_item" data-label="Item">
+                          <div id="u5856_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5857" class="text">
+                            <p><span>JavaScript сценарии в прототипах Axure</span></p>
+                          </div>
+                        </div>
+
+                        <!-- Item (Rectangle) [reference page] -->
+                        <div id="u5856_ref" class="reference_page"></div>
+
+                        <!-- Number (Rectangle) -->
+                        <div id="u5858" class="ax_default content_number" data-label="Number">
+                          <div id="u5858_div" class=""></div>
+                          <!-- Unnamed () -->
+                          <div id="u5859" class="text">
+                            <p><span>01</span></p><p><span>02</span></p><p><span>03</span></p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Header (Rectangle) -->
+                      <div id="u5860" class="ax_default content_header" data-label="Header">
+                        <div id="u5860_div" class=""></div>
+                        <!-- Unnamed () -->
+                        <div id="u5861" class="text">
+                          <p><span>JavaScript в Axure RP 8</span></p>
+                        </div>
+                      </div>
+
+                      <!-- Divider x24 (Rectangle) -->
+                      <div id="u5862" class="ax_default empty" data-label="Divider x24">
+                        <div id="u5862_div" class=""></div>
+                        <!-- Unnamed () -->
+                        <div id="u5863" class="text" style="display:none; visibility: hidden">
+                          <p><span></span></p>
+                        </div>
+                      </div>
+
+                      <!-- __version (Rectangle) -->
+                      <div id="u5864" class="ax_default paragraph ax_default_hidden" data-label="__version" style="display:none; visibility: hidden">
+                        <div id="u5864_div" class=""></div>
+                        <!-- Unnamed () -->
+                        <div id="u5865" class="text">
+                          <p><span>DOC VERSION 0.0.0</span></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- commands (Group) -->
+              <div id="u5866" class="ax_default ax_default_hidden" data-label="commands" style="display:none; visibility: hidden" data-width="0" data-height="0">
+
+                <!-- main-menu.show (Rectangle) -->
+                <div id="u5867" class="ax_default empty" data-label="main-menu.show">
+                  <div id="u5867_div" class=""></div>
+                  <!-- Unnamed () -->
+                  <div id="u5868" class="text" style="display:none; visibility: hidden">
+                    <p><span></span></p>
+                  </div>
+                </div>
+
+                <!-- main-menu.hide (Rectangle) -->
+                <div id="u5869" class="ax_default empty" data-label="main-menu.hide">
+                  <div id="u5869_div" class=""></div>
+                  <!-- Unnamed () -->
+                  <div id="u5870" class="text" style="display:none; visibility: hidden">
+                    <p><span></span></p>
+                  </div>
+                </div>
+
+                <!-- main-menu.btn.show (Rectangle) -->
+                <div id="u5871" class="ax_default empty" data-label="main-menu.btn.show">
+                  <div id="u5871_div" class=""></div>
+                  <!-- Unnamed () -->
+                  <div id="u5872" class="text" style="display:none; visibility: hidden">
+                    <p><span></span></p>
+                  </div>
+                </div>
+
+                <!-- main-menu.btn.hide (Rectangle) -->
+                <div id="u5873" class="ax_default empty" data-label="main-menu.btn.hide">
+                  <div id="u5873_div" class=""></div>
+                  <!-- Unnamed () -->
+                  <div id="u5874" class="text" style="display:none; visibility: hidden">
+                    <p><span></span></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
