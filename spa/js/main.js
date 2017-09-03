@@ -297,7 +297,7 @@
 			{
 				start: function ()
 				{
-					Backbone.history.start({ pushState: true });
+					Backbone.history.start({ root: '/spa/',pushState: true });
 				}
 			});
 			
