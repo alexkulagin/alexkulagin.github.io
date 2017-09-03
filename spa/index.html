@@ -27,7 +27,7 @@
 		}(window.location));
 	</script>
 	<!-- End Single Page Apps for GitHub Pages -->
-	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="/spa/css/style.css">
 </head>
 <body>
 	
@@ -61,7 +61,7 @@
 
 			gif.onload = function ()
 			{
-				l = f('script'); l.defer = true; l.src = 'js/l.js';
+				l = f('script'); l.defer = true; l.src = '/spa/js/l.js';
 				document.body.appendChild(l);
 
 				window.requestAnimationFrame(function() {
@@ -70,7 +70,7 @@
 				});
 			};
 
-			gif.src='img/preloader.gif';
+			gif.src='/spa/img/preloader.gif';
 
 		})();
 

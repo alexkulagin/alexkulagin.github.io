@@ -38,7 +38,7 @@ this.createjs=this.createjs||{},function(){"use strict";var a=createjs.PreloadJS
 			app = { instance: null, device: {} },
 			device = app.device,
 			apploader = new createjs.LoadQueue(),
-			manifest = ['js/libs.js', 'js/main.js'];
+			manifest = ['/spa/js/libs.js', '/spa/js/main.js'];
 
 			window['app'] = app;
 
