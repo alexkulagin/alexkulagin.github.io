@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>MOUNTAIN OF LEADERS: THE WALL OF DOSE</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<!-- Start Single Page Apps for GitHub Pages -->
+	<script type="text/javascript">
+		(function(l) {
+			if (l.search) {
+				var q = {};
+				l.search.slice(1).split('&').forEach(function(v) {
+					var a = v.split('=');
+					q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
+				});
+				if (q.p !== undefined) {
+					window.history.replaceState(null, null,
+						l.pathname.slice(0, -1) + (q.p || '') +
+						(q.q ? ('?' + q.q) : '') +
+						l.hash
+					);
+				}
+			}
+		}(window.location));
+	</script>
+	<!-- End Single Page Apps for GitHub Pages -->
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+	
+	<!-- app container -->
+	<div class="app"></div>
+	
+	<!-- app loader -->
+	<script>
+
+		!(function()
+		{
+			var e, gif, w, p, l, 
+			f = function (t, n, e) {
+				e = document.createElement(t); if (n !== undefined ) e.className = n; return e;
+			};
+
+			gif = f('img');
+			w = f('div', 'wrapper'); w.appendChild(gif);
+			p = f('div', 'preloader transition-before'); p.appendChild(w);
+			e = document.getElementsByClassName('app')[0]; e.appendChild(p);
+
+			if (!window.requestAnimationFrame) {
+				window.requestAnimationFrame = (function() {
+					return 	window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame ||
+							window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
+							function(callback, element) {
+								window.setTimeout(callback, 1000 / 60);
+							};
+				})();
+			}
+
+			gif.onload = function ()
+			{
+				l = f('script'); l.defer = true; l.src = '/js/l.js';
+				document.body.appendChild(l);
+
+				window.requestAnimationFrame(function() {
+					p.className = 'preloader transition-in';
+					gif.onload = null;
+				});
+			};
+
+			gif.src='/img/preloader.gif';
+
+		})();
+
+	</script>
+
+</body>
+</html>
