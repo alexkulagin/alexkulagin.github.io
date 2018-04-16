@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>1 Currency APP</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<link rel="stylesheet" href="css/default.css">
+	<link rel="stylesheet" href="css/stacky.css">
+</head>
+<body>
+	
+	<div class="stacky">
+		<div><img src="img/1.png"></div>
+		<div><img src="img/2.png"></div>
+		<div><img src="img/3.png"></div>
+		<div><img src="img/4.png"></div>
+		<div><img src="img/5.png"></div>
+		<div><img src="img/6.png"></div>
+		<div><img src="img/7.png"></div>
+		<div><img src="img/8.png"></div>
+		<div><img src="img/9.png"></div>
+		<div><img src="img/10.png"></div>
+		<div><img src="img/11.png"></div>
+		<div><img src="img/12.png"></div>
+		<div><img src="img/13.png"></div>
+	</div>
+	
+	<script src="js/draggabilly.pkgd.min.js"></script>
+	<script src="js/stacky.js"></script>
+	<script>
+		var stacky = new Stacky('.stacky');
+		window.addEventListener("keypress", function (event) {
+			//console.log(event);
+			if (event.key === 'a') {
+				stacky.prev();
+			}
+			
+			if (event.key === 's') {
+				stacky.next();
+			}
+			
+			if (event.key === 'z') {
+				stacky.hide();
+			}
+			
+			if (event.key === 'x') {
+				stacky.show();
+			}
+
+		}, false);
+	</script>
+</body>
+</html>

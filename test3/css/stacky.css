@@ -1,0 +1,1 @@
+.stacky{position:absolute;width:320px;height:400px;top:50%;left:50%;transform:translate(-50%,-50%)}.stacky>*{position:absolute;overflow:hidden;border-radius:16px;box-shadow:0 2px 2px 0 rgba(0,0,0,.24)}.stacky>* img{max-width:100%}
